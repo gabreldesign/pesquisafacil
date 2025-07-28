@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satisfação Fácil - Transforme Feedbacks em Decisões</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ------------------- */
+        /* Reset & Variáveis   */
+        /* ------------------- */
+        :root {
+            --color-primary: #6a11cb;
+            --color-secondary: #2575fc;
+            --color-dark: #12121c;
+            --color-light: #ffffff;
+            --color-gray: #f0f2f5;
+            --color-text: #333;
+            --color-text-light: #6c757d;
+            
+            /* Variáveis para o gradiente interativo */
+            --x: 50%;
+            --y: 50%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ------------------- */
+        /* Estilos Gerais      */
+        /* ------------------- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+        
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem); /* Fonte responsiva */
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        h2 span {
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-light);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ------------------- */
+        /* Hero Section        */
+        /* ------------------- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-light);
+            overflow: hidden; /* Garante que o gradiente não vaze */
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-dark);
+            z-index: -1;
+        }
+        
+        /* O gradiente interativo */
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at var(--x) var(--y),
+                var(--color-primary),
+                var(--color-secondary),
+                transparent 40%
+            );
+            opacity: 0.4;
+            transition: background 0.1s ease-out;
+            will-change: background;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        /* ------------------- */
+        /* Seção de Benefícios */
+        /* ------------------- */
+        #benefits {
+            background-color: var(--color-gray);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .benefit-card {
+            background: var(--color-light);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.15);
+        }
+
+        .benefit-card .icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-light);
+        }
+        
+        .benefit-card .icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--color-dark);
+        }
+
+        .benefit-card p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+        }
+
+        /* ------------------- */
+        /* Seção de Simulação  */
+        /* ------------------- */
+        .simulation-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mockup {
+            border: 8px solid #333;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+        
+        .mockup-header {
+            background: #333;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .mockup-header span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .mockup-header .red { background: #ff5f56; }
+        .mockup-header .yellow { background: #ffbd2e; }
+        .mockup-header .green { background: #27c93f; }
+
+        .mockup-content {
+            padding: 20px;
+            font-size: 14px;
+        }
+        
+        /* Mockup Dashboard */
+        .dashboard-mockup .title { font-weight: 600; margin-bottom: 15px; }
+        .dashboard-mockup .kpi { border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; margin-bottom: 15px; }
+        .dashboard-mockup .kpi .value { font-size: 24px; font-weight: 700; color: var(--color-secondary); }
+        .dashboard-mockup .chart { height: 100px; background: linear-gradient(to top, #2575fc33, #6a11cb33); border-radius: 8px; }
+        
+        /* Mockup Formulário */
+        .form-mockup {
+            max-width: 340px;
+        }
+        .form-mockup .title { font-weight: 600; margin-bottom: 15px; text-align: center; }
+        .form-mockup .nps-scale { display: flex; justify-content: space-between; margin: 20px 0; }
+        .form-mockup .nps-scale div { width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 50%; cursor: pointer; }
+        .form-mockup .nps-scale div:nth-child(9) { background: var(--color-primary); border-color: var(--color-primary); }
+        .form-mockup .label { font-size: 12px; color: #666; margin-bottom: 5px; }
+        .form-mockup .input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px; }
+        .form-mockup .submit-btn { width: 100%; padding: 10px; background: var(--color-primary); color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+
+        /* ------------------- */
+        /* Seção Estudo de Caso */
+        /* ------------------- */
+        #case-study {
+            background-color: var(--color-dark);
+            color: var(--color-light);
+        }
+        .case-study-content {
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .case-study-content p {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .case-study-content .client {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* ------------------- */
+        /* Seção de Preços     */
+        /* ------------------- */
+        #pricing {
+            background-color: var(--color-gray);
+        }
+        .pricing-table {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .price-card {
+            background: var(--color-light);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            width: 320px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .price-card.highlight {
+            border-image: linear-gradient(90deg, var(--color-primary), var(--color-secondary)) 1;
+            transform: scale(1.05);
+        }
+
+        .price-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        
+        .price-card .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--color-dark);
+        }
+        
+        .price-card .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--color-text-light);
+        }
+        
+        .price-card p {
+            color: var(--color-text-light);
+            margin-bottom: 30px;
+        }
+
+        /* ------------------- */
+        /* Seção de FAQ        */
+        /* ------------------- */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 20px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--color-dark);
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            transition: transform 0.3s ease;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-answer p {
+            padding-bottom: 20px;
+            color: var(--color-text-light);
+        }
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Ajuste conforme necessário */
+        }
+
+        /* ------------------- */
+        /* Rodapé              */
+        /* ------------------- */
+        footer {
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            text-align: center;
+            padding: 60px 0;
+        }
+        footer h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        footer p {
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        footer .copyright {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header class="hero" id="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content container">
+            <h1>Transforme feedbacks em decisões com a Satisfação Fácil</h1>
+            <p>Sua plataforma personalizada de satisfação com painel inteligente</p>
+            <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Quero alugar a plataforma agora!</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- BENEFITS SECTION -->
+        <section id="benefits">
+            <div class="container">
+                <h2>Por que escolher a <span>Satisfação Fácil?</span></h2>
+                <div class="benefits-grid">
+                    <!-- Card 1 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3>Dashboard em Tempo Real</h3>
+                        <p>Acompanhe os resultados instantaneamente e filtre por evento ou colaborador para insights rápidos.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        </div>
+                        <h3>NPS Integrado</h3>
+                        <p>Meça a lealdade dos seus clientes com a metodologia Net Promoter Score de forma simples e direta.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2.4-3.4-4.3-6.4-4.3-1.6 0-3.1.5-4.4 1.5"/><path d="M15.2 3.9C14.5 2.8 13.3 2 12 2s-2.5.8-3.2 1.9"/><path d="M8.8 19c-.7 1.2-1 2.5-.7 3.9.6 2.4 3.4 4.3 6.4 4.3 1.6 0 3.1-.5 4.4-1.5"/><path d="M4.8 10.1c.7 1.2 1 2.5.7 3.9-.6 2.4-3.4 4.3-6.4 4.3-1.6 0-3.1-.5-4.4-1.5"/><path d="m2.8 14.1.8-1.1"/><path d="m21.2 9-.8 1.1"/><path d="m8 12 4 4 6-6"/><path d="M12 2v4"/><path d="M12 18v4"/></svg>
+                        </div>
+                        <h3>Totalmente Customizável</h3>
+                        <p>Adaptamos os formulários e o design da plataforma à identidade visual da sua empresa.</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg>
+                        </div>
+                        <h3>Interface Amigável</h3>
+                        <p>Uma experiência intuitiva tanto para quem responde quanto para quem analisa os dados no painel.</p>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        </div>
+                        <h3>Exporte seus Dados</h3>
+                        <p>Baixe todos os resultados em formato .CSV para análises aprofundadas e integrações.</p>
+                    </div>
+                    <!-- Card 6 -->
+                    <div class="benefit-card">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.8 12.8 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                        </div>
+                        <h3>Implantação Rápida</h3>
+                        <p>Sua plataforma personalizada e pronta para uso em até 48 horas após a contratação.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMULATION SECTION -->
+        <section id="simulation">
+            <div class="container">
+                <h2>Veja a plataforma <span>em ação</span></h2>
+                <div class="simulation-container">
+                    <!-- Dashboard Mockup -->
+                    <div class="mockup dashboard-mockup">
+                        <div class="mockup-header">
+                            <span class="red"></span><span class="yellow"></span><span class="green"></span>
+                        </div>
+                        <div class="mockup-content">
+                            <div class="title">Dashboard de Satisfação</div>
+                            <div class="kpi">
+                                <div>NPS Geral</div>
+                                <div class="value">75</div>
+                            </div>
+                            <div class="kpi">
+                                <div>Total de Respostas</div>
+                                <div class="value">1,283</div>
+                            </div>
+                            <div class="title">Respostas da Semana</div>
+                            <div class="chart"></div>
+                        </div>
+                    </div>
+                    <!-- Form Mockup -->
+                    <div class="mockup form-mockup">
+                        <div class="mockup-header">
+                            <span class="red"></span><span class="yellow"></span><span class="green"></span>
+                        </div>
+                        <div class="mockup-content">
+                            <div class="title">O que você achou do nosso atendimento?</div>
+                            <div class="label">Em uma escala de 0 a 10, o quanto você nos recomendaria?</div>
+                            <div class="nps-scale">
+                                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                            </div>
+                            <div class="label">Deixe um comentário (opcional):</div>
+                            <textarea class="input" rows="3"></textarea>
+                            <button class="submit-btn">Enviar Avaliação</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CASE STUDY SECTION -->
+        <section id="case-study">
+            <div class="container">
+                <div class="case-study-content">
+                    <p>Utilizado com sucesso por</p>
+                    <div class="client">Instituto Evereste</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PRICING SECTION -->
+        <section id="pricing">
+            <div class="container">
+                 <h2>Planos <span>flexíveis</span> para o seu negócio</h2>
+                 <div class="pricing-table">
+                     <div class="price-card">
+                         <h3>Implementação</h3>
+                         <div class="price">R$2000</div>
+                         <p>Pagamento único para setup e personalização completa da plataforma.</p>
+                         <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Contratar Setup</a>
+                     </div>
+                     <div class="price-card highlight">
+                         <h3>Aluguel Mensal</h3>
+                         <div class="price">R$170<span>/mês</span></div>
+                         <p>Inclui uso ilimitado, manutenção contínua e suporte para ajustes.</p>
+                         <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Iniciar Assinatura</a>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq">
+            <div class="container">
+                <h2><span>Dúvidas</span> Frequentes</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">A plataforma pode ser customizada com a minha marca?</button>
+                        <div class="faq-answer">
+                            <p>Sim! Um dos nossos maiores diferenciais é a customização. Adaptamos as cores, fontes e logo para que a plataforma fique com a cara da sua empresa.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Como funciona a exportação de dados?</button>
+                        <div class="faq-answer">
+                            <p>No seu painel administrativo, você terá um botão para exportar todos os dados coletados. O arquivo é gerado em formato .CSV, compatível com Excel, Google Sheets e outras ferramentas de análise.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Qual o tempo de entrega da plataforma pronta?</button>
+                        <div class="faq-answer">
+                            <p>Garantimos a entrega da sua plataforma personalizada e totalmente funcional em até 48 horas após a confirmação do pagamento da taxa de implementação.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Preciso ter um domínio ou servidor?</button>
+                        <div class="faq-answer">
+                            <p>Não necessariamente. Podemos hospedar a plataforma para você em um subdomínio nosso ou até mesmo em uma página do GitHub Pages, sem custo adicional. Se preferir usar um domínio próprio, nós auxiliamos na configuração.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <h3>Pronto para começar a ouvir seus clientes?</h3>
+            <p>Entre em contato e descubra como a Satisfação Fácil pode impulsionar seu negócio.</p>
+            <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Fale Conosco no Instagram</a>
+            <p class="copyright">© 2024 Satisfação Fácil. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Script para o gradiente interativo do Hero
+        const hero = document.getElementById('hero');
+        hero.addEventListener('mousemove', (e) => {
+            // Calcula a posição do mouse como uma porcentagem da viewport
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            
+            // Atualiza as variáveis CSS
+            hero.style.setProperty('--x', `${x}%`);
+            hero.style.setProperty('--y', `${y}%`);
+        });
+
+        // Script para o Acordeão do FAQ
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Fecha outros itens abertos para funcionar como um acordeão
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // Alterna a classe 'active' no item clicado
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

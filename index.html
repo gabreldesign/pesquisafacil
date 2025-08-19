@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satisfação Fácil - Transforme Feedbacks em Decisões</title>
+    <title>Pesquisa Fácil - Sua Plataforma de Feedback Definitiva</title>
     
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +22,6 @@
             --color-gray: #f0f2f5;
             --color-text: #333;
             --color-text-light: #6c757d;
-            
-            /* Variáveis para o gradiente interativo */
-            --x: 50%;
-            --y: 50%;
         }
 
         * {
@@ -113,7 +109,7 @@
             justify-content: center;
             text-align: center;
             color: var(--color-light);
-            overflow: hidden; /* Garante que o gradiente não vaze */
+            overflow: hidden;
         }
 
         .hero-background {
@@ -122,27 +118,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-dark);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite;
             z-index: -1;
         }
         
-        /* O gradiente interativo */
-        .hero-background::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                circle at var(--x) var(--y),
-                var(--color-primary),
-                var(--color-secondary),
-                transparent 40%
-            );
-            opacity: 0.4;
-            transition: background 0.1s ease-out;
-            will-change: background;
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .hero-content {
@@ -227,7 +212,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 40px;
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
         }
 
@@ -266,9 +251,35 @@
         
         /* Mockup Dashboard */
         .dashboard-mockup .title { font-weight: 600; margin-bottom: 15px; }
-        .dashboard-mockup .kpi { border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; margin-bottom: 15px; }
-        .dashboard-mockup .kpi .value { font-size: 24px; font-weight: 700; color: var(--color-secondary); }
-        .dashboard-mockup .chart { height: 100px; background: linear-gradient(to top, #2575fc33, #6a11cb33); border-radius: 8px; }
+        .charts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .chart-block {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .chart-block .chart-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .pie-chart-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .pie-chart-legend {
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; }
         
         /* Mockup Formulário */
         .form-mockup {
@@ -286,22 +297,30 @@
         /* Seção Estudo de Caso */
         /* ------------------- */
         #case-study {
-            background-color: var(--color-dark);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite;
             color: var(--color-light);
         }
-        .case-study-content {
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-            padding: 50px;
-            border-radius: 15px;
-            text-align: center;
+        
+        .clients-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 50px;
         }
-        .case-study-content p {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        .clients-logos img {
+            max-height: 60px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .case-study-content .client {
-            font-size: 2rem;
-            font-weight: 700;
+        .clients-logos img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .logo-sucessorh {
+            max-height: 70px; /* Aumentado em ~15% */
         }
 
         /* ------------------- */
@@ -319,23 +338,58 @@
         .price-card {
             background: var(--color-light);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 15px;
             text-align: center;
-            width: 320px;
+            width: 100%;
+            max-width: 450px;
             border: 2px solid transparent;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
         }
         
-        .price-card.highlight {
-            border-image: linear-gradient(90deg, var(--color-primary), var(--color-secondary)) 1;
-            transform: scale(1.05);
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .price-card:hover::before {
+            opacity: 1;
+        }
+        
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(106, 17, 203, 0.3);
+        }
+
+        .price-card-content {
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s ease;
+        }
+
+        .price-card:hover .price-card-content,
+        .price-card:hover .price-card-content h3,
+        .price-card:hover .price-card-content .price,
+        .price-card:hover .price-card-content .price span,
+        .price-card:hover .price-card-content p {
+            color: var(--color-light);
         }
 
         .price-card h3 {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--color-primary);
+            transition: color 0.4s ease;
         }
         
         .price-card .price {
@@ -343,17 +397,32 @@
             font-weight: 700;
             margin: 20px 0;
             color: var(--color-dark);
+            transition: color 0.4s ease;
         }
         
         .price-card .price span {
             font-size: 1rem;
             font-weight: 400;
             color: var(--color-text-light);
+            transition: color 0.4s ease;
         }
         
         .price-card p {
             color: var(--color-text-light);
             margin-bottom: 30px;
+            transition: color 0.4s ease;
+        }
+
+        .price-card .cta-button {
+            background: var(--color-light);
+            color: var(--color-primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .price-card:hover .cta-button {
+            background: var(--color-light);
+            color: var(--color-primary);
+            transform: translateY(-5px) scale(1.05);
         }
 
         /* ------------------- */
@@ -432,9 +501,10 @@
     <header class="hero" id="hero">
         <div class="hero-background"></div>
         <div class="hero-content container">
-            <h1>Transforme feedbacks em decisões com a Satisfação Fácil</h1>
-            <p>Sua plataforma personalizada de satisfação com painel inteligente</p>
-            <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Quero alugar a plataforma agora!</a>
+            <h1>Sua Plataforma de Feedback, Sua Propriedade Para Sempre.</h1>
+            <p>Tenha seu painel de satisfação customizado sem mensalidades ou taxas escondidas.</p>
+            <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
+            <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Quero minha plataforma para sempre!</a>
         </div>
     </header>
 
@@ -442,55 +512,31 @@
         <!-- BENEFITS SECTION -->
         <section id="benefits">
             <div class="container">
-                <h2>Por que escolher a <span>Satisfação Fácil?</span></h2>
+                <h2>Por que ter seu próprio <span>Pesquisa Fácil?</span></h2>
                 <div class="benefits-grid">
                     <!-- Card 1 -->
                     <div class="benefit-card">
                         <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         </div>
-                        <h3>Dashboard em Tempo Real</h3>
-                        <p>Acompanhe os resultados instantaneamente e filtre por evento ou colaborador para insights rápidos.</p>
+                        <h3>Propriedade Vitalícia</h3>
+                        <p>Pague uma vez e a plataforma é sua para sempre. Sem contratos, sem mensalidades.</p>
                     </div>
                     <!-- Card 2 -->
                     <div class="benefit-card">
                         <div class="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
                         </div>
-                        <h3>NPS Integrado</h3>
-                        <p>Meça a lealdade dos seus clientes com a metodologia Net Promoter Score de forma simples e direta.</p>
+                        <h3>Custo Zero de Manutenção</h3>
+                        <p>Hospedagem e domínio inclusos. Você não se preocupa com custos de infraestrutura.</p>
                     </div>
                     <!-- Card 3 -->
                     <div class="benefit-card">
                         <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2.4-3.4-4.3-6.4-4.3-1.6 0-3.1.5-4.4 1.5"/><path d="M15.2 3.9C14.5 2.8 13.3 2 12 2s-2.5.8-3.2 1.9"/><path d="M8.8 19c-.7 1.2-1 2.5-.7 3.9.6 2.4 3.4 4.3 6.4 4.3 1.6 0 3.1-.5 4.4-1.5"/><path d="M4.8 10.1c.7 1.2 1 2.5.7 3.9-.6 2.4-3.4 4.3-6.4 4.3-1.6 0-3.1-.5-4.4-1.5"/><path d="m2.8 14.1.8-1.1"/><path d="m21.2 9-.8 1.1"/><path d="m8 12 4 4 6-6"/><path d="M12 2v4"/><path d="M12 18v4"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2.4-3.4-4.3-6.4-4.3-1.6 0-3.1.5-4.4 1.5"/><path d="M15.2 3.9C14.5 2.8 13.3 2 12 2s-2.5.8-3.2 1.9"/><path d="M8.8 19c-.7 1.2-1 2.5-.7 3.9.6 2.4 3.4 4.3 6.4 4.3 1.6 0 3.1-.5 4.4-1.5"/><path d="M4.8 10.1c.7 1.2 1 2.5.7 3.9-.6 2.4-3.4-4.3-6.4 4.3-1.6 0-3.1-.5-4.4-1.5"/><path d="m2.8 14.1.8-1.1"/><path d="m21.2 9-.8 1.1"/><path d="m8 12 4 4 6-6"/><path d="M12 2v4"/><path d="M12 18v4"/></svg>
                         </div>
                         <h3>Totalmente Customizável</h3>
                         <p>Adaptamos os formulários e o design da plataforma à identidade visual da sua empresa.</p>
-                    </div>
-                    <!-- Card 4 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg>
-                        </div>
-                        <h3>Interface Amigável</h3>
-                        <p>Uma experiência intuitiva tanto para quem responde quanto para quem analisa os dados no painel.</p>
-                    </div>
-                    <!-- Card 5 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        </div>
-                        <h3>Exporte seus Dados</h3>
-                        <p>Baixe todos os resultados em formato .CSV para análises aprofundadas e integrações.</p>
-                    </div>
-                    <!-- Card 6 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.8 12.8 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-                        </div>
-                        <h3>Implantação Rápida</h3>
-                        <p>Sua plataforma personalizada e pronta para uso em até 48 horas após a contratação.</p>
                     </div>
                 </div>
             </div>
@@ -508,16 +554,30 @@
                         </div>
                         <div class="mockup-content">
                             <div class="title">Dashboard de Satisfação</div>
-                            <div class="kpi">
-                                <div>NPS Geral</div>
-                                <div class="value">75</div>
+                            <div class="charts-container">
+                                <div class="chart-block">
+                                    <div class="chart-title">NPS Geral - Classificação</div>
+                                    <div class="pie-chart-container">
+                                        <svg viewBox="0 0 32 32" style="width: 80px; height: 80px; transform: rotate(-90deg);">
+                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#27c93f" stroke-width="32" stroke-dasharray="65 100"></circle>
+                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#ffbd2e" stroke-width="32" stroke-dasharray="20 100" stroke-dashoffset="-65"></circle>
+                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#ff5f56" stroke-width="32" stroke-dasharray="15 100" stroke-dashoffset="-85"></circle>
+                                        </svg>
+                                        <div class="pie-chart-legend">
+                                            <div class="legend-item"><div class="legend-color" style="background: #27c93f;"></div>Promotores (65%)</div>
+                                            <div class="legend-item"><div class="legend-color" style="background: #ffbd2e;"></div>Neutros (20%)</div>
+                                            <div class="legend-item"><div class="legend-color" style="background: #ff5f56;"></div>Detratores (15%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chart-block">
+                                    <div class="chart-title">Respostas nos Últimos 30 Dias</div>
+                                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width: 100%; height: 70px;">
+                                        <path d="M 0 40 L 0 30 C 5 10, 15 10, 20 20 S 30 40, 35 35 S 45 15, 50 20 S 60 35, 65 30 S 75 5, 80 15 S 90 25, 100 20 L 100 40 Z" fill="#2575fc33"></path>
+                                        <path d="M 0 30 C 5 10, 15 10, 20 20 S 30 40, 35 35 S 45 15, 50 20 S 60 35, 65 30 S 75 5, 80 15 S 90 25, 100 20" fill="none" stroke="#2575fc" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="kpi">
-                                <div>Total de Respostas</div>
-                                <div class="value">1,283</div>
-                            </div>
-                            <div class="title">Respostas da Semana</div>
-                            <div class="chart"></div>
                         </div>
                     </div>
                     <!-- Form Mockup -->
@@ -543,9 +603,9 @@
         <!-- CASE STUDY SECTION -->
         <section id="case-study">
             <div class="container">
-                <div class="case-study-content">
-                    <p>Utilizado com sucesso por</p>
-                    <div class="client">Instituto Evereste</div>
+                <div class="clients-logos">
+                    <img src="https://i.postimg.cc/mgWJ3c2M/Logo-Evereste-Branco-maior2-1.png" alt="Logo Instituto Evereste">
+                    <img src="https://i.postimg.cc/hGJpz4hc/Design-sem-nome-1.png" alt="Logo Sucesso RH" class="logo-sucessorh">
                 </div>
             </div>
         </section>
@@ -553,19 +613,16 @@
         <!-- PRICING SECTION -->
         <section id="pricing">
             <div class="container">
-                 <h2>Planos <span>flexíveis</span> para o seu negócio</h2>
+                 <h2>Investimento <span>Único e Transparente</span></h2>
                  <div class="pricing-table">
                      <div class="price-card">
-                         <h3>Implementação</h3>
-                         <div class="price">R$2000</div>
-                         <p>Pagamento único para setup e personalização completa da plataforma.</p>
-                         <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Contratar Setup</a>
-                     </div>
-                     <div class="price-card highlight">
-                         <h3>Aluguel Mensal</h3>
-                         <div class="price">R$170<span>/mês</span></div>
-                         <p>Inclui uso ilimitado, manutenção contínua e suporte para ajustes.</p>
-                         <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Iniciar Assinatura</a>
+                        <div class="price-card-content">
+                             <h3>Investimento Único</h3>
+                             <div class="price">R$2000 <span>pagamento único</span></div>
+                             <p>Pagamento único para ter a plataforma para sempre. Inclui customização completa, hospedagem e domínio, sem nenhuma mensalidade.</p>
+                             <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
+                             <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Adquirir minha plataforma</a>
+                        </div>
                      </div>
                  </div>
             </div>
@@ -577,27 +634,27 @@
                 <h2><span>Dúvidas</span> Frequentes</h2>
                 <div class="faq-container">
                     <div class="faq-item">
-                        <button class="faq-question">A plataforma pode ser customizada com a minha marca?</button>
+                        <button class="faq-question">O que está incluso no valor de R$2000?</button>
                         <div class="faq-answer">
-                            <p>Sim! Um dos nossos maiores diferenciais é a customização. Adaptamos as cores, fontes e logo para que a plataforma fique com a cara da sua empresa.</p>
+                            <p>Tudo o que você precisa! O valor cobre a customização completa com sua marca, a configuração inicial, a hospedagem e um domínio. A plataforma é sua para sempre, sem custos adicionais de manutenção.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">Como funciona a exportação de dados?</button>
+                        <button class="faq-question">Existem taxas escondidas ou mensalidades?</button>
                         <div class="faq-answer">
-                            <p>No seu painel administrativo, você terá um botão para exportar todos os dados coletados. O arquivo é gerado em formato .CSV, compatível com Excel, Google Sheets e outras ferramentas de análise.</p>
+                            <p>Não. O modelo é 100% transparente: um pagamento único e a plataforma é sua. Não há mensalidades, anuidades ou taxas de hospedagem.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">Qual o tempo de entrega da plataforma pronta?</button>
                         <div class="faq-answer">
-                            <p>Garantimos a entrega da sua plataforma personalizada e totalmente funcional em até 48 horas após a confirmação do pagamento da taxa de implementação.</p>
+                            <p>Garantimos a entrega da sua plataforma personalizada e totalmente funcional em até 48 horas após a confirmação do pagamento e envio das informações da sua marca.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">Preciso ter um domínio ou servidor?</button>
+                        <button class="faq-question">Como funcionam as atualizações futuras?</button>
                         <div class="faq-answer">
-                            <p>Não necessariamente. Podemos hospedar a plataforma para você em um subdomínio nosso ou até mesmo em uma página do GitHub Pages, sem custo adicional. Se preferir usar um domínio próprio, nós auxiliamos na configuração.</p>
+                            <p>A plataforma é entregue 100% funcional. Caso você precise de novas funcionalidades ou alterações significativas no futuro, podemos orçar o serviço de forma pontual e transparente.</p>
                         </div>
                     </div>
                 </div>
@@ -608,39 +665,29 @@
     <!-- FOOTER -->
     <footer>
         <div class="container">
-            <h3>Pronto para começar a ouvir seus clientes?</h3>
-            <p>Entre em contato e descubra como a Satisfação Fácil pode impulsionar seu negócio.</p>
-            <a href="https://instagram.com/marllongabrel" target="_blank" class="cta-button">Fale Conosco no Instagram</a>
-            <p class="copyright">© 2024 Satisfação Fácil. Todos os direitos reservados.</p>
+            <h3>Pronto para ter o controle total dos seus feedbacks?</h3>
+            <p>Faça um investimento inteligente e tenha uma ferramenta poderosa para sempre.</p>
+            <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
+            <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Fale Conosco no WhatsApp</a>
+            <p class="copyright">© 2024 Pesquisa Fácil. Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script>
-        // Script para o gradiente interativo do Hero
-        const hero = document.getElementById('hero');
-        hero.addEventListener('mousemove', (e) => {
-            // Calcula a posição do mouse como uma porcentagem da viewport
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            
-            // Atualiza as variáveis CSS
-            hero.style.setProperty('--x', `${x}%`);
-            hero.style.setProperty('--y', `${y}%`);
-        });
-
         // Script para o Acordeão do FAQ
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
             question.addEventListener('click', () => {
                 // Fecha outros itens abertos para funcionar como um acordeão
+                const isActive = item.classList.contains('active');
                 faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
+                    otherItem.classList.remove('active');
                 });
                 // Alterna a classe 'active' no item clicado
-                item.classList.toggle('active');
+                if (!isActive) {
+                    item.classList.toggle('active');
+                }
             });
         });
     </script>

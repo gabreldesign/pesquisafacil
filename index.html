@@ -3,693 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisa Fácil - Sua Plataforma de Feedback Definitiva</title>
-    
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+    <title>Calendário de Conteúdo B2B (2025-2026) - Caixas de Tomada</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ------------------- */
-        /* Reset & Variáveis   */
-        /* ------------------- */
-        :root {
-            --color-primary: #6a11cb;
-            --color-secondary: #2575fc;
-            --color-dark: #12121c;
-            --color-light: #ffffff;
-            --color-gray: #f0f2f5;
-            --color-text: #333;
-            --color-text-light: #6c757d;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
+        body {
+            font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
+        /* Estilo para a navegação fixa (sumário) - REMOVIDO */
+        /* .sticky-nav { ... } */
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--color-light);
-            color: var(--color-text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* ------------------- */
-        /* Estilos Gerais      */
-        /* ------------------- */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 80px 0;
-        }
-        
-        h1, h2, h3 {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 3.5rem); /* Fonte responsiva */
-        }
-
-        h2 {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        h2 span {
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-            color: var(--color-light);
-            padding: 15px 35px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ------------------- */
-        /* Hero Section        */
-        /* ------------------- */
-        .hero {
-            position: relative;
-            height: 100vh;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--color-light);
-            overflow: hidden;
-        }
-
-        .hero-background {
+        /* Estilo para o feedback do botão de copiar */
+        .copied-feedback {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
-            background-size: 200% 200%;
-            animation: gradientAnimation 15s ease infinite;
-            z-index: -1;
-        }
-        
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero h1 {
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.85);
-        }
-        
-        /* ------------------- */
-        /* Seção de Benefícios */
-        /* ------------------- */
-        #benefits {
-            background-color: var(--color-gray);
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-        }
-
-        .benefit-card {
-            background: var(--color-light);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .benefit-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.15);
-        }
-
-        .benefit-card .icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-light);
-        }
-        
-        .benefit-card .icon svg {
-            width: 30px;
-            height: 30px;
-        }
-
-        .benefit-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--color-dark);
-        }
-
-        .benefit-card p {
-            font-size: 0.95rem;
-            color: var(--color-text-light);
-        }
-
-        /* ------------------- */
-        /* Seção de Simulação  */
-        /* ------------------- */
-        .simulation-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            align-items: stretch;
-            justify-content: center;
-        }
-
-        .mockup {
-            border: 8px solid #333;
-            border-radius: 12px;
-            background: #fff;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            overflow: hidden;
-            flex: 1;
-            min-width: 300px;
-            max-width: 500px;
-        }
-        
-        .mockup-header {
-            background: #333;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .mockup-header span {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .mockup-header .red { background: #ff5f56; }
-        .mockup-header .yellow { background: #ffbd2e; }
-        .mockup-header .green { background: #27c93f; }
-
-        .mockup-content {
-            padding: 20px;
-            font-size: 14px;
-        }
-        
-        /* Mockup Dashboard */
-        .dashboard-mockup .title { font-weight: 600; margin-bottom: 15px; }
-        .charts-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .chart-block {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        .chart-block .chart-title {
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background-color: #10B981; /* green-500 */
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 12px;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .pie-chart-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .pie-chart-legend {
-            font-size: 11px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .legend-color { width: 10px; height: 10px; border-radius: 50%; }
-        
-        /* Mockup Formulário */
-        .form-mockup {
-            max-width: 340px;
-        }
-        .form-mockup .title { font-weight: 600; margin-bottom: 15px; text-align: center; }
-        .form-mockup .nps-scale { display: flex; justify-content: space-between; margin: 20px 0; }
-        .form-mockup .nps-scale div { width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 50%; cursor: pointer; }
-        .form-mockup .nps-scale div:nth-child(9) { background: var(--color-primary); border-color: var(--color-primary); }
-        .form-mockup .label { font-size: 12px; color: #666; margin-bottom: 5px; }
-        .form-mockup .input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px; }
-        .form-mockup .submit-btn { width: 100%; padding: 10px; background: var(--color-primary); color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-
-        /* ------------------- */
-        /* Seção Estudo de Caso */
-        /* ------------------- */
-        #case-study {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
-            background-size: 200% 200%;
-            animation: gradientAnimation 15s ease infinite;
-            color: var(--color-light);
-        }
-        
-        .clients-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 50px;
-        }
-        .clients-logos img {
-            max-height: 60px;
-            opacity: 0.9;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .clients-logos img:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        .logo-sucessorh {
-            max-height: 70px; /* Aumentado em ~15% */
-        }
-
-        /* ------------------- */
-        /* Seção de Preços     */
-        /* ------------------- */
-        #pricing {
-            background-color: var(--color-gray);
-        }
-        .pricing-table {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        .price-card {
-            background: var(--color-light);
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            width: 100%;
-            max-width: 450px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
-        }
-        
-        .price-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            z-index: 0;
+            font-weight: 500;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
-        
-        .price-card:hover::before {
+        .copied-feedback.show {
             opacity: 1;
+            transform: translateX(-50%) translateY(-12px);
         }
-        
-        .price-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(106, 17, 203, 0.3);
-        }
-
-        .price-card-content {
-            position: relative;
-            z-index: 1;
-            transition: color 0.4s ease;
-        }
-
-        .price-card:hover .price-card-content,
-        .price-card:hover .price-card-content h3,
-        .price-card:hover .price-card-content .price,
-        .price-card:hover .price-card-content .price span,
-        .price-card:hover .price-card-content p {
-            color: var(--color-light);
-        }
-
-        .price-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--color-primary);
-            transition: color 0.4s ease;
-        }
-        
-        .price-card .price {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 20px 0;
-            color: var(--color-dark);
-            transition: color 0.4s ease;
-        }
-        
-        .price-card .price span {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--color-text-light);
-            transition: color 0.4s ease;
-        }
-        
-        .price-card p {
-            color: var(--color-text-light);
-            margin-bottom: 30px;
-            transition: color 0.4s ease;
-        }
-
-        .price-card .cta-button {
-            background: var(--color-light);
-            color: var(--color-primary);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .price-card:hover .cta-button {
-            background: var(--color-light);
-            color: var(--color-primary);
-            transform: translateY(-5px) scale(1.05);
-        }
-
-        /* ------------------- */
-        /* Seção de FAQ        */
-        /* ------------------- */
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .faq-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .faq-question {
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: left;
-            padding: 20px 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--color-dark);
-        }
-        .faq-question::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--color-primary);
-            transition: transform 0.3s ease;
-        }
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-        .faq-answer p {
-            padding-bottom: 20px;
-            color: var(--color-text-light);
-        }
-        .faq-item.active .faq-question::after {
-            transform: rotate(45deg);
-        }
-        .faq-item.active .faq-answer {
-            max-height: 200px; /* Ajuste conforme necessário */
-        }
-
-        /* ------------------- */
-        /* Rodapé              */
-        /* ------------------- */
-        footer {
-            background-color: var(--color-dark);
-            color: var(--color-light);
-            text-align: center;
-            padding: 60px 0;
-        }
-        footer h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        footer p {
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        footer .copyright {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
+        /* Estilo para o card do evento atual */
+        .current-event {
+            border: 2px solid #3B82F6; /* blue-500 */
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800">
 
-    <!-- HERO SECTION -->
-    <header class="hero" id="hero">
-        <div class="hero-background"></div>
-        <div class="hero-content container">
-            <h1>Sua Plataforma de Feedback, Sua Propriedade Para Sempre.</h1>
-            <p>Tenha seu painel de satisfação customizado sem mensalidades ou taxas escondidas.</p>
-            <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
-            <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Quero minha plataforma para sempre!</a>
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calendário de Conteúdo B2B (2025-2026)</h1>
+            <p class="text-lg text-blue-600 font-semibold mt-1">Soluções em Caixas de Tomada para Empresas</p>
+            <p class="mt-3 max-w-3xl mx-auto text-gray-600">
+                Foco: Arquitetos, Engenheiros, Eletricistas, Gerentes de TI, Compradores e Facilities.
+            </p>
+        </header>
+
+        <!-- Botão para abrir o Modal do Sumário -->
+        <div class="text-center mb-10">
+            <button id="openSummaryBtn" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Abrir Sumário Inteligente
+            </button>
         </div>
-    </header>
 
-    <main>
-        <!-- BENEFITS SECTION -->
-        <section id="benefits">
-            <div class="container">
-                <h2>Por que ter seu próprio <span>Pesquisa Fácil?</span></h2>
-                <div class="benefits-grid">
-                    <!-- Card 1 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                        </div>
-                        <h3>Propriedade Vitalícia</h3>
-                        <p>Pague uma vez e a plataforma é sua para sempre. Sem contratos, sem mensalidades.</p>
+        <!-- Modal do Sumário Inteligente -->
+        <div id="summaryModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-3xl w-full mx-auto relative transform transition-all duration-300 scale-95 opacity-0" id="summaryModalContent">
+                <button id="closeSummaryBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Sumário Inteligente</h2>
+                <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-10 text-center">
+                    <!-- Coluna 2025 -->
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2 border-b-2 border-gray-300 pb-1">2025</h3>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#set-2025" class="text-blue-600 hover:underline py-1 block">Setembro</a></li>
+                            <li><a href="#out-2025" class="text-blue-600 hover:underline py-1 block">Outubro</a></li>
+                            <li><a href="#nov-2025" class="text-blue-600 hover:underline py-1 block">Novembro</a></li>
+                            <li><a href="#dez-2025" class="text-blue-600 hover:underline py-1 block">Dezembro</a></li>
+                        </ul>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        </div>
-                        <h3>Custo Zero de Manutenção</h3>
-                        <p>Hospedagem e domínio inclusos. Você não se preocupa com custos de infraestrutura.</p>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="benefit-card">
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2.4-3.4-4.3-6.4-4.3-1.6 0-3.1.5-4.4 1.5"/><path d="M15.2 3.9C14.5 2.8 13.3 2 12 2s-2.5.8-3.2 1.9"/><path d="M8.8 19c-.7 1.2-1 2.5-.7 3.9.6 2.4 3.4 4.3 6.4 4.3 1.6 0 3.1-.5 4.4-1.5"/><path d="M4.8 10.1c.7 1.2 1 2.5.7 3.9-.6 2.4-3.4-4.3-6.4 4.3-1.6 0-3.1-.5-4.4-1.5"/><path d="m2.8 14.1.8-1.1"/><path d="m21.2 9-.8 1.1"/><path d="m8 12 4 4 6-6"/><path d="M12 2v4"/><path d="M12 18v4"/></svg>
-                        </div>
-                        <h3>Totalmente Customizável</h3>
-                        <p>Adaptamos os formulários e o design da plataforma à identidade visual da sua empresa.</p>
+                    <!-- Coluna 2026 -->
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2 border-b-2 border-gray-300 pb-1">2026</h3>
+                        <ul class="space-y-1 text-sm grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-1">
+                            <li><a href="#jan-2026" class="text-blue-600 hover:underline py-1 block">Janeiro</a></li>
+                            <li><a href="#fev-2026" class="text-blue-600 hover:underline py-1 block">Fevereiro</a></li>
+                            <li><a href="#mar-2026" class="text-blue-600 hover:underline py-1 block">Março</a></li>
+                            <li><a href="#abr-2026" class="text-blue-600 hover:underline py-1 block">Abril</a></li>
+                            <li><a href="#mai-2026" class="text-blue-600 hover:underline py-1 block">Maio</a></li>
+                            <li><a href="#jun-2026" class="text-blue-600 hover:underline py-1 block">Junho</a></li>
+                            <li><a href="#jul-2026" class="text-blue-600 hover:underline py-1 block">Julho</a></li>
+                            <li><a href="#ago-2026" class="text-blue-600 hover:underline py-1 block">Agosto</a></li>
+                            <li><a href="#set-2026" class="text-blue-600 hover:underline py-1 block">Setembro</a></li>
+                            <li><a href="#out-2026" class="text-blue-600 hover:underline py-1 block">Outubro</a></li>
+                            <li><a href="#nov-2026" class="text-blue-600 hover:underline py-1 block">Novembro</a></li>
+                            <li><a href="#dez-2026" class="text-blue-600 hover:underline py-1 block">Dezembro</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- SIMULATION SECTION -->
-        <section id="simulation">
-            <div class="container">
-                <h2>Veja a plataforma <span>em ação</span></h2>
-                <div class="simulation-container">
-                    <!-- Dashboard Mockup -->
-                    <div class="mockup dashboard-mockup">
-                        <div class="mockup-header">
-                            <span class="red"></span><span class="yellow"></span><span class="green"></span>
+        <!-- Conteúdo Detalhado -->
+        <main class="space-y-12">
+            <!-- CARDS DE 2025 -->
+            <section id="2025">
+                <h2 class="text-2xl font-bold mb-6">Restante de 2025: Foco em Planejamento e Profissionais</h2>
+                <div id="set-2025" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Setembro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="admin-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                            <p class="font-bold text-lg">09/Set - Dia do Administrador</p>
+                            <p class="text-sm text-gray-500 mb-3">Público: Gerentes de facilities, compradores.</p>
+                            <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Eficiência que começa na tomada. Parabéns a todos os Administradores que mantêm as empresas conectadas e produtivas. Conheça nossas soluções para escritórios organizados."</p>
+                            <div class="mt-4 pt-3 border-t relative">
+                                <button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoAdministrador #GestaoEficiente #EscritorioOrganizado #Conectividade #Facilities">Copiar #</button>
+                                <p class="text-xs text-gray-500 font-semibold">HASHTAGS</p>
+                            </div>
                         </div>
-                        <div class="mockup-content">
-                            <div class="title">Dashboard de Satisfação</div>
-                            <div class="charts-container">
-                                <div class="chart-block">
-                                    <div class="chart-title">NPS Geral - Classificação</div>
-                                    <div class="pie-chart-container">
-                                        <svg viewBox="0 0 32 32" style="width: 80px; height: 80px; transform: rotate(-90deg);">
-                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#27c93f" stroke-width="32" stroke-dasharray="65 100"></circle>
-                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#ffbd2e" stroke-width="32" stroke-dasharray="20 100" stroke-dashoffset="-65"></circle>
-                                            <circle r="16" cx="16" cy="16" fill="transparent" stroke="#ff5f56" stroke-width="32" stroke-dasharray="15 100" stroke-dashoffset="-85"></circle>
-                                        </svg>
-                                        <div class="pie-chart-legend">
-                                            <div class="legend-item"><div class="legend-color" style="background: #27c93f;"></div>Promotores (65%)</div>
-                                            <div class="legend-item"><div class="legend-color" style="background: #ffbd2e;"></div>Neutros (20%)</div>
-                                            <div class="legend-item"><div class="legend-color" style="background: #ff5f56;"></div>Detratores (15%)</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="chart-block">
-                                    <div class="chart-title">Respostas nos Últimos 30 Dias</div>
-                                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width: 100%; height: 70px;">
-                                        <path d="M 0 40 L 0 30 C 5 10, 15 10, 20 20 S 30 40, 35 35 S 45 15, 50 20 S 60 35, 65 30 S 75 5, 80 15 S 90 25, 100 20 L 100 40 Z" fill="#2575fc33"></path>
-                                        <path d="M 0 30 C 5 10, 15 10, 20 20 S 30 40, 35 35 S 45 15, 50 20 S 60 35, 65 30 S 75 5, 80 15 S 90 25, 100 20" fill="none" stroke="#2575fc" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-                                    </svg>
-                                </div>
+                        <div id="cliente-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col current-event">
+                            <p class="font-bold text-lg">15/Set - Dia do Cliente</p>
+                            <p class="text-sm text-gray-500 mb-3">Público: Todos os clientes B2B.</p>
+                            <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Mais do que clientes, parceiros de projeto. Agradecemos a confiança em conectar sua empresa com a nossa qualidade."</p>
+                            <div class="mt-4 pt-3 border-t relative">
+                                <button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoCliente #ClienteB2B #ParceriaDeSucesso #Qualidade #ConectandoEmpresas">Copiar #</button>
+                                <p class="text-xs text-gray-500 font-semibold">HASHTAGS</p>
                             </div>
                         </div>
                     </div>
-                    <!-- Form Mockup -->
-                    <div class="mockup form-mockup">
-                        <div class="mockup-header">
-                            <span class="red"></span><span class="yellow"></span><span class="green"></span>
-                        </div>
-                        <div class="mockup-content">
-                            <div class="title">O que você achou do nosso atendimento?</div>
-                            <div class="label">Em uma escala de 0 a 10, o quanto você nos recomendaria?</div>
-                            <div class="nps-scale">
-                                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-                            </div>
-                            <div class="label">Deixe um comentário (opcional):</div>
-                            <textarea class="input" rows="3"></textarea>
-                            <button class="submit-btn">Enviar Avaliação</button>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- CASE STUDY SECTION -->
-        <section id="case-study">
-            <div class="container">
-                <div class="clients-logos">
-                    <img src="https://i.postimg.cc/mgWJ3c2M/Logo-Evereste-Branco-maior2-1.png" alt="Logo Instituto Evereste">
-                    <img src="https://i.postimg.cc/hGJpz4hc/Design-sem-nome-1.png" alt="Logo Sucesso RH" class="logo-sucessorh">
-                </div>
-            </div>
-        </section>
-        
-        <!-- PRICING SECTION -->
-        <section id="pricing">
-            <div class="container">
-                 <h2>Investimento <span>Único e Transparente</span></h2>
-                 <div class="pricing-table">
-                     <div class="price-card">
-                        <div class="price-card-content">
-                             <h3>Investimento Único</h3>
-                             <div class="price">R$2000 <span>pagamento único</span></div>
-                             <p>Pagamento único para ter a plataforma para sempre. Inclui customização completa, hospedagem e domínio, sem nenhuma mensalidade.</p>
-                             <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
-                             <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Adquirir minha plataforma</a>
+                <!-- Outros meses de 2025 -->
+                 <div id="out-2025" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Outubro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="eletricista-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">17/Out - Dia do Eletricista</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Eletricistas, equipes de manutenção.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Parabéns aos profissionais que levam energia e segurança a todos os ambientes. Nossas caixas são projetadas para facilitar sua instalação e garantir a segurança do projeto."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEletricista #SegurancaEletrica #InstalacaoFacil #QualidadeProfissional #Energia">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                        <div id="engcivil-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">25/Out - Dia do Engenheiro Civil</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Engenheiros, construtoras.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Da planta à execução, cada detalhe constrói a qualidade. Homenageamos os Engenheiros Civis. Conte com nossas soluções para obras limpas, seguras e dentro do prazo."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiroCivil #Construcao #Obras #QualidadeNaObra #Engenharia">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
                         </div>
                      </div>
-                 </div>
-            </div>
-        </section>
-
-        <!-- FAQ SECTION -->
-        <section id="faq">
-            <div class="container">
-                <h2><span>Dúvidas</span> Frequentes</h2>
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <button class="faq-question">O que está incluso no valor de R$2000?</button>
-                        <div class="faq-answer">
-                            <p>Tudo o que você precisa! O valor cobre a customização completa com sua marca, a configuração inicial, a hospedagem e um domínio. A plataforma é sua para sempre, sem custos adicionais de manutenção.</p>
+                </div>
+                <div id="nov-2025" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Novembro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="segtrabalho-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">27/Nov - Dia do Técnico em Segurança do Trabalho</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Deptos de Segurança, Facilities.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um ambiente de trabalho seguro evita acidentes. Nossas caixas de tomada seguem as normas (ex: NBR/Inmetro) para garantir a proteção total da sua equipe."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#SegurancaNoTrabalho #NormaNBR #PrevencaoDeAcidentes #AmbienteSeguro">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
                         </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">Existem taxas escondidas ou mensalidades?</button>
-                        <div class="faq-answer">
-                            <p>Não. O modelo é 100% transparente: um pagamento único e a plataforma é sua. Não há mensalidades, anuidades ou taxas de hospedagem.</p>
+                        <div id="bf-2025" class="bg-gray-800 text-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg text-yellow-400">Última Sexta de Nov - Black Friday B2B</p>
+                           <p class="text-sm text-gray-400 mb-3">Público: Compradores, Gerentes de Projetos.</p>
+                           <p class="text-gray-300 flex-grow"><strong>Tema:</strong> "Planeje seu 2026. A melhor 'Black Friday' para sua empresa é garantir o melhor custo-benefício no seu projeto. Consulte nosso catálogo e solicite um orçamento para grandes volumes."</p>
+                           <div class="mt-4 pt-3 border-t border-gray-600 relative"><button class="copy-btn float-right bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg" data-hashtags="#BlackFridayB2B #Planejamento2026 #ComprasCorporativas #CustoBeneficio #Projetos">Copiar #</button><p class="text-xs text-gray-400 font-semibold">HASHTAGS</p></div>
                         </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">Qual o tempo de entrega da plataforma pronta?</button>
-                        <div class="faq-answer">
-                            <p>Garantimos a entrega da sua plataforma personalizada e totalmente funcional em até 48 horas após a confirmação do pagamento e envio das informações da sua marca.</p>
+                     </div>
+                </div>
+                <div id="dez-2025" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Dezembro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div id="engenheiro-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">11/Dez - Dia do Engenheiro</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Todos os Engenheiros.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Engenharia é a arte de conectar soluções. Parabéns a todos os engenheiros que projetam o futuro."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiro #Engenharia #Inovacao #Projetos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
                         </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">Como funcionam as atualizações futuras?</button>
-                        <div class="faq-answer">
-                            <p>A plataforma é entregue 100% funcional. Caso você precise de novas funcionalidades ou alterações significativas no futuro, podemos orçar o serviço de forma pontual e transparente.</p>
+                        <div id="arquiteto-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">13/Dez - Dia do Arquiteto</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Arquitetos, Escritórios de Arquitetura.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Design e funcionalidade não devem competir. Nossas caixas de tomada são a solução para manter seu projeto limpo, moderno e conectado. Parabéns, Arquiteto!"</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoArquiteto #ArquiteturaCorporativa #DesignFuncional #ProjetoLimpo">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                        <div id="fimdeano-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">20-31/Dez - Fim de Ano</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Todos.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Que 2026 traga novas conexões e grandes projetos. Estaremos juntos para energizar suas ideias. Boas Festas!"</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#BoasFestas #Feliz2026 #NovosProjetos #Conexoes">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+            
+            <!-- CARDS DE 2026 -->
+            <section id="2026">
+                <h2 class="text-2xl font-bold mb-6">Calendário 2026: Foco em Segurança, Inovação e Profissionais</h2>
+                <!-- Meses de 2026 -->
+                <div id="jan-2026" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Janeiro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="planejamento-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">Primeira Semana - Planejamento 2026</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Gestores, Compradores.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Ano novo, escritório mais produtivo. Está na hora de tirar do papel aquele projeto de sala de reunião ou a expansão das estações de trabalho. Consulte nosso catálogo."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Planejamento2026 #EscritorioProdutivo #Infraestrutura #AnoNovoProjetosNovos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                    </div>
+                </div>
+                 <div id="fev-2026" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Fevereiro</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="justica-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">20/Fev - Dia Mundial da Justiça Social</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Geral / RH.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um ambiente de trabalho justo e acessível para todos. Nossas soluções de tomadas de piso ou de fácil acesso promovem a ergonomia e a inclusão no escritório."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#JusticaSocial #Acessibilidade #Inclusao #Ergonomia #AmbienteDeTrabalho">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                    </div>
+                </div>
+                 <div id="mar-2026" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Março</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="mulher-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">08/Mar - Dia Internacional da Mulher</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Geral.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Homenageamos as engenheiras, arquitetas, administradoras e eletricistas que energizam e constroem o mercado."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaMulher #MulheresNaIndustria #LiderancaFeminina #Engenheiras #Arquitetas">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                         <div id="consumidorb2b-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
+                           <p class="font-bold text-lg">15/Mar - Dia Mundial do Consumidor (Foco B2B)</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Clientes B2B.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "No mercado B2B, o consumidor exige mais que um produto: exige parceria, prazo e segurança técnica. Esse é o nosso compromisso."</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#ConsumidorB2B #Parceria #Compromisso #QualidadeB2B #SucessoDoCliente">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="abr-2026" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Abril</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div id="abrilverde-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col border-2 border-red-500">
+                           <p class="font-bold text-lg">28/Abr - Dia Mundial da Segurança e Saúde no Trabalho</p>
+                           <p class="text-sm text-gray-500 mb-3">Público: Técnicos de Segurança, Facilities.</p>
+                           <p class="text-gray-700 flex-grow"><strong>Tema (Mais importante do ano):</strong> "Não arrisque. Instalações elétricas inadequadas são uma das maiores causas de acidentes de trabalho. Proteja sua equipe e seu patrimônio com produtos certificados. #AbrilVerde"</p>
+                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#AbrilVerde #SegurancaEletrica #SST #Prevencao #ProdutosCertificados">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repetir a estrutura para todos os meses de 2026... -->
+                <div id="mai-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Maio</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="trabalhador-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">01/Mai - Dia do Trabalhador</p><p class="text-sm text-gray-500 mb-3">Público: Gestores, RH.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um bom ambiente de trabalho valoriza o profissional. Invista em estações de trabalho organizadas, seguras e com fácil acesso à conectividade."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoTrabalhador #AmbienteDeTrabalho #Produtividade #ValorizacaoProfissional">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="industria-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">25/Mai - Dia da Indústria</p><p class="text-sm text-gray-500 mb-3">Público: Indústrias (clientes).</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Orgulho de fazer parte da cadeia produtiva, fornecendo soluções em conectividade para as indústrias que movem o Brasil."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaIndustria #IndustriaBrasileira #ConectividadeIndustrial #B2B">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="jun-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Junho</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="meioambiente-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">05/Jun - Dia Mundial do Meio Ambiente</p><p class="text-sm text-gray-500 mb-3">Público: Geral, Compradores.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Eficiência energética e durabilidade. Nossos produtos são feitos para durar, reduzindo o descarte e otimizando o consumo em projetos sustentáveis."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#MeioAmbiente #Sustentabilidade #EficienciaEnergetica #ConstrucaoSustentavel">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="jul-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Julho</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="plan2sem-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">Início do mês - Planejamento do 2º Semestre</p><p class="text-sm text-gray-500 mb-3">Público: Gestores.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "O ano ainda não acabou. Como está o planejamento de infraestrutura da sua empresa para o segundo semestre? Não deixe a conectividade para a última hora."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Planejamento #Infraestrutura #GestaoDeProjetos #SegundoSemestre">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="ago-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Agosto</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="informatica-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">15/Ago - Dia da Informática</p><p class="text-sm text-gray-500 mb-3">Público: Gerentes de TI.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Data centers, racks, estações de trabalho... Onde tem TI, precisa ter energia segura e organizada. Conheça nossas soluções de tomadas para infraestrutura de tecnologia."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaInformatica #InfraDeTI #DataCenter #GerenteDeTI #EnergiaSegura">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="set-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Setembro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="admin-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">09/Set - Dia do Administrador</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Parabéns ao profissional que conecta todas as áreas da empresa, garantindo que tudo funcione com máxima eficiência."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoAdmin #Administracao #Eficiencia #Gestao">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="cliente-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">15/Set - Dia do Cliente</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Agradecemos pela parceria em energizar seus negócios e construir projetos de sucesso juntos."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoClienteB2B #Parceria #Sucesso #Negocios">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="out-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Outubro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="eletricista-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">17/Out - Dia do Eletricista</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Segurança e qualidade na instalação. Uma homenagem aos nossos parceiros eletricistas, essenciais em todos os projetos."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Eletricista #SegurancaEletrica #ParceiroDeObra">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="engcivil-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">25/Out - Dia do Engenheiro Civil</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Projetando grandes obras, conectando grandes ideias. Nossas soluções acompanham a grandiosidade da sua engenharia."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#EngenhariaCivil #GrandesObras #ConectandoIdeias">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="nov-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Novembro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="segtrabalho-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">27/Nov - Dia do Técnico em Segurança do Trabalho</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Prioridade máxima: um ambiente de trabalho sem riscos elétricos. Conte com quem entende de normas e segurança."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#SegurancaDoTrabalho #RiscoEletrico #Prevencao">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="bf-2026" class="bg-gray-800 text-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg text-yellow-400">Última Sexta de Nov - Black Friday B2B</p><p class="text-gray-300 flex-grow"><strong>Tema:</strong> "Antecipe suas compras de 2027. Garanta o orçamento de infraestrutura com as melhores condições do ano."</p><div class="mt-4 pt-3 border-t border-gray-600 relative"><button class="copy-btn float-right bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg" data-hashtags="#BlackFridayCorporativa #Planejamento2027 #Orcamento">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+                <div id="dez-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Dezembro</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div id="engenheiro-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">11/Dez - Dia do Engenheiro</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "A engenharia move o mundo. Nós ajudamos a conectá-lo com segurança e eficiência."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiro2026 #EngenhariaMoveOMundo">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="arquiteto-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">13/Dez - Dia do Arquiteto</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "A tomada não precisa ser um ponto fraco no seu design. Conheça nossas linhas que se integram perfeitamente ao seu projeto."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoArquiteto2026 #DesignDeInteriores #Arquitetura">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="fimdeano-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">Fim de Ano</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Boas Festas e um 2027 com projetos ainda mais conectados e cheios de energia!"</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Feliz2027 #BoasFestas #NovosCiclos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
+            </section>
+        </main>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <h3>Pronto para ter o controle total dos seus feedbacks?</h3>
-            <p>Faça um investimento inteligente e tenha uma ferramenta poderosa para sempre.</p>
-            <!-- IMPORTANTE: Troque o número abaixo pelo seu número de WhatsApp com código do país -->
-            <a href="https://wa.me/5592XXXXXXXXX" target="_blank" class="cta-button">Fale Conosco no WhatsApp</a>
-            <p class="copyright">© 2024 Pesquisa Fácil. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // Script para o Acordeão do FAQ
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
-                // Fecha outros itens abertos para funcionar como um acordeão
-                const isActive = item.classList.contains('active');
-                faqItems.forEach(otherItem => {
-                    otherItem.classList.remove('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para o botão de copiar
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                const feedback = document.createElement('div');
+                feedback.className = 'copied-feedback';
+                feedback.textContent = 'Copiado!';
+                button.parentElement.appendChild(feedback);
+
+                button.addEventListener('click', () => {
+                    const hashtags = button.dataset.hashtags;
+                    navigator.clipboard.writeText(hashtags).then(() => {
+                        feedback.classList.add('show');
+                        setTimeout(() => {
+                            feedback.classList.remove('show');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Falha ao copiar: ', err);
+                    });
                 });
-                // Alterna a classe 'active' no item clicado
-                if (!isActive) {
-                    item.classList.toggle('active');
+            });
+
+            // --- Lógica do Modal do Sumário ---
+            const openBtn = document.getElementById('openSummaryBtn');
+            const closeBtn = document.getElementById('closeSummaryBtn');
+            const modal = document.getElementById('summaryModal');
+            const modalContent = document.getElementById('summaryModalContent');
+
+            function openModal() {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => { // Pequeno delay para a animação de entrada funcionar
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                }, 10);
+            }
+
+            function closeModal() {
+                modal.classList.add('opacity-0');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => { // Espera a animação de saída para esconder o modal
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            }
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
                 }
+            });
+
+
+            // Script para o scroll suave do sumário DENTRO DO MODAL
+            document.querySelectorAll('#summaryModal a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    // Fecha o modal antes de rolar
+                    closeModal();
+                    
+                    if(targetElement) {
+                        // Espera a animação do modal terminar antes de rolar
+                        setTimeout(() => {
+                            const offsetTop = targetElement.offsetTop - 80; // Ajuste de espaço do topo
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }, 300);
+                    }
+                });
             });
         });
     </script>
+
 </body>
 </html>
+
+

@@ -1,347 +1,1074 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário de Conteúdo B2B (2025-2026) - Caixas de Tomada</title>
-    <!-- Tailwind CSS -->
+    <title>Timer Evereste</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        /* Estilo para a navegação fixa (sumário) - REMOVIDO */
-        /* .sticky-nav { ... } */
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        /* Estilo para o feedback do botão de copiar */
-        .copied-feedback {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-8px);
-            background-color: #10B981; /* green-500 */
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
+    <style>
+        /* Estilo para a barra de scroll */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .copied-feedback.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-12px);
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
         }
-        /* Estilo para o card do evento atual */
-        .current-event {
-            border: 2px solid #3B82F6; /* blue-500 */
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+
+        /* Animação de fade-in */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .chat-bubble {
+            max-width: 80%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .tag-color {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
 
-    <div class="container mx-auto px-4 py-8">
-        
-        <!-- Cabeçalho -->
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calendário de Conteúdo B2B (2025-2026)</h1>
-            <p class="text-lg text-blue-600 font-semibold mt-1">Soluções em Caixas de Tomada para Empresas</p>
-            <p class="mt-3 max-w-3xl mx-auto text-gray-600">
-                Foco: Arquitetos, Engenheiros, Eletricistas, Gerentes de TI, Compradores e Facilities.
+<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+
+    <!-- Ecrã de Autenticação -->
+    <div id="auth-container" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-900 p-4">
+        <div id="auth-box" class="w-full max-w-md bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6">
+            <div class="text-center">
+                <img src="https://i.postimg.cc/vHwmvFrG/logo-evereste-2025-horizontal-2.png" alt="Logótipo Evereste" class="w-48 mx-auto mb-6">
+                <h2 id="auth-title" class="text-2xl font-bold text-white">Bem-vindo de volta!</h2>
+                <p class="text-gray-400">Inicie sessão para continuar</p>
+            </div>
+            <form id="auth-form" class="space-y-4">
+                <input type="email" id="email" placeholder="E-mail" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+                <div class="relative">
+                    <input type="password" id="password" placeholder="Senha" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
+                    <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-4 text-gray-400 hover:text-white">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <p id="auth-error" class="text-red-400 text-sm h-4"></p>
+                <button type="submit" id="auth-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">Entrar</button>
+            </form>
+            <p class="text-center text-sm text-gray-400">
+                <span id="auth-prompt-text">Não tem uma conta?</span>
+                <a href="#" id="toggle-auth-mode" class="font-medium text-indigo-400 hover:underline">Registrar-se</a>
             </p>
+        </div>
+    </div>
+
+    <!-- Ecrã Principal da Aplicação -->
+    <div id="app-container" class="hidden min-h-screen">
+        <!-- Cabeçalho -->
+        <header class="bg-gray-800/50 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-between p-4 border-b border-gray-700">
+            <h1 class="text-xl font-bold text-white">Timer <span class="text-indigo-400">Evereste</span></h1>
+            <div class="flex items-center space-x-4">
+                <button id="profile-button" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-indigo-400 hover:bg-gray-600 transition">
+                    <i class="fas fa-user"></i>
+                </button>
+                 <button id="logout-button" title="Sair" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-red-400 hover:bg-gray-600 transition">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
         </header>
 
-        <!-- Botão para abrir o Modal do Sumário -->
-        <div class="text-center mb-10">
-            <button id="openSummaryBtn" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                Abrir Sumário Inteligente
+        <!-- Navegação -->
+        <nav class="p-4 bg-gray-900 flex justify-center space-x-2 md:space-x-4">
+            <button data-view="timer-view" class="nav-button bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
+                <i class="fas fa-clock mr-2"></i>Timer
             </button>
-        </div>
+            <button data-view="my-performance-view" class="nav-button bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
+                <i class="fas fa-chart-line mr-2"></i>Meu Desempenho
+            </button>
+            <button data-view="team-dashboard-view" class="nav-button bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
+                <i class="fas fa-users mr-2"></i>Equipe
+            </button>
+        </nav>
 
-        <!-- Modal do Sumário Inteligente -->
-        <div id="summaryModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
-            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-3xl w-full mx-auto relative transform transition-all duration-300 scale-95 opacity-0" id="summaryModalContent">
-                <button id="closeSummaryBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Sumário Inteligente</h2>
-                <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-10 text-center">
-                    <!-- Coluna 2025 -->
-                    <div>
-                        <h3 class="font-semibold text-lg mb-2 border-b-2 border-gray-300 pb-1">2025</h3>
-                        <ul class="space-y-1 text-sm">
-                            <li><a href="#set-2025" class="text-blue-600 hover:underline py-1 block">Setembro</a></li>
-                            <li><a href="#out-2025" class="text-blue-600 hover:underline py-1 block">Outubro</a></li>
-                            <li><a href="#nov-2025" class="text-blue-600 hover:underline py-1 block">Novembro</a></li>
-                            <li><a href="#dez-2025" class="text-blue-600 hover:underline py-1 block">Dezembro</a></li>
-                        </ul>
+        <!-- Conteúdo Principal -->
+        <main id="main-content" class="p-4 md:p-6">
+            <!-- Vista do Timer -->
+            <div id="timer-view" class="view-content fade-in space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Criação de Tarefa -->
+                        <div id="task-creation-container" class="bg-gray-800 p-4 rounded-xl shadow-lg">
+                            <h2 class="text-lg font-bold mb-3">Iniciar nova tarefa</h2>
+                            <form id="new-task-form" class="flex flex-col md:flex-row gap-3">
+                                <input type="text" id="task-name" placeholder="Nome da tarefa" class="flex-grow px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <select id="task-tag" class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                   <!-- Options will be populated by JS -->
+                                </select>
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg transition-transform transform hover:scale-105">Iniciar</button>
+                            </form>
+                             <p id="task-limit-error" class="text-red-400 text-sm mt-2 h-4"></p>
+                        </div>
+                        <!-- Tarefas Ativas -->
+                        <div>
+                            <h2 class="text-xl font-bold mb-4">Tarefas Ativas</h2>
+                            <div id="active-tasks-container" class="space-y-4">
+                                <!-- Tasks will be rendered here -->
+                            </div>
+                        </div>
                     </div>
-                    <!-- Coluna 2026 -->
-                    <div>
-                        <h3 class="font-semibold text-lg mb-2 border-b-2 border-gray-300 pb-1">2026</h3>
-                        <ul class="space-y-1 text-sm grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-1">
-                            <li><a href="#jan-2026" class="text-blue-600 hover:underline py-1 block">Janeiro</a></li>
-                            <li><a href="#fev-2026" class="text-blue-600 hover:underline py-1 block">Fevereiro</a></li>
-                            <li><a href="#mar-2026" class="text-blue-600 hover:underline py-1 block">Março</a></li>
-                            <li><a href="#abr-2026" class="text-blue-600 hover:underline py-1 block">Abril</a></li>
-                            <li><a href="#mai-2026" class="text-blue-600 hover:underline py-1 block">Maio</a></li>
-                            <li><a href="#jun-2026" class="text-blue-600 hover:underline py-1 block">Junho</a></li>
-                            <li><a href="#jul-2026" class="text-blue-600 hover:underline py-1 block">Julho</a></li>
-                            <li><a href="#ago-2026" class="text-blue-600 hover:underline py-1 block">Agosto</a></li>
-                            <li><a href="#set-2026" class="text-blue-600 hover:underline py-1 block">Setembro</a></li>
-                            <li><a href="#out-2026" class="text-blue-600 hover:underline py-1 block">Outubro</a></li>
-                            <li><a href="#nov-2026" class="text-blue-600 hover:underline py-1 block">Novembro</a></li>
-                            <li><a href="#dez-2026" class="text-blue-600 hover:underline py-1 block">Dezembro</a></li>
-                        </ul>
+                    <!-- Pomodoro e Ajuda -->
+                    <div class="space-y-6">
+                        <!-- Pomodoro -->
+                        <div class="bg-gray-800 p-4 rounded-xl shadow-lg text-center">
+                            <h2 class="text-lg font-bold mb-3">Sessão Pomodoro</h2>
+                            <p id="pomodoro-timer" class="text-5xl font-mono font-bold text-indigo-400">25:00</p>
+                            <div class="flex justify-center gap-3 mt-4">
+                                <button id="pomodoro-start" class="bg-green-600 hover:bg-green-700 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-play"></i></button>
+                                <button id="pomodoro-pause" class="bg-yellow-500 hover:bg-yellow-600 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-pause"></i></button>
+                                <button id="pomodoro-reset" class="bg-red-600 hover:bg-red-700 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-undo"></i></button>
+                            </div>
+                        </div>
+                        <!-- Central de Ajuda -->
+                        <div class="bg-gray-800 p-4 rounded-xl shadow-lg">
+                             <h2 class="text-lg font-bold mb-3">Central de Ajuda</h2>
+                             <div class="flex items-center gap-4">
+                                <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Timer" class="w-20 h-20">
+                                <p class="text-sm text-gray-300">"O tempo é o recurso mais valioso. Use-o com sabedoria para escalar as suas próprias montanhas."</p>
+                             </div>
+                             <button id="open-timer-help" class="mt-4 w-full bg-indigo-600/50 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition">Dicas de Foco</button>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Histórico Recente -->
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Últimas 5 Tarefas Finalizadas</h2>
+                    <div id="recent-history-container" class="bg-gray-800 p-4 rounded-xl shadow-lg space-y-3">
+                         <p id="no-recent-history" class="text-gray-400">Ainda não há tarefas finalizadas.</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Conteúdo Detalhado -->
-        <main class="space-y-12">
-            <!-- CARDS DE 2025 -->
-            <section id="2025">
-                <h2 class="text-2xl font-bold mb-6">Restante de 2025: Foco em Planejamento e Profissionais</h2>
-                <div id="set-2025" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Setembro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="admin-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                            <p class="font-bold text-lg">09/Set - Dia do Administrador</p>
-                            <p class="text-sm text-gray-500 mb-3">Público: Gerentes de facilities, compradores.</p>
-                            <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Eficiência que começa na tomada. Parabéns a todos os Administradores que mantêm as empresas conectadas e produtivas. Conheça nossas soluções para escritórios organizados."</p>
-                            <div class="mt-4 pt-3 border-t relative">
-                                <button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoAdministrador #GestaoEficiente #EscritorioOrganizado #Conectividade #Facilities">Copiar #</button>
-                                <p class="text-xs text-gray-500 font-semibold">HASHTAGS</p>
-                            </div>
-                        </div>
-                        <div id="cliente-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col current-event">
-                            <p class="font-bold text-lg">15/Set - Dia do Cliente</p>
-                            <p class="text-sm text-gray-500 mb-3">Público: Todos os clientes B2B.</p>
-                            <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Mais do que clientes, parceiros de projeto. Agradecemos a confiança em conectar sua empresa com a nossa qualidade."</p>
-                            <div class="mt-4 pt-3 border-t relative">
-                                <button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoCliente #ClienteB2B #ParceriaDeSucesso #Qualidade #ConectandoEmpresas">Copiar #</button>
-                                <p class="text-xs text-gray-500 font-semibold">HASHTAGS</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Outros meses de 2025 -->
-                 <div id="out-2025" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Outubro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="eletricista-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">17/Out - Dia do Eletricista</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Eletricistas, equipes de manutenção.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Parabéns aos profissionais que levam energia e segurança a todos os ambientes. Nossas caixas são projetadas para facilitar sua instalação e garantir a segurança do projeto."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEletricista #SegurancaEletrica #InstalacaoFacil #QualidadeProfissional #Energia">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                        <div id="engcivil-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">25/Out - Dia do Engenheiro Civil</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Engenheiros, construtoras.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Da planta à execução, cada detalhe constrói a qualidade. Homenageamos os Engenheiros Civis. Conte com nossas soluções para obras limpas, seguras e dentro do prazo."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiroCivil #Construcao #Obras #QualidadeNaObra #Engenharia">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                     </div>
-                </div>
-                <div id="nov-2025" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Novembro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="segtrabalho-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">27/Nov - Dia do Técnico em Segurança do Trabalho</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Deptos de Segurança, Facilities.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um ambiente de trabalho seguro evita acidentes. Nossas caixas de tomada seguem as normas (ex: NBR/Inmetro) para garantir a proteção total da sua equipe."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#SegurancaNoTrabalho #NormaNBR #PrevencaoDeAcidentes #AmbienteSeguro">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                        <div id="bf-2025" class="bg-gray-800 text-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg text-yellow-400">Última Sexta de Nov - Black Friday B2B</p>
-                           <p class="text-sm text-gray-400 mb-3">Público: Compradores, Gerentes de Projetos.</p>
-                           <p class="text-gray-300 flex-grow"><strong>Tema:</strong> "Planeje seu 2026. A melhor 'Black Friday' para sua empresa é garantir o melhor custo-benefício no seu projeto. Consulte nosso catálogo e solicite um orçamento para grandes volumes."</p>
-                           <div class="mt-4 pt-3 border-t border-gray-600 relative"><button class="copy-btn float-right bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg" data-hashtags="#BlackFridayB2B #Planejamento2026 #ComprasCorporativas #CustoBeneficio #Projetos">Copiar #</button><p class="text-xs text-gray-400 font-semibold">HASHTAGS</p></div>
-                        </div>
-                     </div>
-                </div>
-                <div id="dez-2025" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Dezembro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div id="engenheiro-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">11/Dez - Dia do Engenheiro</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Todos os Engenheiros.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Engenharia é a arte de conectar soluções. Parabéns a todos os engenheiros que projetam o futuro."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiro #Engenharia #Inovacao #Projetos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                        <div id="arquiteto-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">13/Dez - Dia do Arquiteto</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Arquitetos, Escritórios de Arquitetura.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Design e funcionalidade não devem competir. Nossas caixas de tomada são a solução para manter seu projeto limpo, moderno e conectado. Parabéns, Arquiteto!"</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoArquiteto #ArquiteturaCorporativa #DesignFuncional #ProjetoLimpo">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                        <div id="fimdeano-2025" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">20-31/Dez - Fim de Ano</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Todos.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Que 2026 traga novas conexões e grandes projetos. Estaremos juntos para energizar suas ideias. Boas Festas!"</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#BoasFestas #Feliz2026 #NovosProjetos #Conexoes">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- CARDS DE 2026 -->
-            <section id="2026">
-                <h2 class="text-2xl font-bold mb-6">Calendário 2026: Foco em Segurança, Inovação e Profissionais</h2>
-                <!-- Meses de 2026 -->
-                <div id="jan-2026" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Janeiro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="planejamento-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">Primeira Semana - Planejamento 2026</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Gestores, Compradores.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Ano novo, escritório mais produtivo. Está na hora de tirar do papel aquele projeto de sala de reunião ou a expansão das estações de trabalho. Consulte nosso catálogo."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Planejamento2026 #EscritorioProdutivo #Infraestrutura #AnoNovoProjetosNovos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                    </div>
-                </div>
-                 <div id="fev-2026" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Fevereiro</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="justica-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">20/Fev - Dia Mundial da Justiça Social</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Geral / RH.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um ambiente de trabalho justo e acessível para todos. Nossas soluções de tomadas de piso ou de fácil acesso promovem a ergonomia e a inclusão no escritório."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#JusticaSocial #Acessibilidade #Inclusao #Ergonomia #AmbienteDeTrabalho">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                    </div>
-                </div>
-                 <div id="mar-2026" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Março</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div id="mulher-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">08/Mar - Dia Internacional da Mulher</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Geral.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Homenageamos as engenheiras, arquitetas, administradoras e eletricistas que energizam e constroem o mercado."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaMulher #MulheresNaIndustria #LiderancaFeminina #Engenheiras #Arquitetas">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                         <div id="consumidorb2b-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col">
-                           <p class="font-bold text-lg">15/Mar - Dia Mundial do Consumidor (Foco B2B)</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Clientes B2B.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema:</strong> "No mercado B2B, o consumidor exige mais que um produto: exige parceria, prazo e segurança técnica. Esse é o nosso compromisso."</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#ConsumidorB2B #Parceria #Compromisso #QualidadeB2B #SucessoDoCliente">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="abr-2026" class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Abril</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div id="abrilverde-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col border-2 border-red-500">
-                           <p class="font-bold text-lg">28/Abr - Dia Mundial da Segurança e Saúde no Trabalho</p>
-                           <p class="text-sm text-gray-500 mb-3">Público: Técnicos de Segurança, Facilities.</p>
-                           <p class="text-gray-700 flex-grow"><strong>Tema (Mais importante do ano):</strong> "Não arrisque. Instalações elétricas inadequadas são uma das maiores causas de acidentes de trabalho. Proteja sua equipe e seu patrimônio com produtos certificados. #AbrilVerde"</p>
-                           <div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#AbrilVerde #SegurancaEletrica #SST #Prevencao #ProdutosCertificados">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Repetir a estrutura para todos os meses de 2026... -->
-                <div id="mai-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Maio</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="trabalhador-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">01/Mai - Dia do Trabalhador</p><p class="text-sm text-gray-500 mb-3">Público: Gestores, RH.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Um bom ambiente de trabalho valoriza o profissional. Invista em estações de trabalho organizadas, seguras e com fácil acesso à conectividade."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoTrabalhador #AmbienteDeTrabalho #Produtividade #ValorizacaoProfissional">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="industria-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">25/Mai - Dia da Indústria</p><p class="text-sm text-gray-500 mb-3">Público: Indústrias (clientes).</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Orgulho de fazer parte da cadeia produtiva, fornecendo soluções em conectividade para as indústrias que movem o Brasil."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaIndustria #IndustriaBrasileira #ConectividadeIndustrial #B2B">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="jun-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Junho</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="meioambiente-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">05/Jun - Dia Mundial do Meio Ambiente</p><p class="text-sm text-gray-500 mb-3">Público: Geral, Compradores.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Eficiência energética e durabilidade. Nossos produtos são feitos para durar, reduzindo o descarte e otimizando o consumo em projetos sustentáveis."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#MeioAmbiente #Sustentabilidade #EficienciaEnergetica #ConstrucaoSustentavel">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="jul-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Julho</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="plan2sem-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">Início do mês - Planejamento do 2º Semestre</p><p class="text-sm text-gray-500 mb-3">Público: Gestores.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "O ano ainda não acabou. Como está o planejamento de infraestrutura da sua empresa para o segundo semestre? Não deixe a conectividade para a última hora."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Planejamento #Infraestrutura #GestaoDeProjetos #SegundoSemestre">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="ago-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Agosto</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="informatica-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">15/Ago - Dia da Informática</p><p class="text-sm text-gray-500 mb-3">Público: Gerentes de TI.</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Data centers, racks, estações de trabalho... Onde tem TI, precisa ter energia segura e organizada. Conheça nossas soluções de tomadas para infraestrutura de tecnologia."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDaInformatica #InfraDeTI #DataCenter #GerenteDeTI #EnergiaSegura">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="set-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Setembro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="admin-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">09/Set - Dia do Administrador</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Parabéns ao profissional que conecta todas as áreas da empresa, garantindo que tudo funcione com máxima eficiência."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoAdmin #Administracao #Eficiencia #Gestao">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="cliente-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">15/Set - Dia do Cliente</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Agradecemos pela parceria em energizar seus negócios e construir projetos de sucesso juntos."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoClienteB2B #Parceria #Sucesso #Negocios">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="out-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Outubro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="eletricista-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">17/Out - Dia do Eletricista</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Segurança e qualidade na instalação. Uma homenagem aos nossos parceiros eletricistas, essenciais em todos os projetos."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Eletricista #SegurancaEletrica #ParceiroDeObra">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="engcivil-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">25/Out - Dia do Engenheiro Civil</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Projetando grandes obras, conectando grandes ideias. Nossas soluções acompanham a grandiosidade da sua engenharia."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#EngenhariaCivil #GrandesObras #ConectandoIdeias">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="nov-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Novembro</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div id="segtrabalho-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">27/Nov - Dia do Técnico em Segurança do Trabalho</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Prioridade máxima: um ambiente de trabalho sem riscos elétricos. Conte com quem entende de normas e segurança."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#SegurancaDoTrabalho #RiscoEletrico #Prevencao">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="bf-2026" class="bg-gray-800 text-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg text-yellow-400">Última Sexta de Nov - Black Friday B2B</p><p class="text-gray-300 flex-grow"><strong>Tema:</strong> "Antecipe suas compras de 2027. Garanta o orçamento de infraestrutura com as melhores condições do ano."</p><div class="mt-4 pt-3 border-t border-gray-600 relative"><button class="copy-btn float-right bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg" data-hashtags="#BlackFridayCorporativa #Planejamento2027 #Orcamento">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-                <div id="dez-2026" class="mb-8"><h3 class="text-xl font-semibold mb-4 text-gray-700">Dezembro</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div id="engenheiro-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">11/Dez - Dia do Engenheiro</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "A engenharia move o mundo. Nós ajudamos a conectá-lo com segurança e eficiência."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoEngenheiro2026 #EngenhariaMoveOMundo">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="arquiteto-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">13/Dez - Dia do Arquiteto</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "A tomada não precisa ser um ponto fraco no seu design. Conheça nossas linhas que se integram perfeitamente ao seu projeto."</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#DiaDoArquiteto2026 #DesignDeInteriores #Arquitetura">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div><div id="fimdeano-2026" class="bg-white rounded-xl shadow-md p-6 flex flex-col"><p class="font-bold text-lg">Fim de Ano</p><p class="text-gray-700 flex-grow"><strong>Tema:</strong> "Boas Festas e um 2027 com projetos ainda mais conectados e cheios de energia!"</p><div class="mt-4 pt-3 border-t relative"><button class="copy-btn float-right bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg" data-hashtags="#Feliz2027 #BoasFestas #NovosCiclos">Copiar #</button><p class="text-xs text-gray-500 font-semibold">HASHTAGS</p></div></div></div></div>
-            </section>
+            <!-- Vista Meu Desempenho -->
+            <div id="my-performance-view" class="view-content fade-in hidden"></div>
+
+            <!-- Vista Dashboard da Equipe -->
+            <div id="team-dashboard-view" class="view-content fade-in hidden"></div>
         </main>
 
+        <!-- Botão Flutuante do Chatbot -->
+        <button id="open-chat-btn" class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 w-16 h-16 rounded-full shadow-lg flex items-center justify-center transition-transform transform hover:scale-110 overflow-hidden p-1">
+            <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Abrir Chat do Yeti" class="w-full h-full object-cover rounded-full">
+        </button>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Script para o botão de copiar
-            const copyButtons = document.querySelectorAll('.copy-btn');
-            copyButtons.forEach(button => {
-                const feedback = document.createElement('div');
-                feedback.className = 'copied-feedback';
-                feedback.textContent = 'Copiado!';
-                button.parentElement.appendChild(feedback);
+    <!-- Modal do Perfil -->
+    <div id="profile-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto fade-in">
+            <button id="close-profile-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
+            <h2 class="text-2xl font-bold mb-2">Meu Perfil</h2>
+            <p id="profile-email" class="text-indigo-400 mb-6"></p>
+            <div>
+                 <h3 class="text-lg font-semibold mb-4">Desempenho nos Últimos 7 Dias</h3>
+                 <div id="profile-dashboard-container" class="relative min-h-[280px]"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal da Central de Ajuda -->
+    <div id="help-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto fade-in">
+            <button id="close-help-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
+            <div id="help-modal-content"></div>
+        </div>
+    </div>
 
-                button.addEventListener('click', () => {
-                    const hashtags = button.dataset.hashtags;
-                    navigator.clipboard.writeText(hashtags).then(() => {
-                        feedback.classList.add('show');
-                        setTimeout(() => {
-                            feedback.classList.remove('show');
-                        }, 2000);
-                    }).catch(err => {
-                        console.error('Falha ao copiar: ', err);
-                    });
-                });
-            });
+    <!-- Modal do Chatbot -->
+    <div id="chat-modal" class="hidden fixed bottom-24 right-6 w-[350px] h-[500px] bg-gray-800 rounded-2xl shadow-2xl flex flex-col z-50 fade-in">
+        <div class="flex items-center p-4 bg-gray-900 rounded-t-2xl">
+            <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Yeti" class="w-10 h-10 rounded-full mr-3">
+            <div>
+                <h3 class="font-bold">Yeti Assistente</h3>
+                <p class="text-xs text-green-400">Online</p>
+            </div>
+            <button id="close-chat-btn" class="ml-auto text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4">
+            <!-- Messages will be injected here -->
+        </div>
+        <form id="chat-form" class="p-4 border-t border-gray-700">
+            <div class="flex items-center bg-gray-700 rounded-lg">
+                <input type="text" id="chat-input" placeholder="Pergunte algo..." class="w-full bg-transparent px-4 py-2 focus:outline-none">
+                <button type="submit" class="p-2 text-indigo-400 hover:text-indigo-300"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </form>
+    </div>
+    
+    <script type="module">
+        // Importar funções do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc,
+            collection,
+            addDoc,
+            onSnapshot,
+            query,
+            where,
+            orderBy,
+            limit,
+            deleteDoc,
+            getDocs,
+            Timestamp,
+            collectionGroup
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            // --- Lógica do Modal do Sumário ---
-            const openBtn = document.getElementById('openSummaryBtn');
-            const closeBtn = document.getElementById('closeSummaryBtn');
-            const modal = document.getElementById('summaryModal');
-            const modalContent = document.getElementById('summaryModalContent');
+        // =================================================================================
+        // 1. CONFIGURAÇÃO DO FIREBASE
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCeEYuehK-AruCIV_zhNDDQ1ng5U1eIzqI",
+            authDomain: "timerevereste.firebaseapp.com",
+            projectId: "timerevereste",
+            storageBucket: "timerevereste.appspot.com",
+            messagingSenderId: "469617910016",
+            appId: "1:469617910016:web:9076dbb4905667bb353e5",
+            measurementId: "G-K1YGJ0NHCL"
+        };
+        
+        // =================================================================================
+        // 2. INICIALIZAÇÃO E VARIÁVEIS GLOBAIS
+        // =================================================================================
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-            function openModal() {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                setTimeout(() => { // Pequeno delay para a animação de entrada funcionar
-                    modal.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                }, 10);
-            }
+        let currentUser = null;
+        let activeTasks = [];
+        let timerIntervals = {};
+        let unsubscribeActiveTasks = null;
+        let unsubscribeRecentHistory = null;
+        let chatHistory = [];
+        let currentUserName = '';
+        
+        const TAG_OPTIONS = [
+            { name: 'Gestão de Projetos', color: 'bg-yellow-200 text-yellow-800' },
+            { name: 'Análise de Dados', color: 'bg-yellow-200 text-yellow-800' },
+            { name: 'Web Design', color: 'bg-green-200 text-green-800' },
+            { name: 'UX', color: 'bg-green-200 text-green-800' },
+            { name: 'UI', color: 'bg-green-200 text-green-800' },
+            { name: 'App', color: 'bg-green-200 text-green-800' },
+            { name: 'Pré-Produção', color: 'bg-gray-300 text-gray-800' },
+            { name: 'Roteiro', color: 'bg-gray-300 text-gray-800' },
+            { name: 'Edição de Vídeos', color: 'bg-blue-200 text-blue-800' },
+            { name: 'Edição de Fotos', color: 'bg-blue-200 text-blue-800' },
+            { name: 'Audiovisual', color: 'bg-blue-200 text-blue-800' },
+            { name: 'Captação Material', color: 'bg-blue-200 text-blue-800' },
+            { name: 'Pós-Produção', color: 'bg-blue-200 text-blue-800' },
+            { name: 'Evento', color: 'bg-purple-200 text-purple-800' },
+            { name: 'Cerimonial', color: 'bg-purple-200 text-purple-800' },
+            { name: 'Portal', color: 'bg-pink-200 text-pink-800' },
+            { name: 'E-mail', color: 'bg-pink-200 text-pink-800' },
+            { name: 'WhatsApp', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Linkedin', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Instagram', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Youtube', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Tiktok', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Flickr', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Facebook', color: 'bg-pink-200 text-pink-800' },
+            { name: 'TV Evereste', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Impressão', color: 'bg-pink-200 text-pink-800' },
+            { name: 'Assessoria de Comunicação', color: 'bg-red-200 text-red-800' },
+            { name: 'HYPERDOC', color: 'bg-red-200 text-red-800' },
+            { name: 'Documento', color: 'bg-red-200 text-red-800' },
+            { name: 'Comunicação', color: 'bg-red-200 text-red-800' },
+            { name: 'Agendamento', color: 'bg-red-200 text-red-800' },
+            { name: 'Reunião', color: 'bg-red-200 text-red-800' },
+            { name: 'Planejamento', color: 'bg-red-200 text-red-800' },
+            { name: 'Treinamento', color: 'bg-red-200 text-red-800' },
+            { name: 'Pesquisa', color: 'bg-red-200 text-red-800' },
+            { name: 'Notícia', color: 'bg-red-200 text-red-800' },
+            { name: 'Atividade Externa', color: 'bg-red-200 text-red-800' },
+            { name: 'Apresentação', color: 'bg-red-200 text-red-800' },
+            { name: 'Design Gráfico', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Design de Produtos', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Design 3D', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Motion Design', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Social Media', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Copywriting', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Endomarketing', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Identidade Visual', color: 'bg-orange-200 text-orange-800' },
+            { name: 'Mídia Paga', color: 'bg-orange-200 text-orange-800' },
+        ];
 
-            function closeModal() {
-                modal.classList.add('opacity-0');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => { // Espera a animação de saída para esconder o modal
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }, 300);
-            }
 
-            openBtn.addEventListener('click', openModal);
-            closeBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
+        // Popular as tags
+        const taskTagSelect = document.getElementById('task-tag');
+        TAG_OPTIONS.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag.name;
+            option.textContent = tag.name;
+            taskTagSelect.appendChild(option);
+        });
+        
+        function getTagColor(tagName) {
+            const tag = TAG_OPTIONS.find(t => t.name === tagName);
+            return tag ? tag.color : 'bg-gray-500 text-gray-100';
+        }
 
-
-            // Script para o scroll suave do sumário DENTRO DO MODAL
-            document.querySelectorAll('#summaryModal a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-
-                    // Fecha o modal antes de rolar
-                    closeModal();
-                    
-                    if(targetElement) {
-                        // Espera a animação do modal terminar antes de rolar
-                        setTimeout(() => {
-                            const offsetTop = targetElement.offsetTop - 80; // Ajuste de espaço do topo
-                            window.scrollTo({
-                                top: offsetTop,
-                                behavior: 'smooth'
-                            });
-                        }, 300);
-                    }
-                });
+        // =================================================================================
+        // 3. UTILITÁRIOS E GESTÃO DE ESTADO
+        // =================================================================================
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const viewId = button.dataset.view;
+                document.querySelectorAll('.view-content').forEach(view => view.classList.add('hidden'));
+                document.getElementById(viewId).classList.remove('hidden');
+                document.querySelectorAll('.nav-button').forEach(btn => btn.classList.replace('bg-indigo-600', 'bg-gray-700'));
+                button.classList.replace('bg-gray-700', 'bg-indigo-600');
+                if (viewId === 'my-performance-view') loadMyPerformanceDashboard();
+                if (viewId === 'team-dashboard-view') loadTeamDashboard();
             });
         });
-    </script>
 
+        function setupListeners() {
+            if (!currentUser) return;
+            cleanupListeners();
+            const activeTasksQuery = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`));
+            unsubscribeActiveTasks = onSnapshot(activeTasksQuery, (snapshot) => {
+                const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                Object.values(timerIntervals).forEach(clearInterval);
+                timerIntervals = {};
+                renderActiveTasks(tasks);
+            });
+            const recentHistoryQuery = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'), limit(5));
+            unsubscribeRecentHistory = onSnapshot(recentHistoryQuery, (snapshot) => {
+                 renderRecentHistory(snapshot.docs.map(doc => doc.data()));
+            }, (error) => {
+                console.error("Falha ao carregar o histórico recente: ", error);
+                if (error.code === 'failed-precondition') console.error("Falta de índice no Firestore. Verifique a consola de erros.");
+            });
+        }
+
+        function cleanupListeners() {
+            if (unsubscribeActiveTasks) unsubscribeActiveTasks();
+            if (unsubscribeRecentHistory) unsubscribeRecentHistory();
+            Object.values(timerIntervals).forEach(clearInterval);
+            timerIntervals = {};
+        }
+        
+        function clearUI() {
+            activeTasksContainer.innerHTML = '';
+            document.getElementById('recent-history-container').innerHTML = `<p id="no-recent-history" class="text-gray-400">Ainda não há tarefas finalizadas.</p>`;
+            document.getElementById('my-performance-view').innerHTML = '';
+            document.getElementById('team-dashboard-view').innerHTML = '';
+            document.querySelector('[data-view="timer-view"]').click();
+        }
+
+        function formatTime(totalSeconds) {
+            if(isNaN(totalSeconds) || totalSeconds < 0) return "00:00:00";
+            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+        
+        function generateColors(numColors) {
+            const colors = ['#4f46e5', '#7c3aed', '#db2777', '#f97316', '#eab308', '#84cc16', '#10b981', '#06b6d4', '#3b82f6'];
+            return Array.from({length: numColors}, (_, i) => colors[i % colors.length]);
+        }
+        
+        // =================================================================================
+        // 4. LÓGICA DE AUTENTICAÇÃO
+        // =================================================================================
+        const authContainer = document.getElementById('auth-container');
+        const appContainer = document.getElementById('app-container');
+        const authForm = document.getElementById('auth-form');
+        const authError = document.getElementById('auth-error');
+        const toggleAuthModeLink = document.getElementById('toggle-auth-mode');
+        const authTitle = document.getElementById('auth-title');
+        const authPromptText = document.getElementById('auth-prompt-text');
+        const authButton = document.getElementById('auth-button');
+        const togglePassword = document.getElementById('toggle-password');
+
+        togglePassword.addEventListener('click', () => {
+            const passwordInput = document.getElementById('password');
+            const icon = togglePassword.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        let isLoginMode = true;
+
+        toggleAuthModeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            authError.textContent = '';
+            authForm.reset();
+
+            if (isLoginMode) {
+                authTitle.textContent = 'Bem-vindo de volta!';
+                authButton.textContent = 'Entrar';
+                authPromptText.textContent = 'Não tem uma conta?';
+                toggleAuthModeLink.textContent = 'Registrar-se';
+            } else {
+                authTitle.textContent = 'Crie a sua conta';
+                authButton.textContent = 'Registar';
+                authPromptText.textContent = 'Já tem uma conta?';
+                toggleAuthModeLink.textContent = 'Entrar';
+            }
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            authError.textContent = '';
+
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const userProfileRef = doc(db, `artifacts/default-app-id/users/${userCredential.user.uid}/profile/settings`);
+                    await setDoc(userProfileRef, { email: userCredential.user.email });
+                }
+            } catch (error) {
+                console.error("Authentication error:", error);
+                handleAuthError(error);
+            }
+        });
+
+        function handleAuthError(error) {
+             switch (error.code) {
+                case 'auth/invalid-email': authError.textContent = 'Formato de e-mail inválido.'; break;
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                case 'auth/invalid-credential':
+                    authError.textContent = 'E-mail ou senha incorretos.'; 
+                    break;
+                case 'auth/email-already-in-use': authError.textContent = 'Este e-mail já está a ser utilizado.'; break;
+                case 'auth/weak-password': authError.textContent = 'A senha deve ter pelo menos 6 caracteres.'; break;
+                default: authError.textContent = 'Ocorreu um erro. Tente novamente.'; break;
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+
+                // Extrai e armazena o primeiro nome do utilizador a partir do e-mail
+                if (user.email) {
+                    const namePart = user.email.split('@')[0];
+                    const firstName = namePart.split('.')[0].split('-')[0];
+                    currentUserName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+                } else {
+                    currentUserName = 'Usuário'; // Fallback
+                }
+
+                authContainer.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                loadUserProfile();
+                setupListeners();
+                
+                // Reinicia o histórico e envia a mensagem de boas-vindas personalizada
+                chatHistory = [];
+                const welcomeMessage = `Olá, <b>${currentUserName}</b>! Eu sou o Yeti, seu assistente de produtividade com IA. Faça qualquer pergunta sobre suas tarefas ou sobre como usar o app.`;
+                addBotMessage(welcomeMessage);
+                chatHistory.push({ role: "model", parts: [{ text: welcomeMessage }] });
+
+            } else {
+                currentUser = null;
+                currentUserName = ''; // Limpa o nome no logout
+                authContainer.classList.remove('hidden');
+                appContainer.classList.add('hidden');
+                cleanupListeners();
+                clearUI();
+                chatHistory = []; // Limpa o histórico no logout
+            }
+        });
+
+        document.getElementById('logout-button').addEventListener('click', () => signOut(auth));
+
+        // =================================================================================
+        // 5. LÓGICA DO TIMER E GESTÃO DE TAREFAS
+        // =================================================================================
+        const newTaskForm = document.getElementById('new-task-form');
+        const taskLimitError = document.getElementById('task-limit-error');
+        const activeTasksContainer = document.getElementById('active-tasks-container');
+        
+        newTaskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (activeTasks.length >= 3) {
+                taskLimitError.textContent = 'Pode ter no máximo 3 tarefas ativas.';
+                setTimeout(() => taskLimitError.textContent = '', 3000);
+                return;
+            }
+
+            const taskName = document.getElementById('task-name').value;
+            const taskTag = document.getElementById('task-tag').value;
+
+            const newTask = { name: taskName, tag: taskTag, ownerId: currentUser.uid, status: 'paused', startTime: Timestamp.now(), lastStartTime: null, totalActiveTime: 0, totalPausedTime: 0, pauseCount: 0, lastPauseTime: Timestamp.now() };
+
+            try {
+                const collectionRef = collection(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`);
+                await addDoc(collectionRef, newTask);
+                newTaskForm.reset();
+            } catch (error) { console.error("Error adding new task:", error); }
+        });
+
+        function startTimer(task) {
+            if (timerIntervals[task.id]) return;
+            timerIntervals[task.id] = setInterval(() => {
+                task.totalActiveTime++;
+                const timerElement = document.getElementById(`timer-${task.id}`);
+                if (timerElement) timerElement.textContent = formatTime(task.totalActiveTime);
+            }, 1000);
+        }
+
+        function pauseTimer(taskId) {
+            clearInterval(timerIntervals[taskId]);
+            delete timerIntervals[taskId];
+        }
+
+        async function updateTaskInFirestore(taskId, updates) {
+            if (!currentUser) return;
+            const taskRef = doc(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`, taskId);
+            await setDoc(taskRef, updates, { merge: true });
+        }
+        
+        async function continueTask(taskToContinue) {
+            await Promise.all(activeTasks.map(task => {
+                if (task.id !== taskToContinue.id && task.status === 'running') return pauseTask(task);
+            }));
+
+            const now = Timestamp.now();
+            const pauseDuration = now.seconds - taskToContinue.lastPauseTime.seconds;
+            await updateTaskInFirestore(taskToContinue.id, { status: 'running', lastStartTime: now, totalPausedTime: taskToContinue.totalPausedTime + pauseDuration });
+        }
+        
+        async function pauseTask(taskToPause) {
+            const now = Timestamp.now();
+            const activeDuration = now.seconds - taskToPause.lastStartTime.seconds;
+            await updateTaskInFirestore(taskToPause.id, { status: 'paused', lastPauseTime: now, totalActiveTime: taskToPause.totalActiveTime + activeDuration, pauseCount: taskToPause.pauseCount + 1 });
+        }
+
+        async function finishTask(taskToFinish) {
+            pauseTimer(taskToFinish.id);
+            let finalActiveTime = taskToFinish.totalActiveTime;
+            if (taskToFinish.status === 'running') {
+                 const now = Timestamp.now();
+                 finalActiveTime += (now.seconds - taskToFinish.lastStartTime.seconds);
+            }
+            const finishedTask = { ...taskToFinish, userEmail: currentUser.email, endTime: Timestamp.now(), totalActiveTime: finalActiveTime };
+            delete finishedTask.status;
+            delete finishedTask.lastStartTime;
+            delete finishedTask.lastPauseTime;
+            
+            try {
+                await addDoc(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), finishedTask);
+                await deleteDoc(doc(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`, taskToFinish.id));
+            } catch(error) { console.error("Error finishing task: ", error); }
+        }
+        
+        function renderActiveTasks(tasks) {
+            activeTasks = tasks;
+            activeTasksContainer.innerHTML = tasks.length === 0 ? `<p class="text-gray-400 text-center">Nenhuma tarefa ativa. Inicie uma acima!</p>` : '';
+            
+            tasks.forEach(task => {
+                const isRunning = task.status === 'running';
+                let displayTime = task.totalActiveTime;
+                if(isRunning && task.lastStartTime) displayTime += (Math.floor(Date.now() / 1000) - task.lastStartTime.seconds);
+                const tagColor = getTagColor(task.tag);
+                
+                const taskCard = document.createElement('div');
+                taskCard.className = `p-4 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 ${isRunning ? 'bg-green-800/50 border-2 border-green-500' : 'bg-gray-800'}`;
+                taskCard.innerHTML = `
+                    <div class="flex-grow text-center md:text-left">
+                        <div class="flex items-center gap-3">
+                             ${isRunning ? '<span class="text-xs font-bold uppercase bg-green-500 text-gray-900 px-2 py-1 rounded">ATIVA</span>' : ''}
+                            <h3 class="font-bold text-lg">${task.name || 'Tarefa sem nome'}</h3>
+                        </div>
+                        <p class="tag-color ${tagColor}">${task.tag}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-center"><p class="text-2xl md:text-3xl font-mono" id="timer-${task.id}">${formatTime(displayTime)}</p><p class="text-xs text-gray-400">Tempo Ativo</p></div>
+                        <div class="text-center"><p class="text-2xl md:text-3xl font-mono">${task.pauseCount}</p><p class="text-xs text-gray-400">Pausas</p></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="${isRunning ? 'pause-btn bg-yellow-500 hover:bg-yellow-600' : 'continue-btn bg-green-600 hover:bg-green-700'}" title="${isRunning ? 'Pausar' : 'Continuar'}"><i class="fas fa-${isRunning ? 'pause' : 'play'}"></i></button>
+                        <button class="finish-btn bg-red-600 hover:bg-red-700" title="Finalizar"><i class="fas fa-check"></i></button>
+                    </div>`;
+                taskCard.querySelectorAll('button').forEach(btn => btn.classList.add('text-white', 'font-bold', 'py-2', 'px-4', 'rounded-lg', 'transition'));
+                activeTasksContainer.appendChild(taskCard);
+
+                if(isRunning) {
+                    taskCard.querySelector('.pause-btn').addEventListener('click', () => pauseTask(task));
+                    startTimer({ ...task, totalActiveTime: displayTime });
+                } else {
+                    taskCard.querySelector('.continue-btn').addEventListener('click', () => continueTask(task));
+                    pauseTimer(task.id);
+                }
+                taskCard.querySelector('.finish-btn').addEventListener('click', () => finishTask(task));
+            });
+        }
+        
+        function renderRecentHistory(entries) {
+            const container = document.getElementById('recent-history-container');
+            container.innerHTML = `<p id="no-recent-history" class="text-gray-400 ${entries.length > 0 ? 'hidden' : ''}">Ainda não há tarefas finalizadas.</p>`;
+            entries.forEach(entry => {
+                const tagColor = getTagColor(entry.tag);
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'bg-gray-700 p-3 rounded-lg flex justify-between items-center';
+                entryDiv.innerHTML = `
+                     <div><p class="font-semibold">${entry.name}</p><p class="tag-color ${tagColor}">${entry.tag}</p></div>
+                     <div class="text-right">
+                         <p class="font-mono text-lg">${formatTime(entry.totalActiveTime)}</p>
+                         <div class="text-xs text-gray-400 flex items-center gap-2 justify-end">
+                            <span>${new Date(entry.endTime.seconds * 1000).toLocaleDateString()}</span>
+                            <span class="flex items-center gap-1"><i class="fas fa-pause-circle"></i> ${entry.pauseCount}</span>
+                         </div>
+                     </div>`;
+                container.appendChild(entryDiv);
+            });
+        }
+        
+        // =================================================================================
+        // 6. LÓGICA DOS DASHBOARDS E GRÁFICOS
+        // =================================================================================
+        let myPerfChart = null;
+        let teamCategoryChart = null;
+        let teamUserChart = null;
+        
+        async function loadMyPerformanceDashboard() {
+            const container = document.getElementById('my-performance-view');
+            container.innerHTML = `<div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-40"><i class="fas fa-spinner fa-spin text-4xl text-indigo-400"></i></div>`;
+            if (!currentUser) { container.innerHTML = ''; return; };
+
+            try {
+                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'));
+                const querySnapshot = await getDocs(q);
+                const entries = querySnapshot.docs.map(doc => doc.data());
+
+                const totalTime = entries.reduce((acc, curr) => acc + curr.totalActiveTime, 0);
+                const totalTasks = entries.length;
+                const timeByCategory = entries.reduce((acc, curr) => {
+                    acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime;
+                    return acc;
+                }, {});
+
+                const filteredTimeByCategory = Object.entries(timeByCategory).filter(([, value]) => value > 0);
+                const chartLabels = filteredTimeByCategory.map(([key]) => key);
+                const chartData = filteredTimeByCategory.map(([, value]) => value);
+
+                container.innerHTML = `
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex items-center gap-4">
+                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Dash" class="w-20 h-20">
+                        <div><h2 class="text-lg font-bold">Análise de Performance</h2><p class="text-sm text-gray-300">"Medir o progresso é o primeiro passo para melhorá-lo. Seus dados são o mapa para o seu pico de produtividade."</p>
+                        <button id="open-dash-help" class="mt-2 text-sm text-indigo-400 hover:underline">Ver dicas do Yeti</button></div>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTime)}</p><p class="text-gray-400">Tempo Total Registado</p></div>
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${totalTasks}</p><p class="text-gray-400">Total de Tarefas</p></div>
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTasks > 0 ? totalTime / totalTasks : 0)}</p><p class="text-gray-400">Tempo Médio por Tarefa</p></div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Meu Tempo por Categoria</h3><canvas id="my-perf-category-chart"></canvas></div>
+                        <div class="bg-gray-800 p-6 rounded-xl max-h-[400px] overflow-y-auto"><h3 class="font-bold mb-4">Histórico Completo</h3>
+                            <table class="w-full text-left text-sm">
+                                <thead class="text-xs text-gray-400 uppercase bg-gray-700"><tr><th class="p-2">Tarefa</th><th class="p-2">Tempo</th><th class="p-2 flex items-center gap-1"><i class="fas fa-pause-circle"></i></th><th class="p-2">Data</th></tr></thead>
+                                <tbody>${entries.map(e => {
+                                    const tagColor = getTagColor(e.tag);
+                                    return `<tr class="border-b border-gray-700"><td class="p-2">${e.name}<br><span class="tag-color ${tagColor}">${e.tag}</span></td><td class="p-2 font-mono">${formatTime(e.totalActiveTime)}</td><td class="p-2">${e.pauseCount}</td><td class="p-2">${new Date(e.endTime.seconds * 1000).toLocaleDateString()}</td></tr>`
+                                }).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+                container.querySelector('#open-dash-help').addEventListener('click', openHelpModal);
+
+                const ctx = document.getElementById('my-perf-category-chart').getContext('2d');
+                if (myPerfChart) myPerfChart.destroy();
+                myPerfChart = new Chart(ctx, { type: 'doughnut', data: { labels: chartLabels, datasets: [{ data: chartData, backgroundColor: generateColors(chartData.length) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#d1d5db' } } } } });
+            } catch (error) {
+                console.error("Error loading My Performance Dashboard:", error);
+                container.innerHTML = `<p class="text-red-400 text-center">Ocorreu um erro ao carregar os dados.</p>`;
+            }
+        }
+
+        async function loadTeamDashboard() {
+            const container = document.getElementById('team-dashboard-view');
+            container.innerHTML = `<div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-40"><i class="fas fa-spinner fa-spin text-4xl text-indigo-400"></i></div>`;
+
+            try {
+                const timeEntriesQuery = query(collectionGroup(db, 'time_entries'), orderBy('endTime', 'desc'), limit(200));
+                const snapshot = await getDocs(timeEntriesQuery);
+                const allEntries = snapshot.docs.map(doc => doc.data());
+
+                const totalTime = allEntries.reduce((sum, entry) => sum + entry.totalActiveTime, 0);
+                const timeByCategory = allEntries.reduce((acc, curr) => { acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime; return acc; }, {});
+                const timeByUser = allEntries.reduce((acc, curr) => { acc[curr.userEmail] = (acc[curr.userEmail] || 0) + curr.totalActiveTime; return acc; }, {});
+                
+                const topUsers = Object.entries(timeByUser).filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
+                const filteredTimeByCategory = Object.entries(timeByCategory).filter(([, value]) => value > 0);
+
+                container.innerHTML = `
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex items-center gap-4">
+                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Dash" class="w-20 h-20">
+                        <div><h2 class="text-lg font-bold">Análise da Equipe</h2><p class="text-sm text-gray-300">"Uma equipe sincronizada escala mais rápido. Estes dados mostram onde a energia coletiva está focada."</p>
+                        <button id="open-dash-help" class="mt-2 text-sm text-indigo-400 hover:underline">Ver dicas do Yeti</button></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTime)}</p><p class="text-gray-400">Tempo Total da Equipe</p></div>
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${allEntries.length}</p><p class="text-gray-400">Total de Tarefas</p></div>
+                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${new Set(allEntries.map(e => e.ownerId)).size}</p><p class="text-gray-400">Colaboradores Ativos</p></div>
+                    </div>
+                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Tempo por Categoria (Equipe)</h3><canvas id="team-category-chart"></canvas></div>
+                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Top 10 Colaboradores</h3><canvas id="team-user-chart"></canvas></div>
+                    </div>
+                     <div class="bg-gray-800 p-6 rounded-xl max-h-[400px] overflow-y: auto"><h3 class="font-bold mb-4">Log de Atividades Recentes</h3>
+                         <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-gray-400 uppercase bg-gray-700"><tr><th class="p-2">Colaborador</th><th class="p-2">Tarefa</th><th class="p-2">Tempo</th><th class="p-2">Data</th></tr></thead>
+                            <tbody>${allEntries.slice(0, 50).map(e => {
+                                const tagColor = getTagColor(e.tag);
+                                return `<tr class="border-b border-gray-700"><td class="p-2">${e.userEmail}</td><td class="p-2">${e.name}<br><span class="tag-color ${tagColor}">${e.tag}</span></td><td class="p-2 font-mono">${formatTime(e.totalActiveTime)}</td><td class="p-2">${new Date(e.endTime.seconds * 1000).toLocaleString()}</td></tr>`
+                            }).join('')}</tbody>
+                        </table>
+                     </div>`;
+                container.querySelector('#open-dash-help').addEventListener('click', openHelpModal);
+                
+                new Chart(document.getElementById('team-category-chart').getContext('2d'), { type: 'bar', data: { labels: filteredTimeByCategory.map(i => i[0]), datasets: [{ label: 'Tempo', data: filteredTimeByCategory.map(i => i[1]), backgroundColor: generateColors(filteredTimeByCategory.length) }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#d1d5db' } }, x: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } } });
+                new Chart(document.getElementById('team-user-chart').getContext('2d'), { type: 'bar', data: { labels: topUsers.map(u => u[0]), datasets: [{ label: 'Tempo', data: topUsers.map(u => u[1]), backgroundColor: generateColors(topUsers.length) }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { y: { ticks: { color: '#d1d5db' } }, x: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } } });
+            } catch (error) {
+                console.error("Error loading Team Dashboard:", error);
+                container.innerHTML = `<p class="text-red-400 text-center">Ocorreu um erro ao carregar os dados da equipe.</p>`;
+                if (error.code === 'failed-precondition') console.error("Falta de índice no Firestore. Crie o índice através do link na consola.");
+            }
+        }
+
+        // =================================================================================
+        // 7. LÓGICA DO PERFIL, POMODORO E MODAIS
+        // =================================================================================
+        const profileModal = document.getElementById('profile-modal');
+        let profileChart = null;
+        
+        document.getElementById('profile-button').addEventListener('click', () => { profileModal.classList.remove('hidden'); loadProfileDashboard(); });
+        document.getElementById('close-profile-modal').addEventListener('click', () => profileModal.classList.add('hidden'));
+
+        async function loadUserProfile() {
+            if(!currentUser) return;
+            const profileRef = doc(db, `artifacts/default-app-id/users/${currentUser.uid}/profile/settings`);
+            const docSnap = await getDoc(profileRef);
+            if (!docSnap.exists()) {
+                await setDoc(profileRef, { email: currentUser.email });
+            }
+            document.getElementById('profile-email').textContent = currentUser.email;
+        }
+        
+        async function loadProfileDashboard() {
+            const container = document.getElementById('profile-dashboard-container');
+            container.innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg"><i class="fas fa-spinner fa-spin text-3xl text-indigo-400"></i></div>`;
+            try {
+                const sevenDaysAgo = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), where('endTime', '>=', sevenDaysAgo));
+                const snapshot = await getDocs(q);
+                const entries = snapshot.docs.map(doc => doc.data());
+
+                const totalTime = entries.reduce((sum, e) => sum + e.totalActiveTime, 0);
+                const timeByCategory = entries.reduce((acc, curr) => { acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime; return acc; }, {});
+                
+                container.innerHTML = `<p class="text-center text-3xl font-bold text-indigo-400 mb-4">${formatTime(totalTime)}</p><div class="h-64"><canvas id="profile-category-chart"></canvas></div>`;
+                new Chart(document.getElementById('profile-category-chart').getContext('2d'), { type: 'pie', data: { labels: Object.keys(timeByCategory), datasets: [{ data: Object.values(timeByCategory), backgroundColor: generateColors(Object.keys(timeByCategory).length) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+            } catch(error) {
+                console.error("Erro ao carregar o dashboard do perfil:", error);
+                container.innerHTML = `<div class="text-red-400 p-4">Ocorreu um erro ao carregar o seu desempenho.</div>`;
+            }
+        }
+
+        // Pomodoro
+        const pomodoroTimerEl = document.getElementById('pomodoro-timer');
+        let pomodoroInterval;
+        let pomodoroTime = 25 * 60;
+        let pomodoroRunning = false;
+        
+        document.getElementById('pomodoro-start').addEventListener('click', () => {
+            if (pomodoroRunning) return;
+            pomodoroRunning = true;
+            Notification.requestPermission();
+            pomodoroInterval = setInterval(() => {
+                pomodoroTime--;
+                pomodoroTimerEl.textContent = formatTime(pomodoroTime).substring(3);
+                if (pomodoroTime <= 0) {
+                    clearInterval(pomodoroInterval);
+                    pomodoroRunning = false;
+                    new Notification("Pomodoro Finalizado!", { body: "Bom trabalho! Hora de uma pausa.", icon: "https://i.postimg.cc/mDhmmMcn/Gemini-Generated-Image-qbpc7rqbpc7rqbpc-2.png" });
+                    playAlarm();
+                    pomodoroTime = 25 * 60;
+                }
+            }, 1000);
+        });
+        document.getElementById('pomodoro-pause').addEventListener('click', () => { clearInterval(pomodoroInterval); pomodoroRunning = false; });
+        document.getElementById('pomodoro-reset').addEventListener('click', () => { clearInterval(pomodoroInterval); pomodoroRunning = false; pomodoroTime = 25 * 60; pomodoroTimerEl.textContent = "25:00"; });
+        
+        function playAlarm() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+            setTimeout(() => oscillator.stop(), 500);
+        }
+
+        // Central de Ajuda
+        const helpModal = document.getElementById('help-modal');
+        document.getElementById('open-timer-help').addEventListener('click', openHelpModal);
+        document.getElementById('close-help-modal').addEventListener('click', () => helpModal.classList.add('hidden'));
+
+        function openHelpModal() {
+            const currentView = document.querySelector('.nav-button.bg-indigo-600').dataset.view;
+            const contentEl = document.getElementById('help-modal-content');
+            if (currentView === 'timer-view') {
+                contentEl.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" class="w-24 h-24 rounded-full">
+                        <h2 class="text-2xl font-bold text-white">Maximizando o Foco 💡</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <!-- Card Pomodoro -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-red-400 mt-1"><i class="fas fa-stopwatch"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Domine o Pomodoro</h3>
+                                <p class="text-gray-300 text-sm">Use os ciclos de 25 minutos para manter a concentração máxima. Ao final, faça uma pausa curta. Isso treina seu cérebro para focar intensamente por períodos definidos.</p>
+                            </div>
+                        </div>
+                        <!-- Card Tarefas -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-blue-400 mt-1"><i class="fas fa-tasks"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Limite suas Tarefas Ativas</h3>
+                                <p class="text-gray-300 text-sm">Limitar as tarefas ativas a 3 força a priorização. Conclua o que começou antes de abrir novos loops. Foco gera momentum e evita a sobrecarga mental.</p>
+                            </div>
+                        </div>
+                        <!-- Card Yeti -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-indigo-400 mt-1"><i class="fas fa-comment-dots"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Converse com o Yeti</h3>
+                                <p class="text-gray-300 text-sm">Pergunte ao nosso assistente sobre seus padrões de trabalho. "Onde gastei mais tempo hoje?" pode revelar insights para otimizar seu próximo dia.</p>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                 contentEl.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" class="w-24 h-24 rounded-full">
+                        <h2 class="text-2xl font-bold text-white">Entendendo Seus Dados 📊</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <!-- Card Tempo Total -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-green-400 mt-1"><i class="fas fa-chart-line"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Tempo Total e Esforço</h3>
+                                <p class="text-gray-300 text-sm">Este é o seu indicador de esforço bruto. É a base da sua produtividade. Aumentá-lo consistentemente, com qualidade, é o objetivo principal.</p>
+                            </div>
+                        </div>
+                        <!-- Card Categoria -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-purple-400 mt-1"><i class="fas fa-chart-pie"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Tempo por Categoria</h3>
+                                <p class="text-gray-300 text-sm">Revela para onde sua energia está a fluir. Se o tempo em 'Reuniões' é maior que em 'Desenvolvimento', pode ser um sinal para reavaliar sua agenda e prioridades.</p>
+                            </div>
+                        </div>
+                        <!-- Card Colaboradores -->
+                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
+                            <div class="text-2xl text-yellow-400 mt-1"><i class="fas fa-users"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Top Colaboradores</h3>
+                                <p class="text-gray-300 text-sm">Na visão de equipe, este gráfico não é sobre competição, mas sobre reconhecer o esforço e identificar quem pode ser um mentor em práticas de alta produtividade.</p>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            helpModal.classList.remove('hidden');
+        }
+
+        // =================================================================================
+        // 8. LÓGICA DO CHATBOT
+        // =================================================================================
+        const chatModal = document.getElementById('chat-modal');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+
+        document.getElementById('open-chat-btn').addEventListener('click', () => chatModal.classList.toggle('hidden'));
+        document.getElementById('close-chat-btn').addEventListener('click', () => chatModal.classList.add('hidden'));
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message) {
+                addUserMessage(message);
+                processChatMessage(message);
+            }
+            input.value = '';
+        });
+
+        function addUserMessage(message) {
+            chatMessages.innerHTML += `<div class="flex justify-end"><div class="chat-bubble bg-indigo-600 text-white p-3 rounded-lg">${message}</div></div>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addBotMessage(message) {
+            const botMessageHTML = `
+                <div class="flex items-end gap-2">
+                    <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Yeti" class="w-8 h-8 rounded-full">
+                    <div class="chat-bubble bg-gray-700 p-3 rounded-lg">${message}</div>
+                </div>
+            `;
+            chatMessages.innerHTML += botMessageHTML;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        async function callGemini(payload) {
+            const apiKey = firebaseConfig.apiKey;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json();
+                    console.error("Error from Gemini API:", errorBody.error);
+                    throw new Error(`API request failed with status ${response.status}: ${errorBody.error.message}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (!text) {
+                    console.error("Unexpected response structure from Gemini:", result);
+                    throw new Error("Invalid response structure from AI.");
+                }
+                
+                return text;
+
+            } catch (error) {
+                console.error("Error calling Gemini:", error);
+                return "Desculpe, não consegui processar sua pergunta com a IA no momento. Verifique a consola para mais detalhes.";
+            }
+        }
+
+        async function processChatMessage(message) {
+            try {
+                addBotMessage('<i class="fas fa-spinner fa-spin"></i> Pensando...');
+                const lastMessageBubble = chatMessages.lastElementChild.querySelector('.chat-bubble');
+
+                // Adiciona a mensagem do utilizador ao histórico
+                chatHistory.push({ role: "user", parts: [{ text: message }] });
+
+                // 1. Obter contexto das tarefas recentes
+                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'), limit(15));
+                const snapshot = await getDocs(q);
+                const entries = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return { tarefa: data.name, categoria: data.tag, duracao: formatTime(data.totalActiveTime), data: new Date(data.endTime.seconds * 1000).toLocaleDateString() };
+                });
+                const taskContext = JSON.stringify(entries, null, 2);
+
+                // 2. Montar a instrução do sistema (persona e regras)
+                const systemInstruction = {
+                    parts: [{ text: `
+                        Você é o Yeti, um assistente de IA especialista em produtividade para a aplicação Timer Evereste.
+                        O nome do usuário com quem você está falando é ${currentUserName}. Chame-o pelo nome para criar uma experiência mais pessoal e amigável.
+                        Sua personalidade é amigável, encorajadora e prestativa.
+                        Sua função é responder às perguntas do usuário sobre a produtividade dele, sobre como usar a aplicação, ou dar dicas de produtividade.
+                        Use o histórico de tarefas recentes do usuário para dar respostas personalizadas e inteligentes.
+                        Mantenha um fluxo de conversa natural. Não se apresente repetidamente. Aja como se estivesse continuando uma conversa existente.
+                        O nome da empresa é "Evereste", sempre com 'e' no final. Nunca use "Everest".
+
+                        **REGRAS DE FORMATAÇÃO E RESPOSTA (MUITO IMPORTANTE):**
+                        - Formate suas respostas usando tags HTML simples. NUNCA use Markdown.
+                        - Use a tag <b></b> para destacar informações importantes como totais de tempo, nomes de tarefas, categorias e números.
+                        - Use <ul> e <li> para criar listas quando apresentar opções ou múltiplos itens.
+                        - Use emojis relevantes para tornar a conversa mais visual e amigável (ex: ⏳ para tempo, 💡 para dicas, 📊 para dados, 🛠️ para suporte).
+                        - Responda sempre em português do Brasil, de forma concisa e útil.
+
+                        HISTÓRICO DE TAREFAS RECENTES (Contexto para suas respostas):
+                        ${taskContext}
+                    `}]
+                };
+                
+                // 3. Montar o payload final para a API
+                const payload = {
+                    contents: chatHistory,
+                    systemInstruction: systemInstruction
+                };
+
+                // 4. Chamar a IA, exibir a resposta e guardar no histórico
+                const geminiResponse = await callGemini(payload);
+                lastMessageBubble.innerHTML = geminiResponse;
+                chatHistory.push({ role: "model", parts: [{ text: geminiResponse }] });
+
+            } catch (e) {
+                console.error("Error in processChatMessage with AI:", e);
+                const lastMessageBubble = chatMessages.lastElementChild.querySelector('.chat-bubble');
+                if (lastMessageBubble) {
+                    lastMessageBubble.innerHTML = "Ocorreu um erro ao conectar com a IA. Por favor, tente novamente.";
+                }
+                // Remove a última pergunta do histórico se a chamada falhar
+                chatHistory.pop();
+            }
+        }
+    </script>
 </body>
 </html>
-
 

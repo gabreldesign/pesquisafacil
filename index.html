@@ -1,1074 +1,2233 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Evereste</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evereste Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos CSS -->
+  <style>
+    :root {
+    /* Cores do Logo LIDS */
+    --brand-blue: #0066cc;
+    --brand-orange: #ff6b35;
+    --brand-teal: #00a896;
+    --brand-purple: #6a4c93;
+    --brand-yellow: #ffc857;
+    
+    /* Paleta Principal */
+    --primary: #0066cc;
+    --primary-dark: #004c99;
+    --primary-light: #3385d6;
+    --accent: #ff6b35;
+    --accent-light: #ff8c61;
+    
+    /* Tema Claro */
+    --surface: #ffff;
+    --surface-light: #f8fafc;
+    --surface-card: #ffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: rgba(0,102,204,0.12);
+    --glow: rgba(0, 102, 204, 0.2);
+    
+    /* Hero (Tema Escuro) */
+    --hero-bg: #0f172a;
+    --hero-text: #ffff;
+    }
+    
+    html { scroll-behavior: smooth; }
+    body { 
+    font-family: 'Inter', sans-serif; 
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #fef3c7 100%);
+    color: var(--text); 
+    position: relative;
+    }
 
-    <style>
-        /* Estilo para a barra de scroll */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+    /* Scroll Progress Bar */
+    #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-blue), var(--brand-teal), var(--brand-orange));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    z-index: 100;
+    transition: width 100ms ease;
+    }
+    @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+    }
 
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
+    /* Header Glassmorphism */
+    .header-glass { 
+    position: sticky; 
+    top: 0; 
+    z-index: 50; 
+    backdrop-filter: saturate(180%) blur(16px); 
+    background: rgba(255,255,255,0.85); 
+    border-bottom: 1px solid var(--border); 
+    transition: all 300ms ease;
+    box-shadow: 0 4px 12px rgba(0,102,204,0.08);
+    }
+    .header-scrolled { 
+    background: rgba(255,255,255,0.95); 
+    box-shadow: 0 10px 30px rgba(0,102,204,0.15); 
+    border-color: rgba(0,102,204,0.2); 
+    }
 
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 10px;
-        }
+    /* Hero with Parallax (Tema Escuro) */
+    .hero { 
+    position: relative; 
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+    }
+    @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    }
+    .hero::after { 
+    content: ""; 
+    position: absolute; 
+    inset: 0; 
+    background: radial-gradient(1200px 500px at 80% -10%, rgba(0,102,204,0.2), transparent 50%), 
+    radial-gradient(900px 380px at 10% 10%, rgba(255,107,53,0.15), transparent 60%); 
+    pointer-events: none; 
+    }
+    .scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    color: var(--hero-text);
+    }
+    @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+    }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
-        }
+    /* Particles */
+    .particles { 
+    position: absolute; 
+    inset: 0; 
+    pointer-events: none; 
+    overflow: hidden; 
+    }
+    .particles span { 
+    position: absolute; 
+    width: 2px; 
+    height: 2px; 
+    background: rgba(255,255,255,0.85); 
+    border-radius: 999px; 
+    animation: float 12s linear infinite; 
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)); 
+    }
+    @keyframes float { 
+    0% { transform: translateY(0) translateX(0); opacity: 0; } 
+    10% { opacity: 1; } 
+    90% { opacity: 1; } 
+    100% { transform: translateY(-120vh) translateX(20vw); opacity: 0; } 
+    }
 
-        /* Animação de fade-in */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .chat-bubble {
-            max-width: 80%;
-        }
+    /* 3D Cards with Gradient Border */
+    .card-3d { 
+    background: var(--surface-card); 
+    border: 1px solid var(--border); 
+    border-radius: 16px; 
+    box-shadow: 0 4px 20px rgba(0,102,204,0.08), inset 0 1px 0 rgba(255,255,255,0.5); 
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    }
+    .card-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal), var(--brand-orange));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    }
+    .card-3d:hover { 
+    transform: translateY(-8px) scale(1.02); 
+    box-shadow: 0 20px 50px rgba(0,102,204,0.2), 0 0 0 1px var(--glow);
+    }
+    .card-3d:hover::before {
+    opacity: 1;
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+    /* Solid Color Course Cards (Regra 60/30/10) */
+    .course-card-solid {
+    border: none;
+    color: white;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .course-card-solid::before { display: none; }
+    .course-card-solid:hover {
+    transform: translateY(-8px) scale(1.02);
+    filter: brightness(1.1);
+    }
+    /* 60% - Cor Primária (Azul) */
+    .course-card-solid[data-color-rule="60"] { background: var(--brand-blue); }
+    /* 30% - Cor Secundária (Teal) */
+    .course-card-solid[data-color-rule="30"] { background: var(--brand-teal); }
+    /* 10% - Cor Destaque (Laranja) */
+    .course-card-solid[data-color-rule="10"] { background: var(--brand-orange); }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .tag-color {
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-    </style>
+    /* Buttons */
+    .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 700;
+    transition: all 250ms ease;
+    cursor: pointer;
+    }
+    .btn-primary { 
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal)); 
+    border: 1px solid rgba(0,102,204,0.3); 
+    color: #fff; 
+    box-shadow: 0 8px 24px rgba(0,102,204,0.25);
+    position: relative;
+    overflow: hidden;
+    }
+    .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 400ms ease;
+    }
+    .btn-primary:hover::before { transform: translateX(100%); }
+    .btn-primary:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 12px 32px rgba(0,102,204,0.35); 
+    }
+    .btn-secondary {
+    background: linear-gradient(135deg, var(--brand-orange), var(--brand-yellow));
+    border: 1px solid rgba(255,107,53,0.3);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(255,107,53,0.25);
+    }
+    .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(255,107,53,0.35);
+    }
+    .btn-accent {
+    background: var(--brand-purple);
+    color: white;
+    box-shadow: 0 8px 24px rgba(106, 76, 147, 0.25);
+    }
+    .btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(106, 76, 147, 0.35);
+    filter: brightness(1.1);
+    }
+    .btn-ghost { 
+    background: rgba(0,102,204,0.08); 
+    border: 1px solid var(--border); 
+    color: var(--primary); 
+    }
+    .btn-ghost:hover { 
+    transform: translateY(-2px); 
+    background: rgba(0,102,204,0.15); 
+    border-color: var(--primary);
+    }
+    .btn:disabled {
+    background: #94a3b8;
+    color: #e2e8f0;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+    }
+
+    /* Reveal Animation */
+    .reveal { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    .reveal.show { 
+    opacity: 1; 
+    transform: translateY(0); 
+    }
+    .stagger-1 { transition-delay: 100ms; }
+    .stagger-2 { transition-delay: 200ms; }
+    .stagger-3 { transition-delay: 300ms; }
+    .stagger-4 { transition-delay: 400ms; }
+    .stagger-5 { transition-delay: 500ms; }
+
+    /* Badge */
+    .badge { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-weight: 700; 
+    padding: 8px 16px; 
+    border-radius: 999px; 
+    background: rgba(0,102,204,0.12); 
+    border: 1px solid rgba(0,102,204,0.25); 
+    color: var(--primary);
+    font-size: 14px;
+    }
+    .badge-soon {
+    background: rgba(255,200,87,0.15);
+    border-color: rgba(255,200,87,0.4);
+    color: #d97706;
+    }
+    .badge-success {
+    background: rgba(0, 168, 150, 0.15);
+    border-color: rgba(0, 168, 150, 0.3);
+    color: var(--brand-teal);
+    }
+
+    /* Modal */
+    .modal-backdrop { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15,23,42,0.7); 
+    backdrop-filter: blur(8px); 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: all 250ms ease; 
+    z-index: 70; 
+    }
+    .modal-backdrop.show { 
+    opacity: 1; 
+    visibility: visible; 
+    }
+    .modal-card { 
+    max-width: 520px; 
+    width: 100%; 
+    border-radius: 20px; 
+    background: var(--surface-card); 
+    border: 1px solid var(--border); 
+    transform: translateY(20px) scale(0.95); 
+    opacity: 0; 
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1); 
+    box-shadow: 0 25px 70px rgba(0,102,204,0.3), inset 0 1px 0 rgba(255,255,255,0.5); 
+    }
+    .modal-backdrop.show .modal-card { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+    }
+    
+    /* Input Form */
+    .input-field {
+    width: 100%;
+    margin-top: 4px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: var(--surface-light);
+    color: var(--text);
+    transition: all 150ms ease;
+    }
+    .input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--glow);
+    }
+    .input-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    }
+
+    /* Gradient Text */
+    .gradient-text { 
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal), var(--brand-orange)); 
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    color: transparent; 
+    }
+
+    /* Blur Blob Decoration */
+    .blur-blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--surface-light); }
+    ::-webkit-scrollbar-thumb { 
+    background: linear-gradient(180deg, var(--brand-blue), var(--brand-teal)); 
+    border-radius: 10px; 
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+    /* Instructor Avatar */
+    .instructor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    transition: all 250ms ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .instructor-avatar:hover {
+    transform: scale(1.1);
+    }
+
+    /* Section Backgrounds */
+    .section-light {
+    background: var(--surface);
+    }
+    .section-alt {
+    background: linear-gradient(135deg, rgba(0,102,204,0.03), rgba(0,168,150,0.03));
+    }
+
+    /* Course Detail Page Styles */
+    .course-detail-hero {
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    }
+    .course-detail-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    }
+    .star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    font-size: 2rem;
+    color: #cbd5e1;
+    }
+    .star-rating input { display: none; }
+    .star-rating label {
+    cursor: pointer;
+    transition: color 200ms ease;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating:not(:checked) > label:hover,
+    .star-rating:not(:checked) > label:hover ~ label {
+    color: #f59e0b;
+    }
+
+    /* Admin Panel */
+    .admin-panel {
+    display: flex;
+    min-height: 100vh;
+    background: var(--surface-light);
+    }
+    .admin-sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    }
+    .admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 200ms ease;
+    }
+    .admin-nav-link:hover {
+    background: var(--surface-light);
+    color: var(--text);
+    }
+    .admin-nav-link.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--glow);
+    }
+    .admin-main {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    }
+    .admin-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,102,204,0.05);
+    }
+    .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+    .admin-table th, .admin-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    }
+    .admin-table th {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    }
+    .admin-table td {
+    font-size: 14px;
+    color: var(--text);
+    }
+    .admin-table tr:hover {
+    background: var(--surface-light);
+    }
+
+    /* Toast Notification */
+    #notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left-width: 4px;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,102,204,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+    transform: translateX(calc(100% + 20px));
+    opacity: 0;
+    visibility: hidden;
+    transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #notification-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    }
+    #notification-toast .icon {
+    font-size: 20px;
+    }
+    #notification-toast.success { border-left-color: var(--brand-teal); }
+    #notification-toast.success .icon { color: var(--brand-teal); }
+    #notification-toast.error { border-left-color: var(--brand-orange); }
+    #notification-toast.error .icon { color: var(--brand-orange); }
+  </style>
 </head>
+<body class="antialiased">
+  
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress"></div>
 
-<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+  <!-- Toast Notification -->
+  <div id="notification-toast">
+    <i id="notification-icon" class="icon"></i>
+    <div>
+      <h4 id="notification-title" class="font-bold"></h4>
+      <p id="notification-message" class="text-sm"></p>
+    </div>
+  </div>
 
-    <!-- Ecrã de Autenticação -->
-    <div id="auth-container" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-blue-900 p-4">
-        <div id="auth-box" class="w-full max-w-md bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6">
-            <div class="text-center">
-                <img src="https://i.postimg.cc/vHwmvFrG/logo-evereste-2025-horizontal-2.png" alt="Logótipo Evereste" class="w-48 mx-auto mb-6">
-                <h2 id="auth-title" class="text-2xl font-bold text-white">Bem-vindo de volta!</h2>
-                <p class="text-gray-400">Inicie sessão para continuar</p>
+  <!-- Header -->
+  <header id="header" class="header-glass">
+    <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+    <a href="#" id="logo-link" class="cursor-pointer">
+    <img src="https://i.postimg.cc/hvvWCwnk/Prancheta-1-1.png" alt="Logo LIDS" class="h-10 w-auto" />
+    </a>
+    </div>
+    <div class="flex items-center gap-4">
+      <div id="user-info" class="hidden items-center gap-2">
+        <span id="user-email" class="text-sm font-medium text-gray-600"></span>
+        <button id="logoutBtn" class="btn btn-ghost text-sm px-3 py-1"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+      <button id="adminBtnHeader" class="btn btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Admin</button>
+    </div>
+    </div>
+  </header>
+
+  <!-- Main View (Course List) -->
+  <div id="main-view">
+    <!-- Hero (Tema Escuro) -->
+    <section class="hero relative text-white">
+    <div class="relative z-10 container mx-auto px-6 py-24 md:py-32">
+    <div class="reveal max-w-3xl">
+    <span class="badge mb-5" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-bolt"></i> Inscrições Abertas</span>
+    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-4" style="color: white;">Capacitações Evereste Academy</h1>
+    <p class="text-lg md:text-xl text-slate-200 max-w-2xl mb-8">Formações práticas e focadas em resultados para elevar a excelência do Instituto Evereste. Profissionalismo, dinamismo e tecnologia a favor do seu desenvolvimento.</p>
+    <div class="flex items-center gap-4 flex-wrap">
+    <a href="#cursos" class="btn btn-primary"><i class="fa-solid fa-graduation-cap mr-2"></i> Ver Cursos</a>
+    </div>
+    </div>
+    <div class="scroll-indicator text-white text-2xl">
+    <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="particles" id="particles"></div>
+    <img src="https://i.postimg.cc/4xNpxRZJ/capabannerlids.png" alt="Banner" class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none" />
+    </section>
+
+    <!-- Cursos Disponíveis -->
+    <section id="cursos" class="section-light container mx-auto px-6 py-20 md:py-28 relative">
+    <div class="blur-blob" style="background: var(--brand-blue); top: -200px; right: -200px;"></div>
+    <div class="blur-blob" style="background: var(--brand-orange); bottom: -200px; left: -200px;"></div>
+    <div class="reveal text-center mb-16">
+    <h2 class="text-4xl md:text-5xl font-black mb-4" style="color: var(--text);">Cursos Disponíveis</h2>
+    <p class="text-lg" style="color: var(--text-muted);">Inscrições abertas para as próximas turmas</p>
+    </div>
+
+    <!-- Container da Lista de Cursos (será populado pelo JS) -->
+    <div id="courses-list" class="grid md:grid-cols-2 gap-8 mb-20">
+      <!-- Cursos do Firebase serão inseridos aqui -->
+      <p id="courses-loading" class="text-center text-lg col-span-2" style="color: var(--text-muted);">
+        <i class="fas fa-spinner animate-spin mr-2"></i>A carregar cursos...
+      </p>
+    </div>
+
+    <!-- Cursos Futuros (Estático) -->
+    <div class="reveal">
+    <h3 class="text-3xl font-bold mb-8 text-center" style="color: var(--text);">Em Breve</h3>
+    <div class="grid md:grid-cols-3 gap-6">
+    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-purple);">
+    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
+    <h4 class="font-bold text-lg mb-2">Criação de Conteúdo Criativo</h4>
+    <p class="text-sm opacity-90">Marllon C., Vinícius S., Keven M.</p>
+    </div>
+    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-orange);">
+    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
+    <h4 class="font-bold text-lg mb-2">Storytelling e Copywriting</h4>
+    <p class="text-sm opacity-90">Marllon C., Vinícius S.</p>
+    </div>
+    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-teal);">
+    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
+    <h4 class="font-bold text-lg mb-2">Design Thinking</h4>
+    <p class="text-sm opacity-90">Deyse P.</p>
+    </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- Instrutores -->
+    <section id="instrutores" class="section-alt container mx-auto px-6 py-20 md:py-28">
+    <div class="reveal text-center mb-16">
+    <h2 class="text-4xl md:text-5xl font-black mb-4" style="color: var(--text);">Nossos Instrutores</h2>
+    <p class="text-lg" style="color: var(--text-muted);">Profissionais experientes e apaixonados por ensinar</p>
+    </div>
+    
+    <!-- Container dos Instrutores (será populado pelo JS) -->
+    <div id="instructors-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Instrutores do Firebase serão inseridos aqui -->
+      <p id="instructors-loading" class="text-center text-lg col-span-3" style="color: var(--text-muted);">
+        <i class="fas fa-spinner animate-spin mr-2"></i>A carregar instrutores...
+      </p>
+    </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="section-light container mx-auto px-6 py-20 md:py-28">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+    <h2 class="text-4xl md:text-5xl font-black mb-6" style="color: var(--text);">Excelência e Profissionalismo</h2>
+    <p class="text-lg mb-6" style="color: var(--text-muted);">A Evereste Academy oferece experiências imersivas, conteúdos aplicados e uma abordagem voltada à prática. Unimos design moderno, tecnologia e didática para acelerar o desenvolvimento.</p>
+    <ul class="space-y-4">
+    <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Instrutores com experiência prática</span></li>
+    <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Conteúdo atualizado e relevante</span></li>
+    <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Foco em resultados e aplicabilidade</span></li>
+    <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Certificados reconhecidos</span></li>
+    </ul>
+    </div>
+    <div class="reveal">
+    <div class="card-3d p-8">
+    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="w-full h-auto rounded-lg p-6" style="background: rgba(0,102,204,0.03);"/>
+    <p class="mt-6" style="color: var(--text-muted);">Parceria com o Instituto Evereste para formações transformadoras e de alto impacto institucional.</p>
+    </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t" style="border-color: var(--border); background: var(--surface);">
+    <div class="container mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+    <div>
+    <p class="text-sm" style="color: var(--text-muted);">© 2025 Evereste Academy. Todos os direitos reservados.</p>
+    </div>
+    <div class="flex items-center gap-4">
+    <button id="adminBtnFooter" class="btn btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Acesso Admin</button>
+    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="h-8 w-auto"/>
+    </div>
+    </div>
+    </div>
+    </footer>
+  </div> <!-- Fim da #main-view -->
+
+  <!-- Course Detail View (será populado pelo JS) -->
+  <div id="course-detail-view" class="hidden">
+    <!-- Conteúdo dinâmico do curso será injetado aqui -->
+  </div>
+
+  <!-- Admin Panel View (Oculto por defeito) -->
+  <div id="admin-view" class="admin-panel hidden">
+    <!-- Sidebar do Admin -->
+    <aside class="admin-sidebar">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="https://i.postimg.cc/hvvWCwnk/Prancheta-1-1.png" alt="Logo LIDS" class="h-10 w-auto" />
+      </div>
+      <nav class="flex flex-col flex-1 space-y-2">
+        <a href="#admin-dashboard" class="admin-nav-link active" data-tab="admin-tab-dashboard">
+          <i class="fas fa-chart-pie fa-fw"></i><span>Dashboard</span>
+        </a>
+        <a href="#admin-courses" class="admin-nav-link" data-tab="admin-tab-courses">
+          <i class="fas fa-graduation-cap fa-fw"></i><span>Cursos</span>
+        </a>
+        <a href="#admin-enrollments" class="admin-nav-link" data-tab="admin-tab-enrollments">
+          <i class="fas fa-users fa-fw"></i><span>Matrículas</span>
+        </a>
+        <a href="#admin-instructors" class="admin-nav-link" data-tab="admin-tab-instructors">
+          <i class="fas fa-chalkboard-teacher fa-fw"></i><span>Instrutores</span>
+        </a>
+        <a href="#admin-certificates" class="admin-nav-link" data-tab="admin-tab-certificates">
+          <i class="fas fa-certificate fa-fw"></i><span>Certificados</span>
+        </a>
+        <a href="#admin-settings" class="admin-nav-link" data-tab="admin-tab-settings">
+          <i class="fas fa-cogs fa-fw"></i><span>Configurações</span>
+        </a>
+      </nav>
+      <div class="mt-4">
+        <a href="#" id="admin-logout" class="admin-nav-link">
+          <i class="fas fa-sign-out-alt fa-fw"></i><span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Conteúdo Principal do Admin -->
+    <div class="admin-main">
+      <main id="admin-content-area">
+        <!-- Tab: Dashboard (Default) -->
+        <div id="admin-tab-dashboard" class="admin-tab-content">
+          <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="admin-stat-card">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase">Total de Matrículas</h3>
+              <p id="stat-enrollments" class="text-4xl font-bold mt-2">0</p>
             </div>
-            <form id="auth-form" class="space-y-4">
-                <input type="email" id="email" placeholder="E-mail" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
-                <div class="relative">
-                    <input type="password" id="password" placeholder="Senha" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
-                    <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-4 text-gray-400 hover:text-white">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-                <p id="auth-error" class="text-red-400 text-sm h-4"></p>
-                <button type="submit" id="auth-button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">Entrar</button>
+            <div class="admin-stat-card">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase">Total de Check-ins</h3>
+              <p id="stat-checkins" class="text-4xl font-bold mt-2">0</p>
+            </div>
+            <div class="admin-stat-card">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase">Certificados Emitidos</h3>
+              <p id="stat-certificates" class="text-4xl font-bold mt-2">0</p>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <h3 class="text-xl font-bold mb-4">Atividade Recente</h3>
+            <!-- Placeholder para gráfico ou lista de atividades -->
+            <p class="text-gray-500">Gráfico de análise temporal de matrículas (placeholder).</p>
+          </div>
+        </div>
+
+        <!-- Tab: Cursos -->
+        <div id="admin-tab-courses" class="admin-tab-content hidden">
+          <h1 class="text-3xl font-bold mb-6">Gerir Cursos</h1>
+          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Adicionar Novo Curso</button>
+          <div class="admin-stat-card overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Status</th>
+                  <th>Matriculados</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="admin-courses-table-body">
+                <!-- Dados dos cursos serão inseridos aqui -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Matrículas -->
+        <div id="admin-tab-enrollments" class="admin-tab-content hidden">
+          <h1 class="text-3xl font-bold mb-6">Matrículas</h1>
+          <div class="admin-stat-card overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th>Aluno (User ID)</th>
+                  <th>Curso</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="admin-enrollments-table-body">
+                <!-- Dados das matrículas serão inseridos aqui -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Tab: Instrutores -->
+        <div id="admin-tab-instructors" class="admin-tab-content hidden">
+          <h1 class="text-3xl font-bold mb-6">Gerir Instrutores</h1>
+          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Adicionar Instrutor</button>
+          <div class="admin-stat-card overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th>Foto</th>
+                  <th>Nome</th>
+                  <th>Título</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="admin-instructors-table-body">
+                <!-- Dados dos instrutores serão inseridos aqui -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Tab: Certificados -->
+        <div id="admin-tab-certificates" class="admin-tab-content hidden">
+          <h1 class="text-3xl font-bold mb-6">Gerir Certificados</h1>
+          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Emitir Novo Certificado</button>
+          <div class="admin-stat-card overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th>Aluno (User ID)</th>
+                  <th>Curso</th>
+                  <th>Data Emissão</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="admin-certificates-table-body">
+                <!-- Dados dos certificados serão inseridos aqui -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Tab: Configurações -->
+        <div id="admin-tab-settings" class="admin-tab-content hidden">
+          <h1 class="text-3xl font-bold mb-6">Configurações</h1>
+          <div class="admin-stat-card max-w-lg mb-6">
+            <h3 class="text-xl font-bold mb-4">Senhas de Check-in</h3>
+            <p class="text-gray-600 mb-4">Defina as senhas que os alunos usarão para fazer check-in nos cursos.</p>
+            <form id="admin-form-passwords" class="space-y-4">
+              <!-- Inputs de senha serão populados pelo JS -->
+              <div id="admin-passwords-inputs" class="space-y-4">
+                <p class="text-gray-500">A carregar cursos...</p>
+              </div>
+              <button type="submit" class="btn btn-primary">Salvar Senhas</button>
             </form>
-            <p class="text-center text-sm text-gray-400">
-                <span id="auth-prompt-text">Não tem uma conta?</span>
-                <a href="#" id="toggle-auth-mode" class="font-medium text-indigo-400 hover:underline">Registrar-se</a>
-            </p>
-        </div>
-    </div>
+          </div>
 
-    <!-- Ecrã Principal da Aplicação -->
-    <div id="app-container" class="hidden min-h-screen">
-        <!-- Cabeçalho -->
-        <header class="bg-gray-800/50 backdrop-blur-sm sticky top-0 z-20 flex items-center justify-between p-4 border-b border-gray-700">
-            <h1 class="text-xl font-bold text-white">Timer <span class="text-indigo-400">Evereste</span></h1>
-            <div class="flex items-center space-x-4">
-                <button id="profile-button" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-indigo-400 hover:bg-gray-600 transition">
-                    <i class="fas fa-user"></i>
-                </button>
-                 <button id="logout-button" title="Sair" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-red-400 hover:bg-gray-600 transition">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Navegação -->
-        <nav class="p-4 bg-gray-900 flex justify-center space-x-2 md:space-x-4">
-            <button data-view="timer-view" class="nav-button bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
-                <i class="fas fa-clock mr-2"></i>Timer
+          <!-- Seção para Popular Banco de Dados -->
+          <div class="admin-stat-card max-w-lg">
+            <h3 class="text-xl font-bold mb-4">Configuração Inicial</h3>
+            <p class="text-gray-600 mb-4">Se o banco de dados estiver vazio, clique abaixo para adicionar os cursos e instrutores iniciais.</p>
+            <button id="btn-seed-database" class="btn btn-accent">
+              <i class="fas fa-database mr-2"></i>Popular Banco de Dados
             </button>
-            <button data-view="my-performance-view" class="nav-button bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
-                <i class="fas fa-chart-line mr-2"></i>Meu Desempenho
-            </button>
-            <button data-view="team-dashboard-view" class="nav-button bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-700">
-                <i class="fas fa-users mr-2"></i>Equipe
-            </button>
-        </nav>
-
-        <!-- Conteúdo Principal -->
-        <main id="main-content" class="p-4 md:p-6">
-            <!-- Vista do Timer -->
-            <div id="timer-view" class="view-content fade-in space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <!-- Criação de Tarefa -->
-                        <div id="task-creation-container" class="bg-gray-800 p-4 rounded-xl shadow-lg">
-                            <h2 class="text-lg font-bold mb-3">Iniciar nova tarefa</h2>
-                            <form id="new-task-form" class="flex flex-col md:flex-row gap-3">
-                                <input type="text" id="task-name" placeholder="Nome da tarefa" class="flex-grow px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                                <select id="task-tag" class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                                   <!-- Options will be populated by JS -->
-                                </select>
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg transition-transform transform hover:scale-105">Iniciar</button>
-                            </form>
-                             <p id="task-limit-error" class="text-red-400 text-sm mt-2 h-4"></p>
-                        </div>
-                        <!-- Tarefas Ativas -->
-                        <div>
-                            <h2 class="text-xl font-bold mb-4">Tarefas Ativas</h2>
-                            <div id="active-tasks-container" class="space-y-4">
-                                <!-- Tasks will be rendered here -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Pomodoro e Ajuda -->
-                    <div class="space-y-6">
-                        <!-- Pomodoro -->
-                        <div class="bg-gray-800 p-4 rounded-xl shadow-lg text-center">
-                            <h2 class="text-lg font-bold mb-3">Sessão Pomodoro</h2>
-                            <p id="pomodoro-timer" class="text-5xl font-mono font-bold text-indigo-400">25:00</p>
-                            <div class="flex justify-center gap-3 mt-4">
-                                <button id="pomodoro-start" class="bg-green-600 hover:bg-green-700 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-play"></i></button>
-                                <button id="pomodoro-pause" class="bg-yellow-500 hover:bg-yellow-600 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-pause"></i></button>
-                                <button id="pomodoro-reset" class="bg-red-600 hover:bg-red-700 w-12 h-12 rounded-full flex items-center justify-center text-white"><i class="fas fa-undo"></i></button>
-                            </div>
-                        </div>
-                        <!-- Central de Ajuda -->
-                        <div class="bg-gray-800 p-4 rounded-xl shadow-lg">
-                             <h2 class="text-lg font-bold mb-3">Central de Ajuda</h2>
-                             <div class="flex items-center gap-4">
-                                <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Timer" class="w-20 h-20">
-                                <p class="text-sm text-gray-300">"O tempo é o recurso mais valioso. Use-o com sabedoria para escalar as suas próprias montanhas."</p>
-                             </div>
-                             <button id="open-timer-help" class="mt-4 w-full bg-indigo-600/50 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition">Dicas de Foco</button>
-                        </div>
-                    </div>
-                </div>
-                 <!-- Histórico Recente -->
-                <div>
-                    <h2 class="text-xl font-bold mb-4">Últimas 5 Tarefas Finalizadas</h2>
-                    <div id="recent-history-container" class="bg-gray-800 p-4 rounded-xl shadow-lg space-y-3">
-                         <p id="no-recent-history" class="text-gray-400">Ainda não há tarefas finalizadas.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista Meu Desempenho -->
-            <div id="my-performance-view" class="view-content fade-in hidden"></div>
-
-            <!-- Vista Dashboard da Equipe -->
-            <div id="team-dashboard-view" class="view-content fade-in hidden"></div>
-        </main>
-
-        <!-- Botão Flutuante do Chatbot -->
-        <button id="open-chat-btn" class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 w-16 h-16 rounded-full shadow-lg flex items-center justify-center transition-transform transform hover:scale-110 overflow-hidden p-1">
-            <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Abrir Chat do Yeti" class="w-full h-full object-cover rounded-full">
-        </button>
-    </div>
-
-    <!-- Modal do Perfil -->
-    <div id="profile-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto fade-in">
-            <button id="close-profile-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
-            <h2 class="text-2xl font-bold mb-2">Meu Perfil</h2>
-            <p id="profile-email" class="text-indigo-400 mb-6"></p>
-            <div>
-                 <h3 class="text-lg font-semibold mb-4">Desempenho nos Últimos 7 Dias</h3>
-                 <div id="profile-dashboard-container" class="relative min-h-[280px]"></div>
-            </div>
+          </div>
         </div>
+      </main>
     </div>
-    
-    <!-- Modal da Central de Ajuda -->
-    <div id="help-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto fade-in">
-            <button id="close-help-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
-            <div id="help-modal-content"></div>
-        </div>
-    </div>
+  </div> <!-- Fim da #admin-view -->
 
-    <!-- Modal do Chatbot -->
-    <div id="chat-modal" class="hidden fixed bottom-24 right-6 w-[350px] h-[500px] bg-gray-800 rounded-2xl shadow-2xl flex flex-col z-50 fade-in">
-        <div class="flex items-center p-4 bg-gray-900 rounded-t-2xl">
-            <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Yeti" class="w-10 h-10 rounded-full mr-3">
-            <div>
-                <h3 class="font-bold">Yeti Assistente</h3>
-                <p class="text-xs text-green-400">Online</p>
-            </div>
-            <button id="close-chat-btn" class="ml-auto text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4">
-            <!-- Messages will be injected here -->
-        </div>
-        <form id="chat-form" class="p-4 border-t border-gray-700">
-            <div class="flex items-center bg-gray-700 rounded-lg">
-                <input type="text" id="chat-input" placeholder="Pergunte algo..." class="w-full bg-transparent px-4 py-2 focus:outline-none">
-                <button type="submit" class="p-2 text-indigo-400 hover:text-indigo-300"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </form>
-    </div>
-    
-    <script type="module">
-        // Importar funções do Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import {
-            getAuth,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword,
-            signOut,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import {
-            getFirestore,
-            doc,
-            setDoc,
-            getDoc,
-            collection,
-            addDoc,
-            onSnapshot,
-            query,
-            where,
-            orderBy,
-            limit,
-            deleteDoc,
-            getDocs,
-            Timestamp,
-            collectionGroup
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // =================================================================================
-        // 1. CONFIGURAÇÃO DO FIREBASE
-        // =================================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyCeEYuehK-AruCIV_zhNDDQ1ng5U1eIzqI",
-            authDomain: "timerevereste.firebaseapp.com",
-            projectId: "timerevereste",
-            storageBucket: "timerevereste.appspot.com",
-            messagingSenderId: "469617910016",
-            appId: "1:469617910016:web:9076dbb4905667bb353e5",
-            measurementId: "G-K1YGJ0NHCL"
+  <!-- === MODAIS === -->
+
+  <!-- Modal Login Admin -->
+  <div id="modalLogin" class="modal-backdrop flex items-center justify-center px-4">
+    <div class="modal-card p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Acesso Administrativo</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Área restrita para gestores</p>
+    </div>
+    <button id="closeLogin" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="login-form" class="space-y-4">
+    <div>
+    <label class="input-label" for="login-email">E-mail</label>
+    <input id="login-email" type="email" class="input-field" placeholder="admin@evereste.org" required />
+    </div>
+    <div>
+    <label class="input-label" for="login-password">Senha</label>
+    <input id="login-password" type="password" class="input-field" placeholder="••••••••" required />
+    </div>
+    <p id="login-error" class="text-sm text-red-600 hidden">Mensagem de erro aqui.</p>
+    <button type="submit" id="login-submit-btn" class="btn btn-primary w-full">
+      <span id="login-submit-text"><i class="fa-solid fa-right-to-bracket mr-2"></i>Entrar</span>
+      <span id="login-submit-spinner" class="hidden"><i class="fas fa-spinner animate-spin"></i></span>
+    </button>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal Inscrição (Matrícula) -->
+  <div id="modalEnroll" class="modal-backdrop flex items-center justify-center px-4">
+    <div class="modal-card p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Confirmar Inscrição</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Você está prestes a inscrever-se no curso:</p>
+    <h4 id="enroll-course-name" class="text-lg font-semibold mt-1" style="color: var(--primary);"></h4>
+    </div>
+    <button id="closeEnroll" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="enroll-form">
+      <p class="text-gray-600 mb-4">Seu ID de aluno é: <strong id="enroll-user-id" class="select-all">...</strong></p>
+      <p class="text-gray-600 mb-6">Clique em confirmar para concluir sua matrícula. Você será identificado anonimamente.</p>
+      <p id="enroll-error" class="text-sm text-red-600 hidden mb-4">Mensagem de erro aqui.</p>
+      <div class="flex gap-4">
+        <button type="button" id="enroll-cancel" class="btn btn-ghost w-full">Cancelar</button>
+        <button type="submit" id="enroll-submit-btn" class="btn btn-primary w-full">Confirmar Matrícula</button>
+      </div>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal Check-in -->
+  <div id="modalCheckin" class="modal-backdrop flex items-center justify-center px-4">
+    <div class="modal-card p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Check-in do Curso</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Insira a senha fornecida pelo instrutor.</p>
+    </div>
+    <button id="closeCheckin" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="checkin-form" class="space-y-4">
+    <div>
+    <label class="input-label" for="checkin-password">Senha de Acesso</label>
+    <input id="checkin-password" type="password" class="input-field" placeholder="••••••••" required />
+    </div>
+    <p id="checkin-error" class="text-sm text-red-600 hidden">Senha incorreta. Tente novamente.</p>
+    <button type="submit" id="checkin-submit-btn" class="btn btn-primary w-full">
+      Validar Check-in
+    </button>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal Avaliar Instrutor -->
+  <div id="modalEvaluate" class="modal-backdrop flex items-center justify-center px-4">
+    <div class="modal-card p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Avaliar Instrutor</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Deixe seu feedback sobre <strong id="evaluate-instructor-name"></strong></p>
+    </div>
+    <button id="closeEvaluate" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="evaluate-form" class="space-y-4">
+      <div>
+        <label class="input-label">Nota</label>
+        <div class="star-rating mt-1">
+          <input type="radio" id="5-stars" name="rating" value="5" required /><label for="5-stars" class="fas fa-star"></label>
+          <input type="radio" id="4-stars" name="rating" value="4" /><label for="4-stars" class="fas fa-star"></label>
+          <input type="radio" id="3-stars" name="rating" value="3" /><label for="3-stars" class="fas fa-star"></label>
+          <input type="radio" id="2-stars" name="rating" value="2" /><label for="2-stars" class="fas fa-star"></label>
+          <input type="radio" id="1-star" name="rating" value="1" /><label for="1-star" class="fas fa-star"></label>
+        </div>
+      </div>
+      <div>
+        <label class="input-label" for="evaluate-comment">Comentário (Opcional)</label>
+        <textarea id="evaluate-comment" class="input-field" rows="3" placeholder="O que você achou da didática?"></textarea>
+      </div>
+      <p id="evaluate-error" class="text-sm text-red-600 hidden">Ocorreu um erro. Tente novamente.</p>
+      <button type="submit" id="evaluate-submit-btn" class="btn btn-primary w-full">
+        Enviar Avaliação
+      </button>
+    </form>
+    </div>
+  </div>
+
+  <!-- Scripts (Firebase e Lógica da Aplicação) -->
+  <script type="module">
+    // Importações do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged, 
+      signInAnonymously,
+      signInWithCustomToken,
+      setPersistence,
+      browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      getDocs, 
+      doc, 
+      getDoc, 
+      setDoc, 
+      addDoc, 
+      query, 
+      where,
+      onSnapshot,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { 
+      getStorage, 
+      ref, 
+      getDownloadURL 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+
+    // --- Configuração do Firebase ---
+    // A configuração real será injetada pelo ambiente
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config)
+      : {
+          apiKey: "AIzaSyB0xvVzytOx4dumokND-dr926krSO4-CqU",
+          authDomain: "academylids.firebaseapp.com",
+          projectId: "academylids",
+          storageBucket: "academylids.firebasestorage.app",
+          messagingSenderId: "826478835273",
+          appId: "1:826478835273:web:0995d64419276b932cb198",
+          measurementId: "G-T2TN7FL590"
         };
+    
+    // ID da Aplicação (injetado pelo ambiente)
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const analytics = getAnalytics(app);
+
+    // Variáveis Globais de Estado
+    let currentUserId = null;
+    let isAdmin = false;
+    let localCourses = []; // Cache local dos cursos
+    let localInstructors = []; // Cache local dos instrutores
+    let courseCheckinPasswords = {}; // Cache local das senhas de check-in
+    let currentUserCheckins = {}; // Cache local dos check-ins do usuário
+    let authReady = false; // Flag para controlar se a autenticação inicial já ocorreu
+
+    // --- Elementos DOM ---
+    const mainView = document.getElementById('main-view');
+    const courseDetailView = document.getElementById('course-detail-view');
+    const adminView = document.getElementById('admin-view');
+    
+    const coursesListContainer = document.getElementById('courses-list');
+    const coursesLoading = document.getElementById('courses-loading');
+    const instructorsListContainer = document.getElementById('instructors-list');
+    const instructorsLoading = document.getElementById('instructors-loading');
+    
+    const modalLogin = document.getElementById('modalLogin');
+    const modalEnroll = document.getElementById('modalEnroll');
+    const modalCheckin = document.getElementById('modalCheckin');
+    const modalEvaluate = document.getElementById('modalEvaluate');
+    
+    const loginForm = document.getElementById('login-form');
+    const loginEmail = document.getElementById('login-email');
+    const loginPassword = document.getElementById('login-password');
+    const loginError = document.getElementById('login-error');
+    const loginSubmitBtn = document.getElementById('login-submit-btn');
+    const loginSubmitText = document.getElementById('login-submit-text');
+    const loginSubmitSpinner = document.getElementById('login-submit-spinner');
+    
+    const adminBtnHeader = document.getElementById('adminBtnHeader');
+    const adminBtnFooter = document.getElementById('adminBtnFooter');
+    const userInfo = document.getElementById('user-info');
+    const userEmail = document.getElementById('user-email');
+
+    // --- Funções Utilitárias ---
+
+    // Mostrar Notificação (Toast)
+    const showNotification = (title, message, type = 'success') => {
+      const toast = document.getElementById('notification-toast');
+      const icon = document.getElementById('notification-icon');
+      
+      document.getElementById('notification-title').innerText = title;
+      document.getElementById('notification-message').innerText = message;
+      
+      toast.className = ''; // Limpa classes
+      toast.classList.add('show', type);
+      
+      if (type === 'success') {
+        icon.className = 'icon fas fa-check-circle';
+      } else if (type === 'error') {
+        icon.className = 'icon fas fa-times-circle';
+      }
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    };
+
+    // Verificar se o usuário é Admin
+    const checkAdminStatus = async (uid) => {
+      if (!uid) return false;
+      try {
+        const adminDocRef = doc(db, 'admins', uid);
+        const adminDocSnap = await getDoc(adminDocRef);
+        return adminDocSnap.exists();
+      } catch (error) {
+        console.error("Erro ao verificar status de admin:", error);
+        return false;
+      }
+    };
+    
+    // Mudar a visibilidade das views
+    const showView = (viewToShow) => {
+      mainView.classList.add('hidden');
+      courseDetailView.classList.add('hidden');
+      adminView.classList.add('hidden');
+      document.getElementById('header').classList.remove('hidden');
+
+      if (viewToShow === 'main') {
+        mainView.classList.remove('hidden');
+      } else if (viewToShow === 'course') {
+        courseDetailView.classList.remove('hidden');
+      } else if (viewToShow === 'admin') {
+        adminView.classList.remove('hidden');
+        document.getElementById('header').classList.add('hidden'); // Oculta header principal no admin
+      }
+      window.scrollTo(0, 0);
+    };
+
+    // --- Lógica de Autenticação ---
+
+    // Monitorar estado da autenticação (LÓGICA CORRIGIDA)
+    onAuthStateChanged(auth, async (user) => {
+      authReady = true; // Marca que a verificação inicial terminou
+      if (user) {
+        // Usuário está logado
+        currentUserId = user.uid;
         
-        // =================================================================================
-        // 2. INICIALIZAÇÃO E VARIÁVEIS GLOBAIS
-        // =================================================================================
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-        let activeTasks = [];
-        let timerIntervals = {};
-        let unsubscribeActiveTasks = null;
-        let unsubscribeRecentHistory = null;
-        let chatHistory = [];
-        let currentUserName = '';
+        // Carrega dados específicos do usuário (check-ins)
+        loadUserCheckins();
         
-        const TAG_OPTIONS = [
-            { name: 'Gestão de Projetos', color: 'bg-yellow-200 text-yellow-800' },
-            { name: 'Análise de Dados', color: 'bg-yellow-200 text-yellow-800' },
-            { name: 'Web Design', color: 'bg-green-200 text-green-800' },
-            { name: 'UX', color: 'bg-green-200 text-green-800' },
-            { name: 'UI', color: 'bg-green-200 text-green-800' },
-            { name: 'App', color: 'bg-green-200 text-green-800' },
-            { name: 'Pré-Produção', color: 'bg-gray-300 text-gray-800' },
-            { name: 'Roteiro', color: 'bg-gray-300 text-gray-800' },
-            { name: 'Edição de Vídeos', color: 'bg-blue-200 text-blue-800' },
-            { name: 'Edição de Fotos', color: 'bg-blue-200 text-blue-800' },
-            { name: 'Audiovisual', color: 'bg-blue-200 text-blue-800' },
-            { name: 'Captação Material', color: 'bg-blue-200 text-blue-800' },
-            { name: 'Pós-Produção', color: 'bg-blue-200 text-blue-800' },
-            { name: 'Evento', color: 'bg-purple-200 text-purple-800' },
-            { name: 'Cerimonial', color: 'bg-purple-200 text-purple-800' },
-            { name: 'Portal', color: 'bg-pink-200 text-pink-800' },
-            { name: 'E-mail', color: 'bg-pink-200 text-pink-800' },
-            { name: 'WhatsApp', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Linkedin', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Instagram', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Youtube', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Tiktok', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Flickr', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Facebook', color: 'bg-pink-200 text-pink-800' },
-            { name: 'TV Evereste', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Impressão', color: 'bg-pink-200 text-pink-800' },
-            { name: 'Assessoria de Comunicação', color: 'bg-red-200 text-red-800' },
-            { name: 'HYPERDOC', color: 'bg-red-200 text-red-800' },
-            { name: 'Documento', color: 'bg-red-200 text-red-800' },
-            { name: 'Comunicação', color: 'bg-red-200 text-red-800' },
-            { name: 'Agendamento', color: 'bg-red-200 text-red-800' },
-            { name: 'Reunião', color: 'bg-red-200 text-red-800' },
-            { name: 'Planejamento', color: 'bg-red-200 text-red-800' },
-            { name: 'Treinamento', color: 'bg-red-200 text-red-800' },
-            { name: 'Pesquisa', color: 'bg-red-200 text-red-800' },
-            { name: 'Notícia', color: 'bg-red-200 text-red-800' },
-            { name: 'Atividade Externa', color: 'bg-red-200 text-red-800' },
-            { name: 'Apresentação', color: 'bg-red-200 text-red-800' },
-            { name: 'Design Gráfico', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Design de Produtos', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Design 3D', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Motion Design', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Social Media', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Copywriting', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Endomarketing', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Identidade Visual', color: 'bg-orange-200 text-orange-800' },
-            { name: 'Mídia Paga', color: 'bg-orange-200 text-orange-800' },
-        ];
-
-
-        // Popular as tags
-        const taskTagSelect = document.getElementById('task-tag');
-        TAG_OPTIONS.forEach(tag => {
-            const option = document.createElement('option');
-            option.value = tag.name;
-            option.textContent = tag.name;
-            taskTagSelect.appendChild(option);
-        });
-        
-        function getTagColor(tagName) {
-            const tag = TAG_OPTIONS.find(t => t.name === tagName);
-            return tag ? tag.color : 'bg-gray-500 text-gray-100';
-        }
-
-        // =================================================================================
-        // 3. UTILITÁRIOS E GESTÃO DE ESTADO
-        // =================================================================================
-        document.querySelectorAll('.nav-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const viewId = button.dataset.view;
-                document.querySelectorAll('.view-content').forEach(view => view.classList.add('hidden'));
-                document.getElementById(viewId).classList.remove('hidden');
-                document.querySelectorAll('.nav-button').forEach(btn => btn.classList.replace('bg-indigo-600', 'bg-gray-700'));
-                button.classList.replace('bg-gray-700', 'bg-indigo-600');
-                if (viewId === 'my-performance-view') loadMyPerformanceDashboard();
-                if (viewId === 'team-dashboard-view') loadTeamDashboard();
-            });
-        });
-
-        function setupListeners() {
-            if (!currentUser) return;
-            cleanupListeners();
-            const activeTasksQuery = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`));
-            unsubscribeActiveTasks = onSnapshot(activeTasksQuery, (snapshot) => {
-                const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                Object.values(timerIntervals).forEach(clearInterval);
-                timerIntervals = {};
-                renderActiveTasks(tasks);
-            });
-            const recentHistoryQuery = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'), limit(5));
-            unsubscribeRecentHistory = onSnapshot(recentHistoryQuery, (snapshot) => {
-                 renderRecentHistory(snapshot.docs.map(doc => doc.data()));
-            }, (error) => {
-                console.error("Falha ao carregar o histórico recente: ", error);
-                if (error.code === 'failed-precondition') console.error("Falta de índice no Firestore. Verifique a consola de erros.");
-            });
-        }
-
-        function cleanupListeners() {
-            if (unsubscribeActiveTasks) unsubscribeActiveTasks();
-            if (unsubscribeRecentHistory) unsubscribeRecentHistory();
-            Object.values(timerIntervals).forEach(clearInterval);
-            timerIntervals = {};
-        }
-        
-        function clearUI() {
-            activeTasksContainer.innerHTML = '';
-            document.getElementById('recent-history-container').innerHTML = `<p id="no-recent-history" class="text-gray-400">Ainda não há tarefas finalizadas.</p>`;
-            document.getElementById('my-performance-view').innerHTML = '';
-            document.getElementById('team-dashboard-view').innerHTML = '';
-            document.querySelector('[data-view="timer-view"]').click();
-        }
-
-        function formatTime(totalSeconds) {
-            if(isNaN(totalSeconds) || totalSeconds < 0) return "00:00:00";
-            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-            const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
-            return `${h}:${m}:${s}`;
-        }
-        
-        function generateColors(numColors) {
-            const colors = ['#4f46e5', '#7c3aed', '#db2777', '#f97316', '#eab308', '#84cc16', '#10b981', '#06b6d4', '#3b82f6'];
-            return Array.from({length: numColors}, (_, i) => colors[i % colors.length]);
-        }
-        
-        // =================================================================================
-        // 4. LÓGICA DE AUTENTICAÇÃO
-        // =================================================================================
-        const authContainer = document.getElementById('auth-container');
-        const appContainer = document.getElementById('app-container');
-        const authForm = document.getElementById('auth-form');
-        const authError = document.getElementById('auth-error');
-        const toggleAuthModeLink = document.getElementById('toggle-auth-mode');
-        const authTitle = document.getElementById('auth-title');
-        const authPromptText = document.getElementById('auth-prompt-text');
-        const authButton = document.getElementById('auth-button');
-        const togglePassword = document.getElementById('toggle-password');
-
-        togglePassword.addEventListener('click', () => {
-            const passwordInput = document.getElementById('password');
-            const icon = togglePassword.querySelector('i');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-
-        let isLoginMode = true;
-
-        toggleAuthModeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            isLoginMode = !isLoginMode;
-            authError.textContent = '';
-            authForm.reset();
-
-            if (isLoginMode) {
-                authTitle.textContent = 'Bem-vindo de volta!';
-                authButton.textContent = 'Entrar';
-                authPromptText.textContent = 'Não tem uma conta?';
-                toggleAuthModeLink.textContent = 'Registrar-se';
-            } else {
-                authTitle.textContent = 'Crie a sua conta';
-                authButton.textContent = 'Registar';
-                authPromptText.textContent = 'Já tem uma conta?';
-                toggleAuthModeLink.textContent = 'Entrar';
-            }
-        });
-
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            authError.textContent = '';
-
-            try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const userProfileRef = doc(db, `artifacts/default-app-id/users/${userCredential.user.uid}/profile/settings`);
-                    await setDoc(userProfileRef, { email: userCredential.user.email });
-                }
-            } catch (error) {
-                console.error("Authentication error:", error);
-                handleAuthError(error);
-            }
-        });
-
-        function handleAuthError(error) {
-             switch (error.code) {
-                case 'auth/invalid-email': authError.textContent = 'Formato de e-mail inválido.'; break;
-                case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                case 'auth/invalid-credential':
-                    authError.textContent = 'E-mail ou senha incorretos.'; 
-                    break;
-                case 'auth/email-already-in-use': authError.textContent = 'Este e-mail já está a ser utilizado.'; break;
-                case 'auth/weak-password': authError.textContent = 'A senha deve ter pelo menos 6 caracteres.'; break;
-                default: authError.textContent = 'Ocorreu um erro. Tente novamente.'; break;
-            }
-        }
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-
-                // Extrai e armazena o primeiro nome do utilizador a partir do e-mail
-                if (user.email) {
-                    const namePart = user.email.split('@')[0];
-                    const firstName = namePart.split('.')[0].split('-')[0];
-                    currentUserName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-                } else {
-                    currentUserName = 'Usuário'; // Fallback
-                }
-
-                authContainer.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                loadUserProfile();
-                setupListeners();
-                
-                // Reinicia o histórico e envia a mensagem de boas-vindas personalizada
-                chatHistory = [];
-                const welcomeMessage = `Olá, <b>${currentUserName}</b>! Eu sou o Yeti, seu assistente de produtividade com IA. Faça qualquer pergunta sobre suas tarefas ou sobre como usar o app.`;
-                addBotMessage(welcomeMessage);
-                chatHistory.push({ role: "model", parts: [{ text: welcomeMessage }] });
-
-            } else {
-                currentUser = null;
-                currentUserName = ''; // Limpa o nome no logout
-                authContainer.classList.remove('hidden');
-                appContainer.classList.add('hidden');
-                cleanupListeners();
-                clearUI();
-                chatHistory = []; // Limpa o histórico no logout
-            }
-        });
-
-        document.getElementById('logout-button').addEventListener('click', () => signOut(auth));
-
-        // =================================================================================
-        // 5. LÓGICA DO TIMER E GESTÃO DE TAREFAS
-        // =================================================================================
-        const newTaskForm = document.getElementById('new-task-form');
-        const taskLimitError = document.getElementById('task-limit-error');
-        const activeTasksContainer = document.getElementById('active-tasks-container');
-        
-        newTaskForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (activeTasks.length >= 3) {
-                taskLimitError.textContent = 'Pode ter no máximo 3 tarefas ativas.';
-                setTimeout(() => taskLimitError.textContent = '', 3000);
-                return;
-            }
-
-            const taskName = document.getElementById('task-name').value;
-            const taskTag = document.getElementById('task-tag').value;
-
-            const newTask = { name: taskName, tag: taskTag, ownerId: currentUser.uid, status: 'paused', startTime: Timestamp.now(), lastStartTime: null, totalActiveTime: 0, totalPausedTime: 0, pauseCount: 0, lastPauseTime: Timestamp.now() };
-
-            try {
-                const collectionRef = collection(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`);
-                await addDoc(collectionRef, newTask);
-                newTaskForm.reset();
-            } catch (error) { console.error("Error adding new task:", error); }
-        });
-
-        function startTimer(task) {
-            if (timerIntervals[task.id]) return;
-            timerIntervals[task.id] = setInterval(() => {
-                task.totalActiveTime++;
-                const timerElement = document.getElementById(`timer-${task.id}`);
-                if (timerElement) timerElement.textContent = formatTime(task.totalActiveTime);
-            }, 1000);
-        }
-
-        function pauseTimer(taskId) {
-            clearInterval(timerIntervals[taskId]);
-            delete timerIntervals[taskId];
-        }
-
-        async function updateTaskInFirestore(taskId, updates) {
-            if (!currentUser) return;
-            const taskRef = doc(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`, taskId);
-            await setDoc(taskRef, updates, { merge: true });
-        }
-        
-        async function continueTask(taskToContinue) {
-            await Promise.all(activeTasks.map(task => {
-                if (task.id !== taskToContinue.id && task.status === 'running') return pauseTask(task);
-            }));
-
-            const now = Timestamp.now();
-            const pauseDuration = now.seconds - taskToContinue.lastPauseTime.seconds;
-            await updateTaskInFirestore(taskToContinue.id, { status: 'running', lastStartTime: now, totalPausedTime: taskToContinue.totalPausedTime + pauseDuration });
-        }
-        
-        async function pauseTask(taskToPause) {
-            const now = Timestamp.now();
-            const activeDuration = now.seconds - taskToPause.lastStartTime.seconds;
-            await updateTaskInFirestore(taskToPause.id, { status: 'paused', lastPauseTime: now, totalActiveTime: taskToPause.totalActiveTime + activeDuration, pauseCount: taskToPause.pauseCount + 1 });
-        }
-
-        async function finishTask(taskToFinish) {
-            pauseTimer(taskToFinish.id);
-            let finalActiveTime = taskToFinish.totalActiveTime;
-            if (taskToFinish.status === 'running') {
-                 const now = Timestamp.now();
-                 finalActiveTime += (now.seconds - taskToFinish.lastStartTime.seconds);
-            }
-            const finishedTask = { ...taskToFinish, userEmail: currentUser.email, endTime: Timestamp.now(), totalActiveTime: finalActiveTime };
-            delete finishedTask.status;
-            delete finishedTask.lastStartTime;
-            delete finishedTask.lastPauseTime;
+        if (user.isAnonymous) {
+          // Usuário anônimo
+          console.log("Usuário anônimo logado:", user.uid);
+          isAdmin = false;
+          adminBtnHeader.classList.remove('hidden');
+          adminBtnFooter.classList.remove('hidden');
+          
+        } else {
+          // Usuário NÃO-anônimo (pode ser admin ou comum)
+          isAdmin = await checkAdminStatus(user.uid);
+          
+          if (isAdmin) {
+            // É Admin
+            console.log("Admin logado:", user.email);
+            userInfo.classList.remove('hidden');
+            userEmail.innerText = user.email;
+            adminBtnHeader.classList.add('hidden');
+            adminBtnFooter.classList.add('hidden');
             
-            try {
-                await addDoc(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), finishedTask);
-                await deleteDoc(doc(db, `artifacts/default-app-id/users/${currentUser.uid}/active_tasks`, taskToFinish.id));
-            } catch(error) { console.error("Error finishing task: ", error); }
-        }
-        
-        function renderActiveTasks(tasks) {
-            activeTasks = tasks;
-            activeTasksContainer.innerHTML = tasks.length === 0 ? `<p class="text-gray-400 text-center">Nenhuma tarefa ativa. Inicie uma acima!</p>` : '';
-            
-            tasks.forEach(task => {
-                const isRunning = task.status === 'running';
-                let displayTime = task.totalActiveTime;
-                if(isRunning && task.lastStartTime) displayTime += (Math.floor(Date.now() / 1000) - task.lastStartTime.seconds);
-                const tagColor = getTagColor(task.tag);
-                
-                const taskCard = document.createElement('div');
-                taskCard.className = `p-4 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 ${isRunning ? 'bg-green-800/50 border-2 border-green-500' : 'bg-gray-800'}`;
-                taskCard.innerHTML = `
-                    <div class="flex-grow text-center md:text-left">
-                        <div class="flex items-center gap-3">
-                             ${isRunning ? '<span class="text-xs font-bold uppercase bg-green-500 text-gray-900 px-2 py-1 rounded">ATIVA</span>' : ''}
-                            <h3 class="font-bold text-lg">${task.name || 'Tarefa sem nome'}</h3>
-                        </div>
-                        <p class="tag-color ${tagColor}">${task.tag}</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="text-center"><p class="text-2xl md:text-3xl font-mono" id="timer-${task.id}">${formatTime(displayTime)}</p><p class="text-xs text-gray-400">Tempo Ativo</p></div>
-                        <div class="text-center"><p class="text-2xl md:text-3xl font-mono">${task.pauseCount}</p><p class="text-xs text-gray-400">Pausas</p></div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="${isRunning ? 'pause-btn bg-yellow-500 hover:bg-yellow-600' : 'continue-btn bg-green-600 hover:bg-green-700'}" title="${isRunning ? 'Pausar' : 'Continuar'}"><i class="fas fa-${isRunning ? 'pause' : 'play'}"></i></button>
-                        <button class="finish-btn bg-red-600 hover:bg-red-700" title="Finalizar"><i class="fas fa-check"></i></button>
-                    </div>`;
-                taskCard.querySelectorAll('button').forEach(btn => btn.classList.add('text-white', 'font-bold', 'py-2', 'px-4', 'rounded-lg', 'transition'));
-                activeTasksContainer.appendChild(taskCard);
-
-                if(isRunning) {
-                    taskCard.querySelector('.pause-btn').addEventListener('click', () => pauseTask(task));
-                    startTimer({ ...task, totalActiveTime: displayTime });
-                } else {
-                    taskCard.querySelector('.continue-btn').addEventListener('click', () => continueTask(task));
-                    pauseTimer(task.id);
-                }
-                taskCard.querySelector('.finish-btn').addEventListener('click', () => finishTask(task));
-            });
-        }
-        
-        function renderRecentHistory(entries) {
-            const container = document.getElementById('recent-history-container');
-            container.innerHTML = `<p id="no-recent-history" class="text-gray-400 ${entries.length > 0 ? 'hidden' : ''}">Ainda não há tarefas finalizadas.</p>`;
-            entries.forEach(entry => {
-                const tagColor = getTagColor(entry.tag);
-                const entryDiv = document.createElement('div');
-                entryDiv.className = 'bg-gray-700 p-3 rounded-lg flex justify-between items-center';
-                entryDiv.innerHTML = `
-                     <div><p class="font-semibold">${entry.name}</p><p class="tag-color ${tagColor}">${entry.tag}</p></div>
-                     <div class="text-right">
-                         <p class="font-mono text-lg">${formatTime(entry.totalActiveTime)}</p>
-                         <div class="text-xs text-gray-400 flex items-center gap-2 justify-end">
-                            <span>${new Date(entry.endTime.seconds * 1000).toLocaleDateString()}</span>
-                            <span class="flex items-center gap-1"><i class="fas fa-pause-circle"></i> ${entry.pauseCount}</span>
-                         </div>
-                     </div>`;
-                container.appendChild(entryDiv);
-            });
-        }
-        
-        // =================================================================================
-        // 6. LÓGICA DOS DASHBOARDS E GRÁFICOS
-        // =================================================================================
-        let myPerfChart = null;
-        let teamCategoryChart = null;
-        let teamUserChart = null;
-        
-        async function loadMyPerformanceDashboard() {
-            const container = document.getElementById('my-performance-view');
-            container.innerHTML = `<div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-40"><i class="fas fa-spinner fa-spin text-4xl text-indigo-400"></i></div>`;
-            if (!currentUser) { container.innerHTML = ''; return; };
-
-            try {
-                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'));
-                const querySnapshot = await getDocs(q);
-                const entries = querySnapshot.docs.map(doc => doc.data());
-
-                const totalTime = entries.reduce((acc, curr) => acc + curr.totalActiveTime, 0);
-                const totalTasks = entries.length;
-                const timeByCategory = entries.reduce((acc, curr) => {
-                    acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime;
-                    return acc;
-                }, {});
-
-                const filteredTimeByCategory = Object.entries(timeByCategory).filter(([, value]) => value > 0);
-                const chartLabels = filteredTimeByCategory.map(([key]) => key);
-                const chartData = filteredTimeByCategory.map(([, value]) => value);
-
-                container.innerHTML = `
-                    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex items-center gap-4">
-                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Dash" class="w-20 h-20">
-                        <div><h2 class="text-lg font-bold">Análise de Performance</h2><p class="text-sm text-gray-300">"Medir o progresso é o primeiro passo para melhorá-lo. Seus dados são o mapa para o seu pico de produtividade."</p>
-                        <button id="open-dash-help" class="mt-2 text-sm text-indigo-400 hover:underline">Ver dicas do Yeti</button></div>
-                    </div>
-                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTime)}</p><p class="text-gray-400">Tempo Total Registado</p></div>
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${totalTasks}</p><p class="text-gray-400">Total de Tarefas</p></div>
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTasks > 0 ? totalTime / totalTasks : 0)}</p><p class="text-gray-400">Tempo Médio por Tarefa</p></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Meu Tempo por Categoria</h3><canvas id="my-perf-category-chart"></canvas></div>
-                        <div class="bg-gray-800 p-6 rounded-xl max-h-[400px] overflow-y-auto"><h3 class="font-bold mb-4">Histórico Completo</h3>
-                            <table class="w-full text-left text-sm">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-700"><tr><th class="p-2">Tarefa</th><th class="p-2">Tempo</th><th class="p-2 flex items-center gap-1"><i class="fas fa-pause-circle"></i></th><th class="p-2">Data</th></tr></thead>
-                                <tbody>${entries.map(e => {
-                                    const tagColor = getTagColor(e.tag);
-                                    return `<tr class="border-b border-gray-700"><td class="p-2">${e.name}<br><span class="tag-color ${tagColor}">${e.tag}</span></td><td class="p-2 font-mono">${formatTime(e.totalActiveTime)}</td><td class="p-2">${e.pauseCount}</td><td class="p-2">${new Date(e.endTime.seconds * 1000).toLocaleDateString()}</td></tr>`
-                                }).join('')}</tbody>
-                            </table>
-                        </div>
-                    </div>`;
-                container.querySelector('#open-dash-help').addEventListener('click', openHelpModal);
-
-                const ctx = document.getElementById('my-perf-category-chart').getContext('2d');
-                if (myPerfChart) myPerfChart.destroy();
-                myPerfChart = new Chart(ctx, { type: 'doughnut', data: { labels: chartLabels, datasets: [{ data: chartData, backgroundColor: generateColors(chartData.length) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#d1d5db' } } } } });
-            } catch (error) {
-                console.error("Error loading My Performance Dashboard:", error);
-                container.innerHTML = `<p class="text-red-400 text-center">Ocorreu um erro ao carregar os dados.</p>`;
+            if (modalLogin.classList.contains('show')) {
+              modalLogin.classList.remove('show');
             }
-        }
-
-        async function loadTeamDashboard() {
-            const container = document.getElementById('team-dashboard-view');
-            container.innerHTML = `<div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-40"><i class="fas fa-spinner fa-spin text-4xl text-indigo-400"></i></div>`;
-
-            try {
-                const timeEntriesQuery = query(collectionGroup(db, 'time_entries'), orderBy('endTime', 'desc'), limit(200));
-                const snapshot = await getDocs(timeEntriesQuery);
-                const allEntries = snapshot.docs.map(doc => doc.data());
-
-                const totalTime = allEntries.reduce((sum, entry) => sum + entry.totalActiveTime, 0);
-                const timeByCategory = allEntries.reduce((acc, curr) => { acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime; return acc; }, {});
-                const timeByUser = allEntries.reduce((acc, curr) => { acc[curr.userEmail] = (acc[curr.userEmail] || 0) + curr.totalActiveTime; return acc; }, {});
-                
-                const topUsers = Object.entries(timeByUser).filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
-                const filteredTimeByCategory = Object.entries(timeByCategory).filter(([, value]) => value > 0);
-
-                container.innerHTML = `
-                    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex items-center gap-4">
-                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" alt="Mascote Dash" class="w-20 h-20">
-                        <div><h2 class="text-lg font-bold">Análise da Equipe</h2><p class="text-sm text-gray-300">"Uma equipe sincronizada escala mais rápido. Estes dados mostram onde a energia coletiva está focada."</p>
-                        <button id="open-dash-help" class="mt-2 text-sm text-indigo-400 hover:underline">Ver dicas do Yeti</button></div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${formatTime(totalTime)}</p><p class="text-gray-400">Tempo Total da Equipe</p></div>
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${allEntries.length}</p><p class="text-gray-400">Total de Tarefas</p></div>
-                        <div class="bg-gray-800 p-6 rounded-xl text-center"><p class="text-3xl font-bold text-indigo-400">${new Set(allEntries.map(e => e.ownerId)).size}</p><p class="text-gray-400">Colaboradores Ativos</p></div>
-                    </div>
-                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Tempo por Categoria (Equipe)</h3><canvas id="team-category-chart"></canvas></div>
-                        <div class="bg-gray-800 p-6 rounded-xl h-[400px]"><h3 class="font-bold mb-4">Top 10 Colaboradores</h3><canvas id="team-user-chart"></canvas></div>
-                    </div>
-                     <div class="bg-gray-800 p-6 rounded-xl max-h-[400px] overflow-y: auto"><h3 class="font-bold mb-4">Log de Atividades Recentes</h3>
-                         <table class="w-full text-left text-sm">
-                            <thead class="text-xs text-gray-400 uppercase bg-gray-700"><tr><th class="p-2">Colaborador</th><th class="p-2">Tarefa</th><th class="p-2">Tempo</th><th class="p-2">Data</th></tr></thead>
-                            <tbody>${allEntries.slice(0, 50).map(e => {
-                                const tagColor = getTagColor(e.tag);
-                                return `<tr class="border-b border-gray-700"><td class="p-2">${e.userEmail}</td><td class="p-2">${e.name}<br><span class="tag-color ${tagColor}">${e.tag}</span></td><td class="p-2 font-mono">${formatTime(e.totalActiveTime)}</td><td class="p-2">${new Date(e.endTime.seconds * 1000).toLocaleString()}</td></tr>`
-                            }).join('')}</tbody>
-                        </table>
-                     </div>`;
-                container.querySelector('#open-dash-help').addEventListener('click', openHelpModal);
-                
-                new Chart(document.getElementById('team-category-chart').getContext('2d'), { type: 'bar', data: { labels: filteredTimeByCategory.map(i => i[0]), datasets: [{ label: 'Tempo', data: filteredTimeByCategory.map(i => i[1]), backgroundColor: generateColors(filteredTimeByCategory.length) }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#d1d5db' } }, x: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } } });
-                new Chart(document.getElementById('team-user-chart').getContext('2d'), { type: 'bar', data: { labels: topUsers.map(u => u[0]), datasets: [{ label: 'Tempo', data: topUsers.map(u => u[1]), backgroundColor: generateColors(topUsers.length) }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { y: { ticks: { color: '#d1d5db' } }, x: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } } });
-            } catch (error) {
-                console.error("Error loading Team Dashboard:", error);
-                container.innerHTML = `<p class="text-red-400 text-center">Ocorreu um erro ao carregar os dados da equipe.</p>`;
-                if (error.code === 'failed-precondition') console.error("Falta de índice no Firestore. Crie o índice através do link na consola.");
-            }
-        }
-
-        // =================================================================================
-        // 7. LÓGICA DO PERFIL, POMODORO E MODAIS
-        // =================================================================================
-        const profileModal = document.getElementById('profile-modal');
-        let profileChart = null;
-        
-        document.getElementById('profile-button').addEventListener('click', () => { profileModal.classList.remove('hidden'); loadProfileDashboard(); });
-        document.getElementById('close-profile-modal').addEventListener('click', () => profileModal.classList.add('hidden'));
-
-        async function loadUserProfile() {
-            if(!currentUser) return;
-            const profileRef = doc(db, `artifacts/default-app-id/users/${currentUser.uid}/profile/settings`);
-            const docSnap = await getDoc(profileRef);
-            if (!docSnap.exists()) {
-                await setDoc(profileRef, { email: currentUser.email });
-            }
-            document.getElementById('profile-email').textContent = currentUser.email;
-        }
-        
-        async function loadProfileDashboard() {
-            const container = document.getElementById('profile-dashboard-container');
-            container.innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg"><i class="fas fa-spinner fa-spin text-3xl text-indigo-400"></i></div>`;
-            try {
-                const sevenDaysAgo = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), where('endTime', '>=', sevenDaysAgo));
-                const snapshot = await getDocs(q);
-                const entries = snapshot.docs.map(doc => doc.data());
-
-                const totalTime = entries.reduce((sum, e) => sum + e.totalActiveTime, 0);
-                const timeByCategory = entries.reduce((acc, curr) => { acc[curr.tag] = (acc[curr.tag] || 0) + curr.totalActiveTime; return acc; }, {});
-                
-                container.innerHTML = `<p class="text-center text-3xl font-bold text-indigo-400 mb-4">${formatTime(totalTime)}</p><div class="h-64"><canvas id="profile-category-chart"></canvas></div>`;
-                new Chart(document.getElementById('profile-category-chart').getContext('2d'), { type: 'pie', data: { labels: Object.keys(timeByCategory), datasets: [{ data: Object.values(timeByCategory), backgroundColor: generateColors(Object.keys(timeByCategory).length) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
-            } catch(error) {
-                console.error("Erro ao carregar o dashboard do perfil:", error);
-                container.innerHTML = `<div class="text-red-400 p-4">Ocorreu um erro ao carregar o seu desempenho.</div>`;
-            }
-        }
-
-        // Pomodoro
-        const pomodoroTimerEl = document.getElementById('pomodoro-timer');
-        let pomodoroInterval;
-        let pomodoroTime = 25 * 60;
-        let pomodoroRunning = false;
-        
-        document.getElementById('pomodoro-start').addEventListener('click', () => {
-            if (pomodoroRunning) return;
-            pomodoroRunning = true;
-            Notification.requestPermission();
-            pomodoroInterval = setInterval(() => {
-                pomodoroTime--;
-                pomodoroTimerEl.textContent = formatTime(pomodoroTime).substring(3);
-                if (pomodoroTime <= 0) {
-                    clearInterval(pomodoroInterval);
-                    pomodoroRunning = false;
-                    new Notification("Pomodoro Finalizado!", { body: "Bom trabalho! Hora de uma pausa.", icon: "https://i.postimg.cc/mDhmmMcn/Gemini-Generated-Image-qbpc7rqbpc7rqbpc-2.png" });
-                    playAlarm();
-                    pomodoroTime = 25 * 60;
-                }
-            }, 1000);
-        });
-        document.getElementById('pomodoro-pause').addEventListener('click', () => { clearInterval(pomodoroInterval); pomodoroRunning = false; });
-        document.getElementById('pomodoro-reset').addEventListener('click', () => { clearInterval(pomodoroInterval); pomodoroRunning = false; pomodoroTime = 25 * 60; pomodoroTimerEl.textContent = "25:00"; });
-        
-        function playAlarm() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-            oscillator.connect(audioCtx.destination);
-            oscillator.start();
-            setTimeout(() => oscillator.stop(), 500);
-        }
-
-        // Central de Ajuda
-        const helpModal = document.getElementById('help-modal');
-        document.getElementById('open-timer-help').addEventListener('click', openHelpModal);
-        document.getElementById('close-help-modal').addEventListener('click', () => helpModal.classList.add('hidden'));
-
-        function openHelpModal() {
-            const currentView = document.querySelector('.nav-button.bg-indigo-600').dataset.view;
-            const contentEl = document.getElementById('help-modal-content');
-            if (currentView === 'timer-view') {
-                contentEl.innerHTML = `
-                    <div class="flex items-center gap-4 mb-6">
-                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" class="w-24 h-24 rounded-full">
-                        <h2 class="text-2xl font-bold text-white">Maximizando o Foco 💡</h2>
-                    </div>
-                    <div class="space-y-4">
-                        <!-- Card Pomodoro -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-red-400 mt-1"><i class="fas fa-stopwatch"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Domine o Pomodoro</h3>
-                                <p class="text-gray-300 text-sm">Use os ciclos de 25 minutos para manter a concentração máxima. Ao final, faça uma pausa curta. Isso treina seu cérebro para focar intensamente por períodos definidos.</p>
-                            </div>
-                        </div>
-                        <!-- Card Tarefas -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-blue-400 mt-1"><i class="fas fa-tasks"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Limite suas Tarefas Ativas</h3>
-                                <p class="text-gray-300 text-sm">Limitar as tarefas ativas a 3 força a priorização. Conclua o que começou antes de abrir novos loops. Foco gera momentum e evita a sobrecarga mental.</p>
-                            </div>
-                        </div>
-                        <!-- Card Yeti -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-indigo-400 mt-1"><i class="fas fa-comment-dots"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Converse com o Yeti</h3>
-                                <p class="text-gray-300 text-sm">Pergunte ao nosso assistente sobre seus padrões de trabalho. "Onde gastei mais tempo hoje?" pode revelar insights para otimizar seu próximo dia.</p>
-                            </div>
-                        </div>
-                    </div>`;
+            if (!adminView.classList.contains('hidden')) {
+               // Se já estiver no admin, apenas recarrega os dados
+               loadAdminPanel();
             } else {
-                 contentEl.innerHTML = `
-                    <div class="flex items-center gap-4 mb-6">
-                        <img src="https://i.postimg.cc/nVP7BvRQ/Sem-T-tulo-1.jpg" class="w-24 h-24 rounded-full">
-                        <h2 class="text-2xl font-bold text-white">Entendendo Seus Dados 📊</h2>
-                    </div>
-                    <div class="space-y-4">
-                        <!-- Card Tempo Total -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-green-400 mt-1"><i class="fas fa-chart-line"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Tempo Total e Esforço</h3>
-                                <p class="text-gray-300 text-sm">Este é o seu indicador de esforço bruto. É a base da sua produtividade. Aumentá-lo consistentemente, com qualidade, é o objetivo principal.</p>
-                            </div>
-                        </div>
-                        <!-- Card Categoria -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-purple-400 mt-1"><i class="fas fa-chart-pie"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Tempo por Categoria</h3>
-                                <p class="text-gray-300 text-sm">Revela para onde sua energia está a fluir. Se o tempo em 'Reuniões' é maior que em 'Desenvolvimento', pode ser um sinal para reavaliar sua agenda e prioridades.</p>
-                            </div>
-                        </div>
-                        <!-- Card Colaboradores -->
-                        <div class="bg-gray-700 p-4 rounded-lg flex items-start gap-4">
-                            <div class="text-2xl text-yellow-400 mt-1"><i class="fas fa-users"></i></div>
-                            <div>
-                                <h3 class="font-bold text-lg">Top Colaboradores</h3>
-                                <p class="text-gray-300 text-sm">Na visão de equipe, este gráfico não é sobre competição, mas sobre reconhecer o esforço e identificar quem pode ser um mentor em práticas de alta produtividade.</p>
-                            </div>
-                        </div>
-                    </div>`;
+               // Se estava fora, redireciona para o admin
+               showView('admin');
+               loadAdminPanel();
             }
-            helpModal.classList.remove('hidden');
+
+          } else {
+            // É um usuário comum (não-admin, não-anônimo)
+            console.log("Usuário logado:", user.email);
+            isAdmin = false;
+            // (lógica futura para usuário comum)
+          }
+        }
+        
+        // DADOS PÚBLICOS: Carrega DEPOIS de saber quem é o usuário
+        if (localCourses.length === 0) loadCourses();
+        if (localInstructors.length === 0) loadInstructors();
+
+      } else {
+        // Usuário deslogado
+        console.log("Nenhum usuário logado. A tentar login anônimo...");
+        currentUserId = null;
+        isAdmin = false;
+        
+        // UI para deslogado
+        userInfo.classList.add('hidden');
+        userEmail.innerText = '';
+        adminBtnHeader.classList.remove('hidden');
+        adminBtnFooter.classList.remove('hidden');
+
+        // Se estiver no admin, volta para home
+        if (adminView.classList.contains('hidden') === false) {
+          showView('main');
         }
 
-        // =================================================================================
-        // 8. LÓGICA DO CHATBOT
-        // =================================================================================
-        const chatModal = document.getElementById('chat-modal');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatForm = document.getElementById('chat-form');
-
-        document.getElementById('open-chat-btn').addEventListener('click', () => chatModal.classList.toggle('hidden'));
-        document.getElementById('close-chat-btn').addEventListener('click', () => chatModal.classList.add('hidden'));
-
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (message) {
-                addUserMessage(message);
-                processChatMessage(message);
-            }
-            input.value = '';
-        });
-
-        function addUserMessage(message) {
-            chatMessages.innerHTML += `<div class="flex justify-end"><div class="chat-bubble bg-indigo-600 text-white p-3 rounded-lg">${message}</div></div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Tenta logar anonimamente
+        try {
+          // Tenta usar o token injetado se disponível
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            console.log("A tentar login com Custom Token...");
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            console.log("A tentar login anônimo...");
+            await signInAnonymously(auth);
+          }
+        } catch (error) {
+          console.error("Erro no login anônimo ou custom token:", error);
+          // Este erro (auth/operation-not-allowed) acontece se o login anônimo
+          // não estiver ativado no Console do Firebase.
+          loginError.innerText = "Erro de conexão. Não foi possível autenticar.";
         }
+      }
+    });
 
-        function addBotMessage(message) {
-            const botMessageHTML = `
-                <div class="flex items-end gap-2">
-                    <img src="https://i.postimg.cc/yxnH5wnY/Gemini-Generated-Image-ech0slech0slech0.png" alt="Yeti" class="w-8 h-8 rounded-full">
-                    <div class="chat-bubble bg-gray-700 p-3 rounded-lg">${message}</div>
+    // Login Admin (Formulário)
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = loginEmail.value;
+      const password = loginPassword.value;
+
+      loginError.classList.add('hidden');
+      loginSubmitBtn.disabled = true;
+      loginSubmitText.classList.add('hidden');
+      loginSubmitSpinner.classList.remove('hidden');
+
+      try {
+        // Define a persistência da sessão
+        await setPersistence(auth, browserLocalPersistence);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        // A verificação de admin e redirecionamento são feitos pelo onAuthStateChanged
+        showNotification('Sucesso', `Bem-vindo, ${userCredential.user.email}!`, 'success');
+
+      } catch (error) {
+        console.error("Erro de login:", error.code, error.message);
+        let friendlyMessage = "Email ou senha inválidos.";
+        if (error.code === 'auth/wrong-password') {
+          friendlyMessage = "Senha incorreta.";
+        } else if (error.code === 'auth/user-not-found') {
+          friendlyMessage = "Usuário não encontrado.";
+        } else if (error.code === 'auth/invalid-credential') {
+            friendlyMessage = "Email ou senha inválidos.";
+        } else if (error.code === 'auth/operation-not-allowed') {
+            friendlyMessage = "Login por email e senha não está ativado no Firebase.";
+        }
+        loginError.innerText = friendlyMessage;
+        loginError.classList.remove('hidden');
+      } finally {
+        loginSubmitBtn.disabled = false;
+        loginSubmitText.classList.remove('hidden');
+        loginSubmitSpinner.classList.add('hidden');
+      }
+    });
+    
+    // Logout (Botão no Header e no Admin)
+    const handleLogout = async () => {
+      try {
+        await signOut(auth);
+        isAdmin = false;
+        currentUserId = null;
+        localCourses = []; // Limpa cache
+        localInstructors = []; // Limpa cache
+        showView('main');
+        showNotification('Até logo!', 'Você saiu da sua conta.', 'success');
+        // O onAuthStateChanged vai tratar de logar anonimamente
+      } catch (error) {
+        console.error("Erro ao sair:", error);
+      }
+    };
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('admin-logout').addEventListener('click', handleLogout);
+
+    // --- Lógica de Carregamento de Dados (Público) ---
+    
+    // Função para esperar a autenticação estar pronta
+    const waitForAuth = () => {
+      return new Promise((resolve, reject) => {
+        if (authReady) {
+          resolve();
+        } else {
+          // Se o onAuthStateChanged ainda não rodou, espera um pouco
+          // Isso é um fallback, o ideal é que o authReady já seja true
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            authReady = true;
+            unsubscribe(); // Para de ouvir
+            resolve();
+          });
+        }
+      });
+    };
+
+    // Carregar Cursos do Firestore
+    const loadCourses = async () => {
+      await waitForAuth(); // Espera o auth estar pronto (anônimo ou não)
+      
+      try {
+        const coursesRef = collection(db, 'artifacts', appId, 'public/data/courses');
+        const querySnap = await getDocs(coursesRef);
+        
+        localCourses = []; // Limpa cache
+        coursesListContainer.innerHTML = ''; // Limpa container
+
+        if (querySnap.empty) {
+          coursesLoading.innerText = "Nenhum curso disponível no momento.";
+          return;
+        }
+        
+        // Aplicando regra 60/30/10
+        const colors = ['60', '30', '10'];
+        let colorIndex = 0;
+
+        querySnap.forEach((docSnap) => {
+          const course = { id: docSnap.id, ...docSnap.data() };
+          localCourses.push(course); // Adiciona ao cache
+
+          // Só exibe cursos com status 'aberto'
+          if (course.status !== 'aberto') {
+            return;
+          }
+
+          const colorRule = colors[colorIndex % colors.length];
+          colorIndex++;
+
+          const cardHTML = `
+            <article class="card-3d p-8 reveal course-card-solid cursor-pointer" 
+                     data-course-id="${course.id}" 
+                     data-color-rule="${colorRule}"
+                     style="background-color: ${course.themeColor || 'var(--brand-blue)'};">
+              <div class="flex items-center gap-3 mb-4">
+                <i class="fa-solid ${course.icon || 'fa-graduation-cap'} text-3xl"></i>
+                <div>
+                  <h3 class="text-2xl font-bold">${course.title}</h3>
+                  <p class="text-sm opacity-90">${course.subtitle}</p>
                 </div>
-            `;
-            chatMessages.innerHTML += botMessageHTML;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+              </div>
+              <div class="overflow-hidden rounded-lg mb-4">
+                <img src="${course.headerOverlayImage}" alt="${course.title}" class="w-full h-48 object-cover opacity-80" 
+                     onerror="this.src='https://placehold.co/600x400/333/fff?text=ImagemIndisponível'" />
+              </div>
+              <p class="mb-6 opacity-90">${course.summary}</p>
+              <button class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                <i class="fa-solid fa-arrow-right mr-2"></i>Ver Detalhes
+              </button>
+            </article>
+          `;
+          coursesListContainer.innerHTML += cardHTML;
+        });
+
+        coursesLoading.classList.add('hidden');
+        // Re-ativa animações de reveal
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('#courses-list .reveal').forEach(el => io.observe(el));
+
+      } catch (error) {
+        console.error("Erro ao carregar cursos:", error);
+        coursesLoading.innerText = "Não foi possível carregar os cursos. (Permissões?)";
+        coursesLoading.style.color = "red";
+      }
+    };
+    
+    // Carregar Instrutores do Firestore
+    const loadInstructors = async () => {
+      await waitForAuth(); // Espera o auth estar pronto (anônimo ou não)
+      
+      try {
+        const instructorsRef = collection(db, 'artifacts', appId, 'public/data/instructors');
+        const querySnap = await getDocs(instructorsRef);
+        
+        localInstructors = []; // Limpa cache
+        instructorsListContainer.innerHTML = ''; // Limpa container
+
+        if (querySnap.empty) {
+          instructorsLoading.innerText = "Nenhum instrutor encontrado.";
+          return;
+        }
+
+        querySnap.forEach((docSnap) => {
+          const instructor = { id: docSnap.id, ...docSnap.data() };
+          localInstructors.push(instructor); // Adiciona ao cache
+
+          const cardHTML = `
+            <div class="card-3d p-6 reveal">
+              <img src="${instructor.image}" 
+                   alt="${instructor.name}" 
+                   class="instructor-avatar mx-auto mb-4" 
+                   style="border-color: var(--brand-blue);"
+                   onerror="this.src='https://placehold.co/80x80/0066cc/fff?text=${instructor.name[0]}'" />
+              <h4 class="font-bold text-lg text-center" style="color: var(--text);">${instructor.name}</h4>
+              <p class="text-sm mt-2 text-center" style="color: var(--text-muted);">${instructor.title}</p>
+              <p class="text-xs mt-3 text-center" style="color: var(--text-muted);">${instructor.bio || ''}</p>
+            </div>
+          `;
+          instructorsListContainer.innerHTML += cardHTML;
+        });
+        
+        instructorsLoading.classList.add('hidden');
+        // Re-ativa animações de reveal
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('#instructors-list .reveal').forEach(el => io.observe(el));
+
+      } catch (error) {
+        console.error("Erro ao carregar instrutores:", error);
+        instructorsLoading.innerText = "Não foi possível carregar os instrutores. (Permissões?)";
+        instructorsLoading.style.color = "red";
+      }
+    };
+    
+    // Carregar Check-ins do Usuário (Privado)
+    const loadUserCheckins = async () => {
+      if (!currentUserId) return;
+      
+      try {
+        // Caminho privado do usuário
+        const checkinsRef = collection(db, 'artifacts', appId, 'users', currentUserId, 'checkins');
+        const querySnap = await getDocs(checkinsRef);
+        
+        currentUserCheckins = {}; // Limpa cache
+        querySnap.forEach((docSnap) => {
+          // docSnap.id é o courseId (ex: 'fotografia')
+          // docSnap.data() deve ser { checkedInAt: Timestamp }
+          currentUserCheckins[docSnap.id] = docSnap.data();
+        });
+        console.log("Check-ins do usuário carregados:", currentUserCheckins);
+      } catch (error) {
+        console.error("Erro ao carregar check-ins do usuário:", error);
+      }
+    };
+
+    // --- Lógica da Página de Detalhes do Curso ---
+
+    // Renderizar Detalhes do Curso
+    const renderCourseDetail = (course) => {
+      const detailsHTML = Object.entries(course.details || {}).map(([key, value]) => `
+      <div class="flex items-start">
+      <i class="fas fa-check mt-1 mr-3" style="color: ${course.themeColor};"></i>
+      <span><strong>${key}:</strong> ${value}</span>
+      </div>
+      `).join('');
+
+      const instructorsHTML = (course.instructors || []).map(instructor => `
+      <div class="flex items-center space-x-4">
+      <img class="h-16 w-16 rounded-full object-cover" 
+           src="${instructor.image}" alt="${instructor.name}"
+           onerror="this.src='https://placehold.co/64x64/0066cc/fff?text=${instructor.name[0]}'" />
+      <div>
+      <p class="font-bold text-gray-800">${instructor.name}</p>
+      <p class="text-sm text-gray-500">${instructor.title}</p>
+      </div>
+      </div>
+      `).join('');
+
+      const modulesHTML = (course.modules || []).map(module => `
+      <div class="bg-gray-50 p-5 rounded-lg border-l-4" style="border-color: ${course.themeColor};">
+      <h4 class="font-bold text-lg" style="color: var(--primary);">${module.title}</h4>
+      <ul class="mt-3 space-y-2 list-disc list-inside text-gray-600">
+      ${(module.topics || []).map(topic => `<li>${topic}</li>`).join('')}
+      </ul>
+      </div>
+      `).join('');
+
+      const practicalActivitiesHTML = (course.practicalActivities || []).map(activity => `
+      <div class="bg-white p-5 rounded-lg border border-gray-200">
+      <h4 class="font-bold flex items-center text-lg" style="color: ${course.themeColor};"><i class="fas fa-flask mr-3"></i>${activity.title}</h4>
+      <p class="text-gray-600 mt-2 pl-8">${activity.description}</p>
+      </div>
+      `).join('');
+      
+      // Botões de Ação - Lógica de Estado
+      const hasCheckedIn = !!currentUserCheckins[course.id];
+      const isEnrolled = true; // Simulado - idealmente viria do Firestore
+      const isCompleted = false; // Simulado - idealmente viria do Firestore
+
+      const checkinBtnDisabled = !isEnrolled || hasCheckedIn;
+      const materialsBtnDisabled = !isEnrolled || !hasCheckedIn;
+      const evaluateBtnDisabled = !isEnrolled || !hasCheckedIn;
+      const certificateBtnDisabled = !isEnrolled || !isCompleted;
+      
+      const checkinBtnText = hasCheckedIn ? 'Check-in Realizado' : 'Fazer Check-in';
+
+      const courseHTML = `
+      <section class="relative text-white py-20 md:py-32 overflow-hidden course-detail-hero" style="background: linear-gradient(-45deg, ${course.themeColor}, ${course.themeColorDark || course.themeColor});">
+      <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('${course.headerOverlayImage}');"></div>
+      <div class="container mx-auto px-6 relative">
+      <p class="text-lg font-semibold mb-2"><i class="fas ${course.icon} mr-2"></i>Capacitação Evereste Academy</p>
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">${course.title}</h1>
+      <p class="mt-2 text-xl md:text-2xl opacity-90">${course.subtitle}</p>
+      </div>
+      </section>
+      
+      <div class="container mx-auto px-6 py-16 course-detail-content">
+      <button id="back-to-courses-btn" class="mb-12 font-semibold hover:underline" style="color: ${course.themeColor};">
+      <i class="fas fa-arrow-left mr-2"></i>Voltar para todos os cursos
+      </button>
+      
+      <div class="grid lg:grid-cols-3 gap-12">
+      <!-- Coluna Principal (Conteúdo) -->
+      <div class="lg:col-span-2">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Sobre a atividade</h2>
+      <p class="text-gray-600 leading-relaxed mb-8">${course.fullDescription}</p>
+      
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">O que irá aprender</h2>
+      <ul class="space-y-3 mb-8">${(course.learningObjectives || []).map(obj => `<li class="flex items-start"><i class="fas fa-check-circle mt-1 mr-3" style="color: ${course.themeColor};"></i><span>${obj}</span></li>`).join('')}</ul>
+      
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 mt-12">Conteúdo Programático</h2>
+      <div class="space-y-6 mb-12">${modulesHTML}</div>
+      
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Atividades Práticas</h2>
+      <div class="space-y-4 mb-12">${practicalActivitiesHTML}</div>
+
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Requisitos</h2>
+      <ul class="space-y-3">${(course.requirements || []).map(req => `<li class="flex items-start"><i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i><span>${req}</span></li>`).join('')}</ul>
+      </div>
+      
+      <!-- Coluna Lateral (Ações) -->
+      <div class="lg:col-span-1">
+      <div class="bg-white p-6 rounded-lg shadow-xl sticky top-24">
+      <span class="inline-block text-sm font-semibold mb-4 px-3 py-1 rounded-full" style="background-color: ${course.themeColor}20; color: ${course.themeColor};">Inscrições abertas</span>
+      <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">${course.title}</h3>
+      <div class="space-y-3 mb-6 text-gray-700">${detailsHTML}</div>
+      
+      <!-- Botões de Ação do Curso -->
+      <div class="space-y-3">
+        <button id="enroll-btn-detail" class="btn btn-primary w-full" style="background-color: ${course.themeColor};" data-course-id="${course.id}" data-course-name="${course.title}">
+          <i class="fas fa-check-circle mr-2"></i>Inscreva-se
+        </button>
+        
+        <button id="btn-checkin" class="btn btn-secondary w-full" ${checkinBtnDisabled ? 'disabled' : ''}>
+          <i class="fas ${hasCheckedIn ? 'fa-user-check' : 'fa-map-marker-alt'} mr-2"></i>${checkinBtnText}
+        </button>
+        
+        <button id="btn-materials" class="btn btn-ghost w-full" ${materialsBtnDisabled ? 'disabled' : ''}>
+          <i class="fas fa-download mr-2"></i>Materiais
+        </button>
+        
+        <button id="btn-evaluate" class="btn btn-ghost w-full" ${evaluateBtnDisabled ? 'disabled' : ''}>
+          <i class="fas fa-star mr-2"></i>Avaliar Instrutor
+        </button>
+        
+        <button id="btn-certificate" class="btn btn-ghost w-full" ${certificateBtnDisabled ? 'disabled' : ''}>
+          <i class="fas fa-certificate mr-2"></i>Certificado
+        </button>
+      </div>
+      
+      </div>
+      </div>
+      </div>
+      
+      <div class="mt-16 pt-8 border-t">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Instrutores</h2>
+      <div class="flex flex-col md:flex-row gap-8">${instructorsHTML}</div>
+      </div>
+      <div class="mt-16 pt-8 border-t">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Público-alvo</h2>
+      <p class="text-gray-600">${course.targetAudience}</p>
+      </div>
+      </div>
+      `;
+      
+      courseDetailView.innerHTML = courseHTML;
+      showView('course');
+      
+      // Adiciona listeners aos novos botões
+      addCourseDetailListeners(course);
+    };
+    
+    // Adicionar Listeners aos Botões de Detalhe do Curso
+    const addCourseDetailListeners = (course) => {
+      // Voltar
+      document.getElementById('back-to-courses-btn').addEventListener('click', () => {
+        showView('main');
+      });
+      
+      // Inscrever-se
+      document.getElementById('enroll-btn-detail').addEventListener('click', (e) => {
+        if (!currentUserId) {
+          showNotification('Erro', 'Você precisa estar logado (mesmo anonimamente) para se inscrever.', 'error');
+          return;
+        }
+        document.getElementById('enroll-course-name').innerText = e.target.dataset.courseName;
+        document.getElementById('enroll-user-id').innerText = currentUserId;
+        modalEnroll.dataset.courseId = e.target.dataset.courseId; // Armazena o ID do curso no modal
+        modalEnroll.classList.add('show');
+      });
+      
+      // Check-in
+      document.getElementById('btn-checkin').addEventListener('click', () => {
+        modalCheckin.dataset.courseId = course.id; // Armazena o ID do curso no modal
+        document.getElementById('checkin-error').classList.add('hidden');
+        document.getElementById('checkin-password').value = '';
+        modalCheckin.classList.add('show');
+      });
+      
+      // Materiais
+      document.getElementById('btn-materials').addEventListener('click', () => {
+        // Lógica para baixar materiais
+        showNotification('Info', 'Funcionalidade de download de materiais em implementação.', 'success');
+        // Exemplo: window.open(course.materialsUrl, '_blank');
+      });
+      
+      // Avaliar
+      document.getElementById('btn-evaluate').addEventListener('click', () => {
+        const instructorName = course.instructors[0]?.name || 'o instrutor';
+        document.getElementById('evaluate-instructor-name').innerText = instructorName;
+        modalEvaluate.dataset.courseId = course.id;
+        modalEvaluate.dataset.instructorId = course.instructors[0]?.id || 'unknown'; // Assumindo que instrutor tem ID
+        modalEvaluate.classList.add('show');
+      });
+      
+      // Certificado
+      document.getElementById('btn-certificate').addEventListener('click', () => {
+        // Lógica para baixar certificado
+        showNotification('Info', 'Funcionalidade de download de certificado em implementação.', 'success');
+        // Exemplo: window.open(course.certificateUrl, '_blank');
+      });
+    };
+
+    // --- Lógica dos Modais de Ação ---
+
+    // Modal de Inscrição (Formulário)
+    document.getElementById('enroll-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = modalEnroll.dataset.courseId;
+      if (!currentUserId || !courseId) {
+        showNotification('Erro', 'ID do usuário ou do curso não encontrado.', 'error');
+        return;
+      }
+      
+      const enrollSubmitBtn = document.getElementById('enroll-submit-btn');
+      enrollSubmitBtn.disabled = true;
+      enrollSubmitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i>A processar...';
+
+      try {
+        // Cria um ID de documento único para a matrícula
+        const enrollmentRef = doc(collection(db, 'artifacts', appId, 'public/data/enrollments'));
+        
+        await setDoc(enrollmentRef, {
+          userId: currentUserId,
+          courseId: courseId,
+          enrolledAt: Timestamp.now(),
+          status: 'inscrito'
+        });
+        
+        showNotification('Sucesso!', 'Inscrição realizada com sucesso.', 'success');
+        modalEnroll.classList.remove('show');
+        // Atualizar UI (ex: desabilitar botão de inscrição)
+        // Por simplicidade, vamos apenas recarregar os dados do usuário
+        
+      } catch (error) {
+        console.error("Erro ao inscrever:", error);
+        document.getElementById('enroll-error').innerText = "Erro ao processar inscrição. Tente novamente.";
+        document.getElementById('enroll-error').classList.remove('hidden');
+      } finally {
+        enrollSubmitBtn.disabled = false;
+        enrollSubmitBtn.innerHTML = 'Confirmar Matrícula';
+      }
+    });
+    document.getElementById('enroll-cancel').addEventListener('click', () => modalEnroll.classList.remove('show'));
+
+    // Modal de Check-in (Formulário)
+    document.getElementById('checkin-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = modalCheckin.dataset.courseId;
+      const inputPassword = document.getElementById('checkin-password').value;
+      const errorEl = document.getElementById('checkin-error');
+      
+      if (!currentUserId || !courseId) {
+        showNotification('Erro', 'ID do usuário ou do curso não encontrado.', 'error');
+        return;
+      }
+
+      try {
+        // 1. Buscar a senha correta no Firestore
+        // Admin pode ler, mas usuário comum não. App precisa de admin logado para buscar? Não.
+        // A senha deve ser buscada por um usuário admin, ou por uma cloud function.
+        // Vamos assumir que a senha é buscada por um admin logado, ou que as regras permitem
+        // a leitura da senha por usuários inscritos.
+        
+        // **CORREÇÃO DE LÓGICA DE PERMISSÃO**
+        // O usuário comum não pode ler /checkinPasswords/.
+        // A solução mais simples é o admin carregar isso no cache (courseCheckinPasswords)
+        // quando ele loga. Mas o usuário anônimo não terá acesso.
+        
+        // **Solução Temporária (Insegura):** O admin define, mas o cache local é usado.
+        // **Solução Correta (Complexa):** Usar uma Cloud Function para validar a senha.
+        
+        // **Vamos usar a solução insegura por enquanto, assumindo que as regras serão ajustadas**
+        // **ou que o admin já carregou as senhas.**
+        
+        // Tenta buscar do cache primeiro
+        let correctPassword = courseCheckinPasswords[courseId];
+        
+        if (!correctPassword) {
+          // Se admin, tenta buscar do DB (fallback)
+          if (isAdmin) {
+            const passwordDocRef = doc(db, 'artifacts', appId, 'public/data/checkinPasswords', courseId);
+            const docSnap = await getDoc(passwordDocRef);
+            if (docSnap.exists() && docSnap.data().password) {
+              correctPassword = docSnap.data().password;
+              courseCheckinPasswords[courseId] = correctPassword; // Salva no cache
+            }
+          } else {
+            // Se não é admin e não está no cache, não há como validar
+            // O admin PRECISA logar-se pelo menos uma vez para carregar as senhas na tab de config.
+            console.warn("Usuário não-admin tentou check-in sem cache de senhas. O admin precisa carregar as senhas.");
+          }
         }
         
-        async function callGemini(payload) {
-            const apiKey = firebaseConfig.apiKey;
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+        // 2. Comparar a senha
+        if (correctPassword && inputPassword === correctPassword) {
+          // Senha correta!
+          // 3. Registrar o check-in no documento *privado* do usuário
+          const checkinRef = doc(db, 'artifacts', appId, 'users', currentUserId, 'checkins', courseId);
+          await setDoc(checkinRef, {
+            checkedInAt: Timestamp.now()
+          });
+          
+          // 4. Atualizar cache local e UI
+          currentUserCheckins[courseId] = { checkedInAt: Timestamp.now() };
+          showNotification('Sucesso!', 'Check-in realizado!', 'success');
+          modalCheckin.classList.remove('show');
+          
+          // Atualiza botões na página de detalhes
+          const btnCheckin = document.getElementById('btn-checkin');
+          const btnMaterials = document.getElementById('btn-materials');
+          const btnEvaluate = document.getElementById('btn-evaluate');
+          
+          if (btnCheckin) {
+            btnCheckin.disabled = true;
+            btnCheckin.innerHTML = '<i class="fas fa-user-check mr-2"></i>Check-in Realizado';
+          }
+          if (btnMaterials) btnMaterials.disabled = false;
+          if (btnEvaluate) btnEvaluate.disabled = false;
+          
+        } else {
+          // Senha incorreta
+          errorEl.innerText = "Senha incorreta. Tente novamente.";
+          errorEl.classList.remove('hidden');
+        }
+        
+      } catch (error) {
+        console.error("Erro ao fazer check-in:", error);
+        errorEl.innerText = "Erro ao validar a senha. (O admin já definiu uma?)";
+        errorEl.classList.remove('hidden');
+      }
+    });
+    document.getElementById('closeCheckin').addEventListener('click', () => modalCheckin.classList.remove('show'));
+    
+    // Modal de Avaliação (Formulário)
+    document.getElementById('evaluate-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = modalEvaluate.dataset.courseId;
+      const instructorId = modalEvaluate.dataset.instructorId;
+      const rating = document.querySelector('input[name="rating"]:checked');
+      const comment = document.getElementById('evaluate-comment').value;
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
+      if (!rating) {
+        showNotification('Erro', 'Por favor, selecione uma nota (de 1 a 5 estrelas).', 'error');
+        return;
+      }
 
-                if (!response.ok) {
-                    const errorBody = await response.json();
-                    console.error("Error from Gemini API:", errorBody.error);
-                    throw new Error(`API request failed with status ${response.status}: ${errorBody.error.message}`);
-                }
+      if (!currentUserId || !courseId || !instructorId) {
+        showNotification('Erro', 'Informações em falta (usuário, curso ou instrutor).', 'error');
+        return;
+      }
 
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (!text) {
-                    console.error("Unexpected response structure from Gemini:", result);
-                    throw new Error("Invalid response structure from AI.");
-                }
-                
-                return text;
+      try {
+        const evaluationRef = doc(collection(db, 'artifacts', appId, 'public/data/evaluations'));
+        await setDoc(evaluationRef, {
+          userId: currentUserId,
+          courseId: courseId,
+          instructorId: instructorId,
+          rating: parseInt(rating.value, 10),
+          comment: comment,
+          createdAt: Timestamp.now()
+        });
+        
+        showNotification('Obrigado!', 'Sua avaliação foi enviada com sucesso.', 'success');
+        modalEvaluate.classList.remove('show');
+        // Limpa o formulário
+        document.getElementById('evaluate-form').reset();
+        document.querySelectorAll('.star-rating input').forEach(r => r.checked = false);
+        
+      } catch (error) {
+        console.error("Erro ao enviar avaliação:", error);
+        document.getElementById('evaluate-error').classList.remove('hidden');
+      }
+    });
+    document.getElementById('closeEvaluate').addEventListener('click', () => modalEvaluate.classList.remove('show'));
 
-            } catch (error) {
-                console.error("Error calling Gemini:", error);
-                return "Desculpe, não consegui processar sua pergunta com a IA no momento. Verifique a consola para mais detalhes.";
-            }
+    // --- Lógica do Painel de Admin ---
+
+    // Navegação por Tabs do Admin
+    document.querySelector('.admin-sidebar nav').addEventListener('click', (e) => {
+      const link = e.target.closest('.admin-nav-link');
+      if (link && isAdmin) { // Garante que só admin pode navegar
+        e.preventDefault();
+        const tabId = link.dataset.tab;
+        
+        // Remove 'active' de todos os links
+        document.querySelectorAll('.admin-sidebar .admin-nav-link').forEach(l => l.classList.remove('active'));
+        // Adiciona 'active' ao link clicado
+        link.classList.add('active');
+        
+        // Esconde todas as tabs
+        document.querySelectorAll('.admin-tab-content').forEach(tab => tab.classList.add('hidden'));
+        // Mostra a tab correspondente
+        document.getElementById(tabId).classList.remove('hidden');
+        
+        // Carrega dados da tab específica
+        if (tabId === 'admin-tab-courses') loadAdminCourses();
+        if (tabId === 'admin-tab-enrollments') loadAdminEnrollments();
+        if (tabId === 'admin-tab-instructors') loadAdminInstructors();
+        if (tabId === 'admin-tab-certificates') loadAdminCertificates();
+        if (tabId === 'admin-tab-settings') loadAdminCoursePasswords();
+      }
+    });
+
+    // Carrega dados para o Painel de Admin (chamado no login admin)
+    const loadAdminPanel = () => {
+      if (!isAdmin) return; // Segurança extra
+      loadAdminDashboardData();
+      // Outros dados são carregados ao clicar na tab
+    };
+    
+    // Carrega senhas dos cursos (para o form de config)
+    const loadAdminCoursePasswords = async () => {
+      if (!isAdmin) return;
+      
+      const container = document.getElementById('admin-passwords-inputs');
+      container.innerHTML = ''; // Limpa
+      
+      try {
+        // Usa o cache local de cursos
+        if (localCourses.length === 0) {
+          await loadCourses(); // Garante que os cursos estão carregados
         }
 
-        async function processChatMessage(message) {
-            try {
-                addBotMessage('<i class="fas fa-spinner fa-spin"></i> Pensando...');
-                const lastMessageBubble = chatMessages.lastElementChild.querySelector('.chat-bubble');
+        // Carrega senhas existentes
+        const passwordsRef = collection(db, 'artifacts', appId, 'public/data/checkinPasswords');
+        const querySnap = await getDocs(passwordsRef);
+        
+        courseCheckinPasswords = {}; // Limpa o cache
+        querySnap.forEach((docSnap) => {
+          if (docSnap.data().password) {
+            courseCheckinPasswords[docSnap.id] = docSnap.data().password;
+          }
+        });
 
-                // Adiciona a mensagem do utilizador ao histórico
-                chatHistory.push({ role: "user", parts: [{ text: message }] });
+        // Cria os inputs
+        localCourses.forEach(course => {
+          const currentPassword = courseCheckinPasswords[course.id] || '';
+          const inputGroup = `
+            <div>
+              <label class="input-label" for="pass-${course.id}">${course.title}</label>
+              <input id="pass-${course.id}" type="text" class="input-field" 
+                     data-course-id="${course.id}" 
+                     value="${currentPassword}"
+                     placeholder="Senha para ${course.title}">
+            </div>
+          `;
+          container.innerHTML += inputGroup;
+        });
+        
+      } catch (error) {
+        console.error("Erro ao carregar senhas:", error);
+        container.innerHTML = '<p class="text-red-600">Erro ao carregar dados.</p>';
+      }
+    };
+    
+    // Salva senhas dos cursos
+    document.getElementById('admin-form-passwords').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!isAdmin) return;
+      
+      const inputs = document.querySelectorAll('#admin-form-passwords input[data-course-id]');
+      const promises = [];
+      const newPasswordsCache = {};
 
-                // 1. Obter contexto das tarefas recentes
-                const q = query(collection(db, `artifacts/default-app-id/users/${currentUser.uid}/time_entries`), orderBy('endTime', 'desc'), limit(15));
-                const snapshot = await getDocs(q);
-                const entries = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return { tarefa: data.name, categoria: data.tag, duracao: formatTime(data.totalActiveTime), data: new Date(data.endTime.seconds * 1000).toLocaleDateString() };
-                });
-                const taskContext = JSON.stringify(entries, null, 2);
+      inputs.forEach(input => {
+        const courseId = input.dataset.courseId;
+        const newPassword = input.value;
+        
+        // Salva em documentos individuais, conforme firestore.rules
+        const passwordDocRef = doc(db, 'artifacts', appId, 'public/data/checkinPasswords', courseId);
+        
+        promises.push(setDoc(passwordDocRef, { password: newPassword }));
+        newPasswordsCache[courseId] = newPassword;
+      });
 
-                // 2. Montar a instrução do sistema (persona e regras)
-                const systemInstruction = {
-                    parts: [{ text: `
-                        Você é o Yeti, um assistente de IA especialista em produtividade para a aplicação Timer Evereste.
-                        O nome do usuário com quem você está falando é ${currentUserName}. Chame-o pelo nome para criar uma experiência mais pessoal e amigável.
-                        Sua personalidade é amigável, encorajadora e prestativa.
-                        Sua função é responder às perguntas do usuário sobre a produtividade dele, sobre como usar a aplicação, ou dar dicas de produtividade.
-                        Use o histórico de tarefas recentes do usuário para dar respostas personalizadas e inteligentes.
-                        Mantenha um fluxo de conversa natural. Não se apresente repetidamente. Aja como se estivesse continuando uma conversa existente.
-                        O nome da empresa é "Evereste", sempre com 'e' no final. Nunca use "Everest".
+      try {
+        await Promise.all(promises); // Salva todas as senhas
+        courseCheckinPasswords = newPasswordsCache; // Atualiza o cache local
+        showNotification('Sucesso', 'Senhas de check-in atualizadas.', 'success');
+      } catch (error) {
+        console.error("Erro ao salvar senhas:", error);
+        showNotification('Erro', 'Não foi possível salvar as senhas.', 'error');
+      }
+    });
 
-                        **REGRAS DE FORMATAÇÃO E RESPOSTA (MUITO IMPORTANTE):**
-                        - Formate suas respostas usando tags HTML simples. NUNCA use Markdown.
-                        - Use a tag <b></b> para destacar informações importantes como totais de tempo, nomes de tarefas, categorias e números.
-                        - Use <ul> e <li> para criar listas quando apresentar opções ou múltiplos itens.
-                        - Use emojis relevantes para tornar a conversa mais visual e amigável (ex: ⏳ para tempo, 💡 para dicas, 📊 para dados, 🛠️ para suporte).
-                        - Responda sempre em português do Brasil, de forma concisa e útil.
-
-                        HISTÓRICO DE TAREFAS RECENTES (Contexto para suas respostas):
-                        ${taskContext}
-                    `}]
-                };
-                
-                // 3. Montar o payload final para a API
-                const payload = {
-                    contents: chatHistory,
-                    systemInstruction: systemInstruction
-                };
-
-                // 4. Chamar a IA, exibir a resposta e guardar no histórico
-                const geminiResponse = await callGemini(payload);
-                lastMessageBubble.innerHTML = geminiResponse;
-                chatHistory.push({ role: "model", parts: [{ text: geminiResponse }] });
-
-            } catch (e) {
-                console.error("Error in processChatMessage with AI:", e);
-                const lastMessageBubble = chatMessages.lastElementChild.querySelector('.chat-bubble');
-                if (lastMessageBubble) {
-                    lastMessageBubble.innerHTML = "Ocorreu um erro ao conectar com a IA. Por favor, tente novamente.";
-                }
-                // Remove a última pergunta do histórico se a chamada falhar
-                chatHistory.pop();
-            }
+    // --- NOVO: Lógica para Popular o Banco (Seed) ---
+    document.getElementById('btn-seed-database').addEventListener('click', async () => {
+      if (!isAdmin) return;
+      
+      if (!confirm('Tem certeza que deseja adicionar os dados iniciais? Isso pode sobrescrever cursos e instrutores existentes com o mesmo ID.')) {
+        return;
+      }
+      
+      console.log('Iniciando o seeding do banco de dados...');
+      
+      // Dados dos Cursos (baseado no lidssistema.txt)
+      const coursesToSeed = [
+        {
+          id: "fotografia",
+          themeColor: "#FFC107",
+          themeColorDark: "#E6A700",
+          headerOverlayImage: "https://i.postimg.cc/3rLTy2xn/medium-shot-people-with-camera.jpg",
+          icon: "fa-camera-retro",
+          title: "Workshop de Fotografia",
+          subtitle: "O Olhar que Conecta Histórias",
+          summary: "Aprenda a capturar a essência dos nossos projetos com sensibilidade e técnica.",
+          fullDescription: "No Instituto Evereste, cada imagem conta uma parte da nossa história. Este workshop é um convite para desenvolver a sua percepção e criatividade...",
+          learningObjectives: [
+            "Introduzir conceitos básicos de fotografia (composição, iluminação).",
+            "Desenvolver habilidades práticas em fotografia com câmaras e celulares.",
+            "Capacitar para o registo de eventos e projetos com qualidade profissional.",
+          ],
+          modules: [
+            { title: "Módulo 1: Fundamentos e Equipamento", topics: ["Introdução à história e ao impacto da fotografia.", "Dominando o corpo da câmera.", "Entendendo ISO, lentes e o uso do flash."] },
+            { title: "Módulo 2: Composição e Iluminação", topics: ["A arte do enquadramento.", "Trabalhando com a luz.", "Princípios de composição de imagens."] },
+            { title: "Módulo 3: Edição e Pós-Produção", topics: ["Introdução à edição no Lightroom.", "Análise do histograma e correção de cores.", "Exercícios práticos."] }
+          ],
+          requirements: ["Não são necessários pré-requisitos.", "Incentivamos a trazer o seu próprio smartphone ou câmara."],
+          targetAudience: "O Curso de Fotografia é voltado para pessoas que desejam explorar o poder da imagem como forma de expressão...",
+          instructors: [
+            { name: "Bruno Diogo", title: "Supervisor de Marketing e Mídias Visuais", image: "https://i.postimg.cc/yNhgmLJK/IMG-7311.avif" },
+            { name: "Vinícius Sena", title: "Fotógrafo Documental/Eventos", image: "https://i.postimg.cc/bw7kHG3D/vinicius.jpg" }
+          ],
+          details: { "Data": "28 de Outubro de 2025", "Horário": "08:30h - 12:15h", "Carga": "4 horas", "Certificado": "Sim", "Modalidade": "Presencial e Online" },
+          practicalActivities: [
+            { title: "Exercício de Teste: Contando uma História", description: "Em duplas, os participantes tiram 3 fotos um do outro." },
+            { title: "Exercício de Conhecimento: Dominando a Luz", description: "Os participantes tiram 3-5 fotos com diferentes tipos de iluminação." }
+          ],
+          status: "aberto"
+        },
+        {
+          id: "ia",
+          themeColor: "#4CAF50",
+          themeColorDark: "#388E3C",
+          headerOverlayImage: "https://i.postimg.cc/bv25v2BZ/relat-rio-1.png",
+          icon: "fa-brain",
+          title: "IA Aplicada à Análise de Dados",
+          subtitle: "Do Relatório ao Insight",
+          summary: "Transforme relatórios e dados brutos em dashboards web interativos e de alto impacto.",
+          fullDescription: "Num mundo movido por dados, a capacidade de extrair insights rápidos é um superpoder...",
+          learningObjectives: [
+            "Formular prompts eficazes no Gemini para gerar códigos de dashboards.",
+            "Publicar um dashboard interativo na web utilizando o GitHub Pages.",
+            "Estruturar uma apresentação de resultados de alto impacto.",
+          ],
+          modules: [
+            { title: "Módulo 1: Fundamentos e Geração de Código", topics: ["Os 3 pilares do Método Evereste Ágil.", "Introdução às ferramentas de IA.", "Oficina Prática: Construindo o prompt perfeito."] },
+            { title: "Módulo 2: Publicação e Interatividade", topics: ["Desmistificando o GitHub Pages.", "Oficina Prática: Publicando o seu primeiro dashboard.", "Análise e refinamento."] },
+            { title: "Módulo 3: Apresentação Estratégica", topics: ["Técnicas para apresentar resultados.", "Simulação de apresentação para a diretoria.", "Transformando a cultura de apresentação de resultados."] }
+          ],
+          requirements: ["É indispensável ter um notebook.", "Conta Google (Gemini) e conta no GitHub."],
+          targetAudience: "Para todos os colaboradores, entusiastas de tecnologia e qualquer pessoa curiosa sobre o poder da IA.",
+          instructors: [
+            { name: "Marllon Costa", title: "Técnico em Tecnologia da Informação | Inovação e IA", image: "https://i.postimg.cc/sxm4TVvF/IMG-9781.jpg" }
+          ],
+          details: { "Data": "06 de Novembro de 2025", "Carga": "4 horas", "Certificado": "Sim", "Modalidade": "Presencial ou Online" },
+          practicalActivities: [
+            { title: "Oficina Prática 1: O Prompt Perfeito", description: "Construir um prompt detalhado no Gemini para solicitar um dashboard." },
+            { title: "Oficina Prática 2: O Seu Primeiro Dashboard no Ar", description: "Publicar o seu dashboard online via GitHub." }
+          ],
+          status: "aberto"
         }
-    </script>
+      ];
+      
+      // Dados dos Instrutores
+      const instructorsToSeed = [
+        { id: "marllon", name: "Marllon Costa", title: "Técnico em Tecnologia da Informação | Designer | Marketing | Inovação e IA", image: "https://i.postimg.cc/sxm4TVvF/IMG-9781.jpg", bio: "Designer gráfico, graduando em marketing e autodidata em Inovação e IA..." },
+        { id: "vinicius", name: "Vinícius Sena", title: "Fotógrafo Documental/Eventos | Animação", image: "https://i.postimg.cc/bw7kHG3D/vinicius.jpg", bio: "Formado em Animação, estudante e entusiasta de fotografia desde 2019..." },
+        { id: "bruno", name: "Bruno Diogo", title: "Supervisor de Marketing e Mídias Visuais | Designer Gráfico", image: "https://i.postimg.cc/yNhgmLJK/IMG-7311.avif", bio: "Designer Gráfico e Digital | UX & UI | 📸 Fotografia" },
+        { id: "keven", name: "Keven Menezes", title: "Analista de TI | Designer Gráfico | Motion Design", image: "https://i.postimg.cc/fTgkcmpP/Whats-App-Image-2025-10-27-at-12-11-25.jpg", bio: "Formado em Design Gráfico e possui mais de 5 anos de experiência..." },
+        { id: "deyse", name: "Deyse Pereira", title: "Estrategista em Comunicação, Design e Gestão de Projetos", image: "https://i.postimg.cc/T1sL3bXz/IMG-7381-jpg.png", bio: "Mestre em Design de Artefatos Digitais, pós-graduanda em Gestão de Projetos..." }
+      ];
+
+      try {
+        const coursePromises = coursesToSeed.map(course => {
+          const courseRef = doc(db, 'artifacts', appId, 'public/data/courses', course.id);
+          return setDoc(courseRef, course);
+        });
+        
+        const instructorPromises = instructorsToSeed.map(instructor => {
+          const instructorRef = doc(db, 'artifacts', appId, 'public/data/instructors', instructor.id);
+          return setDoc(instructorRef, instructor);
+        });
+        
+        await Promise.all([...coursePromises, ...instructorPromises]);
+        
+        showNotification('Sucesso!', 'Banco de dados populado com cursos e instrutores iniciais.', 'success');
+        console.log('Seeding concluído com sucesso.');
+        
+        // Recarrega os dados na UI
+        loadCourses();
+        loadInstructors();
+        
+      } catch (error) {
+        console.error('Erro ao popular o banco de dados:', error);
+        showNotification('Erro de Seeding', 'Não foi possível popular o banco de dados. Verifique o console e suas regras do Firestore.', 'error');
+      }
+    });
+
+
+    // Carrega dados do Dashboard
+    const loadAdminDashboardData = async () => {
+      if (!isAdmin) return;
+      try {
+        const enrollmentsSnap = await getDocs(collection(db, 'artifacts', appId, 'public/data/enrollments'));
+        const certificatesSnap = await getDocs(collection(db, 'artifacts', appId, 'public/data/certificates'));
+        
+        // Contar check-ins é mais complexo pois estão em subcoleções de usuários
+        // Vamos simplificar por enquanto ou fazer uma query mais complexa (requer regras)
+        
+        document.getElementById('stat-enrollments').innerText = enrollmentsSnap.size;
+        document.getElementById('stat-certificates').innerText = certificatesSnap.size;
+        document.getElementById('stat-checkins').innerText = '...'; // Placeholder
+
+      } catch(error) {
+        console.error("Erro ao carregar stats do dashboard:", error);
+      }
+    };
+    
+    // Carrega Cursos na Tabela Admin
+    const loadAdminCourses = () => {
+      if (!isAdmin) return;
+      const tbody = document.getElementById('admin-courses-table-body');
+      tbody.innerHTML = '';
+      if (localCourses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">Nenhum curso encontrado. Tente popular o banco de dados.</td></tr>';
+        return;
+      }
+      localCourses.forEach(course => {
+        const row = `
+          <tr>
+            <td>${course.title}</td>
+            <td><span class="badge ${course.status === 'aberto' ? 'badge-success' : 'badge-soon'}">${course.status}</span></td>
+            <td>...</td>
+            <td>
+              <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    };
+    
+    // Carrega Instrutores na Tabela Admin
+    const loadAdminInstructors = () => {
+      if (!isAdmin) return;
+      const tbody = document.getElementById('admin-instructors-table-body');
+      tbody.innerHTML = '';
+      if (localInstructors.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">Nenhum instrutor encontrado. Tente popular o banco de dados.</td></tr>';
+        return;
+      }
+      localInstructors.forEach(instructor => {
+        const row = `
+          <tr>
+            <td><img src="${instructor.image}" class="h-10 w-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/ccc/fff?text=${instructor.name[0]}'"></td>
+            <td>${instructor.name}</td>
+            <td>${instructor.title}</td>
+            <td>
+              <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    };
+    
+    // Carrega Matrículas na Tabela Admin (com onSnapshot para tempo real)
+    const loadAdminEnrollments = () => {
+      if (!isAdmin) return;
+      const tbody = document.getElementById('admin-enrollments-table-body');
+      const enrollmentsRef = collection(db, 'artifacts', appId, 'public/data/enrollments');
+      
+      onSnapshot(enrollmentsRef, (querySnap) => {
+        tbody.innerHTML = '';
+        if (querySnap.empty) {
+          tbody.innerHTML = '<tr><td colspan="4">Nenhuma matrícula encontrada.</td></tr>';
+          return;
+        }
+        querySnap.forEach(docSnap => {
+          const data = docSnap.data();
+          const courseName = localCourses.find(c => c.id === data.courseId)?.title || data.courseId;
+          const row = `
+            <tr>
+              <td class="text-xs font-mono">${data.userId}</td>
+              <td>${courseName}</td>
+              <td>${data.enrolledAt.toDate().toLocaleDateString('pt-PT')}</td>
+              <td><span class="badge badge-success">${data.status}</span></td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+      }, (error) => {
+        console.error("Erro ao ouvir matrículas:", error);
+        tbody.innerHTML = '<tr><td colspan="4" class="text-red-600">Erro ao carregar matrículas.</td></tr>';
+      });
+    };
+    
+    // Carrega Certificados na Tabela Admin (com onSnapshot)
+    const loadAdminCertificates = () => {
+      if (!isAdmin) return;
+      const tbody = document.getElementById('admin-certificates-table-body');
+      const certificatesRef = collection(db, 'artifacts', appId, 'public/data/certificates');
+
+      onSnapshot(certificatesRef, (querySnap) => {
+        tbody.innerHTML = '';
+        if (querySnap.empty) {
+          tbody.innerHTML = '<tr><td colspan="4">Nenhum certificado emitido.</td></tr>';
+          return;
+        }
+        querySnap.forEach(docSnap => {
+          const data = docSnap.data();
+          const courseName = localCourses.find(c => c.id === data.courseId)?.title || data.courseId;
+          const row = `
+            <tr>
+              <td class="text-xs font-mono">${data.userId}</td>
+              <td>${courseName}</td>
+              <td>${data.issuedAt.toDate().toLocaleDateString('pt-PT')}</td>
+              <td>
+                <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-download"></i></button>
+                <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+      }, (error) => {
+        console.error("Erro ao ouvir certificados:", error);
+        tbody.innerHTML = '<tr><td colspan="4" class="text-red-600">Erro ao carregar certificados.</td></tr>';
+      });
+    };
+    
+    // --- Lógica de Inicialização ---
+    
+    // Event Listeners Globais
+    document.addEventListener('DOMContentLoaded', () => {
+      // Carrega dados públicos assim que a página abre
+      // *** REMOVIDO DAQUI - Movido para onAuthStateChanged ***
+      
+      // Reveal on Scroll (para elementos estáticos)
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      
+      // Modais
+      [adminBtnHeader, adminBtnFooter].forEach(btn => btn.addEventListener('click', () => modalLogin.classList.add('show')));
+      document.getElementById('closeLogin').addEventListener('click', () => modalLogin.classList.remove('show'));
+      modalLogin.addEventListener('click', (e) => { if (e.target === modalLogin) modalLogin.classList.remove('show'); });
+      
+      document.getElementById('closeEnroll').addEventListener('click', () => modalEnroll.classList.remove('show'));
+      modalEnroll.addEventListener('click', (e) => { if (e.target === modalEnroll) modalEnroll.classList.remove('show'); });
+      
+      document.getElementById('closeCheckin').addEventListener('click', () => modalCheckin.classList.remove('show'));
+      modalCheckin.addEventListener('click', (e) => { if (e.target === modalCheckin) modalCheckin.classList.remove('show'); });
+      
+      document.getElementById('closeEvaluate').addEventListener('click', () => modalEvaluate.classList.remove('show'));
+      modalEvaluate.addEventListener('click', (e) => { if (e.target === modalEvaluate) modalEvaluate.classList.remove('show'); });
+    });
+
+    // Logo click
+    document.getElementById('logo-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('main');
+    });
+
+    // Course card click (na lista principal)
+    coursesListContainer.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-course-id]');
+      if (card) {
+        const courseId = card.dataset.courseId;
+        const course = localCourses.find(c => c.id === courseId);
+        if (course) {
+          renderCourseDetail(course);
+        } else {
+          console.error("Curso não encontrado no cache local.");
+        }
+      }
+    });
+
+    // Scroll Progress
+    const scrollProgress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const st = h.scrollTop || document.body.scrollTop;
+      const sh = h.scrollHeight || document.body.scrollHeight;
+      // Previne divisão por zero se o conteúdo for menor que a viewport
+      const percent = (sh - h.clientHeight) > 0 ? (st / (sh - h.clientHeight)) * 100 : 0;
+      scrollProgress.style.width = percent + '%';
+    });
+
+    // Header Scroll Effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) header.classList.add('header-scrolled');
+      else header.classList.remove('header-scrolled');
+    });
+
+    // Animação de Partículas (Hero)
+    const particles = document.getElementById('particles');
+    const createParticle = () => {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.bottom = '-10px';
+      s.style.width = (Math.random() * 2 + 1) + 'px';
+      s.style.height = (Math.random() * 2 + 1) + 'px';
+      s.style.animationDelay = Math.random() * 8 + 's';
+      particles.appendChild(s);
+      setTimeout(() => s.remove(), 14000);
+    };
+    // Gera partículas iniciais e depois em intervalos
+    if (particles) {
+      for (let i = 0; i < 60; i++) createParticle();
+      setInterval(createParticle, 600);
+    }
+    
+  </script>
 </body>
 </html>
 

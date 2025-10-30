@@ -2,178 +2,120 @@
 <html lang="pt-pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Evereste Academy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Estilos CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-    /* Cores do Logo LIDS */
     --brand-blue: #0066cc;
     --brand-orange: #ff6b35;
     --brand-teal: #00a896;
     --brand-purple: #6a4c93;
     --brand-yellow: #ffc857;
-    
-    /* Paleta Principal */
     --primary: #0066cc;
     --primary-dark: #004c99;
     --primary-light: #3385d6;
     --accent: #ff6b35;
     --accent-light: #ff8c61;
-    
-    /* Tema Claro */
     --surface: #ffff;
     --surface-light: #f8fafc;
     --surface-card: #ffff;
     --text: #1e293b;
     --text-muted: #64748b;
-    --border: rgba(0,102,204,0.12);
+    --border: rgba(0, 102, 204, 0.12);
     --glow: rgba(0, 102, 204, 0.2);
-    
-    /* Hero (Tema Escuro) */
     --hero-bg: #0f172a;
     --hero-text: #ffff;
     }
-    
     html { scroll-behavior: smooth; }
-    body { 
-    font-family: 'Inter', sans-serif; 
+    body {
+    font-family: 'Inter', sans-serif;
     background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #fef3c7 100%);
-    color: var(--text); 
+    color: var(--text);
     position: relative;
+    overflow-x: hidden;
     }
-
-    /* Scroll Progress Bar */
     #scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
+    position: fixed; top: 0; left: 0; height: 3px;
     background: linear-gradient(90deg, var(--brand-blue), var(--brand-teal), var(--brand-orange));
     background-size: 200% 100%;
     animation: shimmer 3s linear infinite;
     z-index: 100;
     transition: width 100ms ease;
     }
-    @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-    }
-
-    /* Header Glassmorphism */
-    .header-glass { 
-    position: sticky; 
-    top: 0; 
-    z-index: 50; 
-    backdrop-filter: saturate(180%) blur(16px); 
-    background: rgba(255,255,255,0.85); 
-    border-bottom: 1px solid var(--border); 
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .header-glass {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(16px);
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid var(--border);
     transition: all 300ms ease;
-    box-shadow: 0 4px 12px rgba(0,102,204,0.08);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.08);
     }
-    .header-scrolled { 
-    background: rgba(255,255,255,0.95); 
-    box-shadow: 0 10px 30px rgba(0,102,204,0.15); 
-    border-color: rgba(0,102,204,0.2); 
+    .header-scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 30px rgba(0, 102, 204, 0.15);
+    border-color: rgba(0, 102, 204, 0.2);
     }
-
-    /* Hero with Parallax (Tema Escuro) */
-    .hero { 
-    position: relative; 
-    overflow: hidden;
+    .hero {
+    position: relative; overflow: hidden;
     background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
     background-size: 200% 200%;
     animation: gradientShift 8s ease infinite;
     }
-    @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    }
-    .hero::after { 
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
-    background: radial-gradient(1200px 500px at 80% -10%, rgba(0,102,204,0.2), transparent 50%), 
-    radial-gradient(900px 380px at 10% 10%, rgba(255,107,53,0.15), transparent 60%); 
-    pointer-events: none; 
+    @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(1200px 500px at 80% -10%, rgba(0, 102, 204, 0.2), transparent 50%),
+    radial-gradient(900px 380px at 10% 10%, rgba(255, 107, 53, 0.15), transparent 60%);
+    pointer-events: none;
     }
     .scroll-indicator {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-    color: var(--hero-text);
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    animation: bounce 2s infinite; color: var(--hero-text);
     }
-    @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-10px); }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particles span {
+    position: absolute; width: 2px; height: 2px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    animation: float 12s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
     }
-
-    /* Particles */
-    .particles { 
-    position: absolute; 
-    inset: 0; 
-    pointer-events: none; 
-    overflow: hidden; 
+    @keyframes float {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-120vh) translateX(20vw); opacity: 0; }
     }
-    .particles span { 
-    position: absolute; 
-    width: 2px; 
-    height: 2px; 
-    background: rgba(255,255,255,0.85); 
-    border-radius: 999px; 
-    animation: float 12s linear infinite; 
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)); 
-    }
-    @keyframes float { 
-    0% { transform: translateY(0) translateX(0); opacity: 0; } 
-    10% { opacity: 1; } 
-    90% { opacity: 1; } 
-    100% { transform: translateY(-120vh) translateX(20vw); opacity: 0; } 
-    }
-
-    /* 3D Cards with Gradient Border */
-    .card-3d { 
-    background: var(--surface-card); 
-    border: 1px solid var(--border); 
-    border-radius: 16px; 
-    box-shadow: 0 4px 20px rgba(0,102,204,0.08), inset 0 1px 0 rgba(255,255,255,0.5); 
+    .card-3d {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 102, 204, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
     }
     .card-3d::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    padding: 2px;
+    content: ''; position: absolute; inset: 0; border-radius: 16px; padding: 2px;
     background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal), var(--brand-orange));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 300ms ease;
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity 300ms ease;
     }
-    .card-3d:hover { 
-    transform: translateY(-8px) scale(1.02); 
-    box-shadow: 0 20px 50px rgba(0,102,204,0.2), 0 0 0 1px var(--glow);
+    .card-3d:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 102, 204, 0.2), 0 0 0 1px var(--glow);
     }
-    .card-3d:hover::before {
-    opacity: 1;
-    }
-
-    /* Solid Color Course Cards (Regra 60/30/10) */
+    .card-3d:hover::before { opacity: 1; }
     .course-card-solid {
-    border: none;
-    color: white;
+    border: none; color: white;
     transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     .course-card-solid::before { display: none; }
@@ -181,371 +123,322 @@
     transform: translateY(-8px) scale(1.02);
     filter: brightness(1.1);
     }
-    /* 60% - Cor Primária (Azul) */
-    .course-card-solid[data-color-rule="60"] { background: var(--brand-blue); }
-    /* 30% - Cor Secundária (Teal) */
-    .course-card-solid[data-color-rule="30"] { background: var(--brand-teal); }
-    /* 10% - Cor Destaque (Laranja) */
-    .course-card-solid[data-color-rule="10"] { background: var(--brand-orange); }
-
-    /* Buttons */
-    .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-weight: 700;
+    .btn-primary {
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal));
+    border: 1px solid rgba(0, 102, 204, 0.3);
+    border-radius: 12px; color: #fff;
+    padding: 12px 24px; font-weight: 700;
     transition: all 250ms ease;
-    cursor: pointer;
-    }
-    .btn-primary { 
-    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal)); 
-    border: 1px solid rgba(0,102,204,0.3); 
-    color: #fff; 
-    box-shadow: 0 8px 24px rgba(0,102,204,0.25);
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+    position: relative; overflow: hidden;
     }
     .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transform: translateX(-100%);
     transition: transform 400ms ease;
     }
     .btn-primary:hover::before { transform: translateX(100%); }
-    .btn-primary:hover { 
-    transform: translateY(-2px); 
-    box-shadow: 0 12px 32px rgba(0,102,204,0.35); 
-    }
-    .btn-secondary {
-    background: linear-gradient(135deg, var(--brand-orange), var(--brand-yellow));
-    border: 1px solid rgba(255,107,53,0.3);
-    color: #fff;
-    box-shadow: 0 8px 24px rgba(255,107,53,0.25);
-    }
-    .btn-secondary:hover {
+    .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(255,107,53,0.35);
+    box-shadow: 0 12px 32px rgba(0, 102, 204, 0.35);
     }
-    .btn-accent {
-    background: var(--brand-purple);
-    color: white;
-    box-shadow: 0 8px 24px rgba(106, 76, 147, 0.25);
+    .btn-ghost {
+    background: rgba(0, 102, 204, 0.08);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 700;
+    transition: all 250ms ease;
     }
-    .btn-accent:hover {
+    .btn-ghost:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(106, 76, 147, 0.35);
-    filter: brightness(1.1);
-    }
-    .btn-ghost { 
-    background: rgba(0,102,204,0.08); 
-    border: 1px solid var(--border); 
-    color: var(--primary); 
-    }
-    .btn-ghost:hover { 
-    transform: translateY(-2px); 
-    background: rgba(0,102,204,0.15); 
+    background: rgba(0, 102, 204, 0.15);
     border-color: var(--primary);
     }
-    .btn:disabled {
-    background: #94a3b8;
-    color: #e2e8f0;
-    box-shadow: none;
-    cursor: not-allowed;
-    transform: none;
+    .btn-disabled {
+    background: #94a3b8; color: #e2e8f0;
+    cursor: not-allowed; box-shadow: none; transform: none;
     }
-
-    /* Reveal Animation */
-    .reveal { 
-    opacity: 0; 
-    transform: translateY(30px); 
-    transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1); 
+    .btn-disabled:hover { background: #94a3b8; box-shadow: none; transform: none; }
+    .btn-danger {
+    background: #dc2626; color: white;
+    border-radius: 8px; padding: 8px 16px;
+    font-size: 14px; font-weight: 600;
+    transition: all 200ms ease;
     }
-    .reveal.show { 
-    opacity: 1; 
-    transform: translateY(0); 
+    .btn-danger:hover { background: #b91c1c; transform: translateY(-1px); }
+    .btn-edit {
+    background: #3b82f6; color: white;
+    border-radius: 8px; padding: 8px 16px;
+    font-size: 14px; font-weight: 600;
+    transition: all 200ms ease;
     }
+    .btn-edit:hover { background: #2563eb; transform: translateY(-1px); }
+    .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reveal.show { opacity: 1; transform: translateY(0); }
     .stagger-1 { transition-delay: 100ms; }
     .stagger-2 { transition-delay: 200ms; }
     .stagger-3 { transition-delay: 300ms; }
     .stagger-4 { transition-delay: 400ms; }
     .stagger-5 { transition-delay: 500ms; }
-
-    /* Badge */
-    .badge { 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px; 
-    font-weight: 700; 
-    padding: 8px 16px; 
-    border-radius: 999px; 
-    background: rgba(0,102,204,0.12); 
-    border: 1px solid rgba(0,102,204,0.25); 
-    color: var(--primary);
-    font-size: 14px;
+    .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 700; padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(0, 102, 204, 0.12);
+    border: 1px solid rgba(0, 102, 204, 0.25);
+    color: var(--primary); font-size: 14px;
     }
     .badge-soon {
-    background: rgba(255,200,87,0.15);
-    border-color: rgba(255,200,87,0.4);
+    background: rgba(255, 200, 87, 0.15);
+    border-color: rgba(255, 200, 87, 0.4);
     color: #d97706;
     }
-    .badge-success {
-    background: rgba(0, 168, 150, 0.15);
-    border-color: rgba(0, 168, 150, 0.3);
-    color: var(--brand-teal);
+    .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    opacity: 0; visibility: hidden;
+    transition: all 250ms ease;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
     }
-
-    /* Modal */
-    .modal-backdrop { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(15,23,42,0.7); 
-    backdrop-filter: blur(8px); 
-    opacity: 0; 
-    visibility: hidden; 
-    transition: all 250ms ease; 
-    z-index: 70; 
-    }
-    .modal-backdrop.show { 
-    opacity: 1; 
-    visibility: visible; 
-    }
-    .modal-card { 
-    max-width: 520px; 
-    width: 100%; 
-    border-radius: 20px; 
-    background: var(--surface-card); 
-    border: 1px solid var(--border); 
-    transform: translateY(20px) scale(0.95); 
-    opacity: 0; 
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1); 
-    box-shadow: 0 25px 70px rgba(0,102,204,0.3), inset 0 1px 0 rgba(255,255,255,0.5); 
-    }
-    .modal-backdrop.show .modal-card { 
-    transform: translateY(0) scale(1); 
-    opacity: 1; 
-    }
-    
-    /* Input Form */
-    .input-field {
-    width: 100%;
-    margin-top: 4px;
+    .modal-backdrop.show { opacity: 1; visibility: visible; }
+    .modal-card {
+    width: 100%; border-radius: 20px;
+    background: var(--surface-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    background: var(--surface-light);
-    color: var(--text);
-    transition: all 150ms ease;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 25px 70px rgba(0, 102, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    max-height: 90vh;
+    overflow-y: auto;
     }
-    .input-field:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--glow);
+    .modal-card-sm { max-width: 520px; }
+    .modal-card-md { max-width: 640px; }
+    .modal-card-lg { max-width: 800px; }
+    .modal-card-xl { max-width: 1024px; }
+    .modal-backdrop.show .modal-card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
     }
-    .input-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-muted);
+    .gradient-text {
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal), var(--brand-orange));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     }
-
-    /* Gradient Text */
-    .gradient-text { 
-    background: linear-gradient(135deg, var(--brand-blue), var(--brand-teal), var(--brand-orange)); 
-    -webkit-background-clip: text; 
-    background-clip: text; 
-    color: transparent; 
-    }
-
-    /* Blur Blob Decoration */
     .blur-blob {
     position: absolute;
-    width: 400px;
-    height: 400px;
+    width: 400px; height: 400px;
     border-radius: 50%;
     filter: blur(100px);
     opacity: 0.15;
     pointer-events: none;
     z-index: -1;
     }
-
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: var(--surface-light); }
-    ::-webkit-scrollbar-thumb { 
-    background: linear-gradient(180deg, var(--brand-blue), var(--brand-teal)); 
-    border-radius: 10px; 
+    ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--brand-blue), var(--brand-teal));
+    border-radius: 10px;
     }
     ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
-
-    /* Instructor Avatar */
+    .modal-card::-webkit-scrollbar-thumb { background: var(--brand-purple); }
     .instructor-avatar {
-    width: 80px;
-    height: 80px;
+    width: 80px; height: 80px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid white;
     transition: all 250ms ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .instructor-avatar:hover {
-    transform: scale(1.1);
-    }
-
-    /* Section Backgrounds */
-    .section-light {
-    background: var(--surface);
-    }
-    .section-alt {
-    background: linear-gradient(135deg, rgba(0,102,204,0.03), rgba(0,168,150,0.03));
-    }
-
-    /* Course Detail Page Styles */
+    .instructor-avatar:hover { transform: scale(1.1); }
+    .section-light { background: var(--surface); }
+    .section-alt { background: linear-gradient(135deg, rgba(0, 102, 204, 0.03), rgba(0, 168, 150, 0.03)); }
     .course-detail-hero {
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     }
-    .course-detail-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    }
-    .star-rating {
-    display: inline-flex;
-    flex-direction: row-reverse;
-    font-size: 2rem;
-    color: #cbd5e1;
-    }
-    .star-rating input { display: none; }
-    .star-rating label {
-    cursor: pointer;
-    transition: color 200ms ease;
-    }
-    .star-rating input:checked ~ label,
-    .star-rating:not(:checked) > label:hover,
-    .star-rating:not(:checked) > label:hover ~ label {
-    color: #f59e0b;
-    }
-
-    /* Admin Panel */
-    .admin-panel {
-    display: flex;
-    min-height: 100vh;
-    background: var(--surface-light);
-    }
-    .admin-sidebar {
+    .course-detail-content { max-width: 1200px; margin: 0 auto; }
+    #admin-panel { min-height: 100vh; display: flex; }
+    #admin-nav {
     width: 260px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
+    background: #0f172a;
+    color: #e2e8f0;
+    }
+    #admin-content {
+    flex: 1;
+    background: #f1f5f9;
     }
     .admin-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 8px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 24px;
+    color: #94a3b8;
     font-weight: 600;
-    color: var(--text-muted);
     transition: all 200ms ease;
+    border-left: 4px solid transparent;
     }
     .admin-nav-link:hover {
-    background: var(--surface-light);
-    color: var(--text);
+    color: #f1f5f9;
+    background: #1e293b;
     }
     .admin-nav-link.active {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 4px 12px var(--glow);
+    color: #fff;
+    background: linear-gradient(90deg, rgba(0,102,204,0.3), transparent);
+    border-left-color: var(--brand-blue);
     }
-    .admin-main {
-    flex: 1;
-    padding: 32px;
-    overflow-y: auto;
-    }
-    .admin-stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0,102,204,0.05);
-    }
+    .admin-nav-link .fa-solid { width: 20px; text-align: center; }
     .admin-table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
     .admin-table th, .admin-table td {
-    padding: 12px 16px;
+    padding: 16px 20px;
     text-align: left;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #e2e8f0;
     }
     .admin-table th {
+    background: #f8fafc;
+    color: #64748b;
     font-size: 12px;
-    font-weight: 600;
     text-transform: uppercase;
+    font-weight: 700;
+    }
+    .admin-table td { color: #334155; font-size: 14px; }
+    .admin-table tbody tr:last-child td { border-bottom: none; }
+    .admin-table tbody tr:hover { background: #f1f5f9; }
+    .admin-table .actions { display: flex; gap: 10px; }
+    .admin-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
     color: var(--text-muted);
     }
-    .admin-table td {
+    .admin-input, .admin-textarea, .admin-select {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 12px 16px;
     font-size: 14px;
     color: var(--text);
-    }
-    .admin-table tr:hover {
     background: var(--surface-light);
+    transition: all 200ms ease;
     }
-
-    /* Toast Notification */
-    #notification-toast {
+    .admin-input:focus, .admin-textarea:focus, .admin-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,102,204,0.2);
+    }
+    .admin-textarea {
+    min-height: 120px;
+    font-family: monospace;
+    }
+    .checkbox-list {
+    max-height: 150px;
+    overflow-y: auto;
+    background: var(--surface-light);
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 10px;
+    }
+    .checkbox-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    }
+    .checkbox-list label:hover { background: #e2e8f0; }
+    .checkbox-list input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    }
+    #toast-container {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left-width: 4px;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0,102,204,0.15);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    }
+    .toast {
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.05);
     display: flex;
     align-items: center;
     gap: 12px;
-    z-index: 1000;
-    transform: translateX(calc(100% + 20px));
+    transform: translateX(120%);
     opacity: 0;
-    visibility: hidden;
     transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 300px;
     }
-    #notification-toast.show {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
+    .toast.show { transform: translateX(0); opacity: 1; }
+    .toast-success {
+    background: #dcfce7;
+    color: #166534;
+    border-left: 5px solid #22c55e;
     }
-    #notification-toast .icon {
-    font-size: 20px;
+    .toast-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 5px solid #ef4444;
     }
-    #notification-toast.success { border-left-color: var(--brand-teal); }
-    #notification-toast.success .icon { color: var(--brand-teal); }
-    #notification-toast.error { border-left-color: var(--brand-orange); }
-    #notification-toast.error .icon { color: var(--brand-orange); }
+    .toast .icon { font-size: 20px; }
+    .toast-message { font-weight: 600; flex: 1; }
+    .toast-close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 18px;
+    }
+    .toast-close:hover { opacity: 1; }
+    .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    }
+    .consent-label input {
+    margin-top: 2px;
+    flex-shrink: 0;
+    }
+    .consent-label a {
+    color: var(--primary);
+    text-decoration: underline;
+    }
+    .oculto { display: none !important; }
   </style>
 </head>
+
 <body class="antialiased">
-  
-  <!-- Scroll Progress Bar -->
+  <div id="toast-container"></div>
   <div id="scroll-progress"></div>
 
-  <!-- Toast Notification -->
-  <div id="notification-toast">
-    <i id="notification-icon" class="icon"></i>
-    <div>
-      <h4 id="notification-title" class="font-bold"></h4>
-      <p id="notification-message" class="text-sm"></p>
-    </div>
-  </div>
-
-  <!-- Header -->
   <header id="header" class="header-glass">
     <div class="container mx-auto px-6 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
@@ -554,26 +447,22 @@
     </a>
     </div>
     <div class="flex items-center gap-4">
-      <div id="user-info" class="hidden items-center gap-2">
-        <span id="user-email" class="text-sm font-medium text-gray-600"></span>
-        <button id="logoutBtn" class="btn btn-ghost text-sm px-3 py-1"><i class="fas fa-sign-out-alt"></i></button>
-      </div>
-      <button id="adminBtnHeader" class="btn btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Admin</button>
+    <button id="adminBtnHeader" class="btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Admin</button>
+    <button id="logoutBtnHeader" class="btn-danger text-sm hidden"><i class="fas fa-right-from-bracket mr-2"></i>Logout</button>
     </div>
     </div>
   </header>
 
-  <!-- Main View (Course List) -->
   <div id="main-view">
-    <!-- Hero (Tema Escuro) -->
     <section class="hero relative text-white">
     <div class="relative z-10 container mx-auto px-6 py-24 md:py-32">
     <div class="reveal max-w-3xl">
     <span class="badge mb-5" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-bolt"></i> Inscrições Abertas</span>
-    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-4" style="color: white;">Capacitações Evereste Academy</h1>
+    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-4" style="color: white;">Evereste Academy</h1>
     <p class="text-lg md:text-xl text-slate-200 max-w-2xl mb-8">Formações práticas e focadas em resultados para elevar a excelência do Instituto Evereste. Profissionalismo, dinamismo e tecnologia a favor do seu desenvolvimento.</p>
     <div class="flex items-center gap-4 flex-wrap">
-    <a href="#cursos" class="btn btn-primary"><i class="fa-solid fa-graduation-cap mr-2"></i> Ver Cursos</a>
+    <a href="#cursos" class="btn-primary"><i class="fa-solid fa-graduation-cap mr-2"></i> Ver Cursos</a>
+    </div>
     </div>
     </div>
     <div class="scroll-indicator text-white text-2xl">
@@ -583,68 +472,31 @@
     <img src="https://i.postimg.cc/4xNpxRZJ/capabannerlids.png" alt="Banner" class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none" />
     </section>
 
-    <!-- Cursos Disponíveis -->
     <section id="cursos" class="section-light container mx-auto px-6 py-20 md:py-28 relative">
     <div class="blur-blob" style="background: var(--brand-blue); top: -200px; right: -200px;"></div>
     <div class="blur-blob" style="background: var(--brand-orange); bottom: -200px; left: -200px;"></div>
+    
     <div class="reveal text-center mb-16">
     <h2 class="text-4xl md:text-5xl font-black mb-4" style="color: var(--text);">Cursos Disponíveis</h2>
     <p class="text-lg" style="color: var(--text-muted);">Inscrições abertas para as próximas turmas</p>
     </div>
-
-    <!-- Container da Lista de Cursos (será populado pelo JS) -->
-    <div id="courses-list" class="grid md:grid-cols-2 gap-8 mb-20">
-      <!-- Cursos do Firebase serão inseridos aqui -->
-      <p id="courses-loading" class="text-center text-lg col-span-2" style="color: var(--text-muted);">
-        <i class="fas fa-spinner animate-spin mr-2"></i>A carregar cursos...
-      </p>
+    <div id="courses-list-open" class="grid md:grid-cols-2 gap-8 mb-20">
+    <p class="text-center md:col-span-2 text-gray-500">A carregar cursos...</p>
     </div>
 
-    <!-- Cursos Futuros (Estático) -->
     <div class="reveal">
     <h3 class="text-3xl font-bold mb-8 text-center" style="color: var(--text);">Em Breve</h3>
-    <div class="grid md:grid-cols-3 gap-6">
-    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-purple);">
-    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
-    <h4 class="font-bold text-lg mb-2">Criação de Conteúdo Criativo</h4>
-    <p class="text-sm opacity-90">Marllon C., Vinícius S., Keven M.</p>
-    </div>
-    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-orange);">
-    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
-    <h4 class="font-bold text-lg mb-2">Storytelling e Copywriting</h4>
-    <p class="text-sm opacity-90">Marllon C., Vinícius S.</p>
-    </div>
-    <div class="card-3d p-6 course-card-solid" style="background: var(--brand-teal);">
-    <span class="badge-soon mb-3" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;"><i class="fa-solid fa-clock mr-2"></i>Em breve</span>
-    <h4 class="font-bold text-lg mb-2">Design Thinking</h4>
-    <p class="text-sm opacity-90">Deyse P.</p>
-    </div>
+    <div id="courses-list-soon" class="grid md:grid-cols-3 gap-6">
+    <p class="text-center md:col-span-3 text-gray-500">A carregar futuros cursos...</p>
     </div>
     </div>
     </section>
 
-    <!-- Instrutores -->
-    <section id="instrutores" class="section-alt container mx-auto px-6 py-20 md:py-28">
-    <div class="reveal text-center mb-16">
-    <h2 class="text-4xl md:text-5xl font-black mb-4" style="color: var(--text);">Nossos Instrutores</h2>
-    <p class="text-lg" style="color: var(--text-muted);">Profissionais experientes e apaixonados por ensinar</p>
-    </div>
-    
-    <!-- Container dos Instrutores (será populado pelo JS) -->
-    <div id="instructors-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Instrutores do Firebase serão inseridos aqui -->
-      <p id="instructors-loading" class="text-center text-lg col-span-3" style="color: var(--text-muted);">
-        <i class="fas fa-spinner animate-spin mr-2"></i>A carregar instrutores...
-      </p>
-    </div>
-    </section>
-
-    <!-- Sobre -->
     <section id="sobre" class="section-light container mx-auto px-6 py-20 md:py-28">
     <div class="grid md:grid-cols-2 gap-12 items-center">
     <div class="reveal">
     <h2 class="text-4xl md:text-5xl font-black mb-6" style="color: var(--text);">Excelência e Profissionalismo</h2>
-    <p class="text-lg mb-6" style="color: var(--text-muted);">A Evereste Academy oferece experiências imersivas, conteúdos aplicados e uma abordagem voltada à prática. Unimos design moderno, tecnologia e didática para acelerar o desenvolvimento.</p>
+    <p class="text-lg mb-6" style="color: var(--text-muted);">O Programa Evereste Academy é uma iniciativa do Instituto Evereste que oferece experiências imersivas, conteúdos aplicados e uma abordagem voltada à prática. Unimos design moderno, tecnologia e didática para acelerar o desenvolvimento.</p>
     <ul class="space-y-4">
     <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Instrutores com experiência prática</span></li>
     <li class="flex gap-3"><i class="fa-solid fa-circle-check mt-1" style="color: var(--brand-teal);"></i><span style="color: var(--text);">Conteúdo atualizado e relevante</span></li>
@@ -654,1580 +506,513 @@
     </div>
     <div class="reveal">
     <div class="card-3d p-8">
-    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="w-full h-auto rounded-lg p-6" style="background: rgba(0,102,204,0.03);"/>
-    <p class="mt-6" style="color: var(--text-muted);">Parceria com o Instituto Evereste para formações transformadoras e de alto impacto institucional.</p>
+    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="w-full h-auto rounded-lg p-6" style="background: rgba(0,102,204,0.03);" />
+    <p class="mt-6 text-center font-medium" style="color: var(--text-muted);">Uma iniciativa do Instituto Evereste para formações transformadoras.</p>
     </div>
     </div>
     </div>
     </section>
 
-    <!-- Footer -->
     <footer class="border-t" style="border-color: var(--border); background: var(--surface);">
     <div class="container mx-auto px-6 py-12">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-    <div>
+    <div class="text-center md:text-left">
     <p class="text-sm" style="color: var(--text-muted);">© 2025 Evereste Academy. Todos os direitos reservados.</p>
+    <a href="#" id="footerPrivacyLink" class="text-sm text-blue-600 hover:underline mt-1 inline-block">Política de Privacidade</a>
     </div>
     <div class="flex items-center gap-4">
-    <button id="adminBtnFooter" class="btn btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Acesso Admin</button>
-    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="h-8 w-auto"/>
+    <button id="adminBtnFooter" class="btn-ghost text-sm"><i class="fas fa-lock mr-2"></i>Acesso Admin</button>
+    <button id="logoutBtnFooter" class="btn-danger text-sm hidden"><i class="fas fa-right-from-bracket mr-2"></i>Logout</button>
+    <img src="https://i.postimg.cc/SKQh2j5n/logo-evereste-2025-horizontal-2.png" alt="Instituto Evereste" class="h-8 w-auto" />
     </div>
     </div>
     </div>
     </footer>
-  </div> <!-- Fim da #main-view -->
-
-  <!-- Course Detail View (será populado pelo JS) -->
-  <div id="course-detail-view" class="hidden">
-    <!-- Conteúdo dinâmico do curso será injetado aqui -->
   </div>
 
-  <!-- Admin Panel View (Oculto por defeito) -->
-  <div id="admin-view" class="admin-panel hidden">
-    <!-- Sidebar do Admin -->
-    <aside class="admin-sidebar">
-      <div class="flex items-center gap-3 mb-8">
-        <img src="https://i.postimg.cc/hvvWCwnk/Prancheta-1-1.png" alt="Logo LIDS" class="h-10 w-auto" />
-      </div>
-      <nav class="flex flex-col flex-1 space-y-2">
-        <a href="#admin-dashboard" class="admin-nav-link active" data-tab="admin-tab-dashboard">
-          <i class="fas fa-chart-pie fa-fw"></i><span>Dashboard</span>
-        </a>
-        <a href="#admin-courses" class="admin-nav-link" data-tab="admin-tab-courses">
-          <i class="fas fa-graduation-cap fa-fw"></i><span>Cursos</span>
-        </a>
-        <a href="#admin-enrollments" class="admin-nav-link" data-tab="admin-tab-enrollments">
-          <i class="fas fa-users fa-fw"></i><span>Matrículas</span>
-        </a>
-        <a href="#admin-instructors" class="admin-nav-link" data-tab="admin-tab-instructors">
-          <i class="fas fa-chalkboard-teacher fa-fw"></i><span>Instrutores</span>
-        </a>
-        <a href="#admin-certificates" class="admin-nav-link" data-tab="admin-tab-certificates">
-          <i class="fas fa-certificate fa-fw"></i><span>Certificados</span>
-        </a>
-        <a href="#admin-settings" class="admin-nav-link" data-tab="admin-tab-settings">
-          <i class="fas fa-cogs fa-fw"></i><span>Configurações</span>
-        </a>
-      </nav>
-      <div class="mt-4">
-        <a href="#" id="admin-logout" class="admin-nav-link">
-          <i class="fas fa-sign-out-alt fa-fw"></i><span>Sair</span>
-        </a>
-      </div>
-    </aside>
-
-    <!-- Conteúdo Principal do Admin -->
-    <div class="admin-main">
-      <main id="admin-content-area">
-        <!-- Tab: Dashboard (Default) -->
-        <div id="admin-tab-dashboard" class="admin-tab-content">
-          <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="admin-stat-card">
-              <h3 class="text-sm font-semibold text-gray-500 uppercase">Total de Matrículas</h3>
-              <p id="stat-enrollments" class="text-4xl font-bold mt-2">0</p>
-            </div>
-            <div class="admin-stat-card">
-              <h3 class="text-sm font-semibold text-gray-500 uppercase">Total de Check-ins</h3>
-              <p id="stat-checkins" class="text-4xl font-bold mt-2">0</p>
-            </div>
-            <div class="admin-stat-card">
-              <h3 class="text-sm font-semibold text-gray-500 uppercase">Certificados Emitidos</h3>
-              <p id="stat-certificates" class="text-4xl font-bold mt-2">0</p>
-            </div>
-          </div>
-          <div class="admin-stat-card">
-            <h3 class="text-xl font-bold mb-4">Atividade Recente</h3>
-            <!-- Placeholder para gráfico ou lista de atividades -->
-            <p class="text-gray-500">Gráfico de análise temporal de matrículas (placeholder).</p>
-          </div>
-        </div>
-
-        <!-- Tab: Cursos -->
-        <div id="admin-tab-courses" class="admin-tab-content hidden">
-          <h1 class="text-3xl font-bold mb-6">Gerir Cursos</h1>
-          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Adicionar Novo Curso</button>
-          <div class="admin-stat-card overflow-x-auto">
-            <table class="admin-table w-full">
-              <thead>
-                <tr>
-                  <th>Título</th>
-                  <th>Status</th>
-                  <th>Matriculados</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="admin-courses-table-body">
-                <!-- Dados dos cursos serão inseridos aqui -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Tab: Matrículas -->
-        <div id="admin-tab-enrollments" class="admin-tab-content hidden">
-          <h1 class="text-3xl font-bold mb-6">Matrículas</h1>
-          <div class="admin-stat-card overflow-x-auto">
-            <table class="admin-table w-full">
-              <thead>
-                <tr>
-                  <th>Aluno (User ID)</th>
-                  <th>Curso</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="admin-enrollments-table-body">
-                <!-- Dados das matrículas serão inseridos aqui -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tab: Instrutores -->
-        <div id="admin-tab-instructors" class="admin-tab-content hidden">
-          <h1 class="text-3xl font-bold mb-6">Gerir Instrutores</h1>
-          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Adicionar Instrutor</button>
-          <div class="admin-stat-card overflow-x-auto">
-            <table class="admin-table w-full">
-              <thead>
-                <tr>
-                  <th>Foto</th>
-                  <th>Nome</th>
-                  <th>Título</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="admin-instructors-table-body">
-                <!-- Dados dos instrutores serão inseridos aqui -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tab: Certificados -->
-        <div id="admin-tab-certificates" class="admin-tab-content hidden">
-          <h1 class="text-3xl font-bold mb-6">Gerir Certificados</h1>
-          <button class="btn btn-primary mb-6"><i class="fas fa-plus mr-2"></i>Emitir Novo Certificado</button>
-          <div class="admin-stat-card overflow-x-auto">
-            <table class="admin-table w-full">
-              <thead>
-                <tr>
-                  <th>Aluno (User ID)</th>
-                  <th>Curso</th>
-                  <th>Data Emissão</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="admin-certificates-table-body">
-                <!-- Dados dos certificados serão inseridos aqui -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tab: Configurações -->
-        <div id="admin-tab-settings" class="admin-tab-content hidden">
-          <h1 class="text-3xl font-bold mb-6">Configurações</h1>
-          <div class="admin-stat-card max-w-lg mb-6">
-            <h3 class="text-xl font-bold mb-4">Senhas de Check-in</h3>
-            <p class="text-gray-600 mb-4">Defina as senhas que os alunos usarão para fazer check-in nos cursos.</p>
-            <form id="admin-form-passwords" class="space-y-4">
-              <!-- Inputs de senha serão populados pelo JS -->
-              <div id="admin-passwords-inputs" class="space-y-4">
-                <p class="text-gray-500">A carregar cursos...</p>
-              </div>
-              <button type="submit" class="btn btn-primary">Salvar Senhas</button>
-            </form>
-          </div>
-
-          <!-- Seção para Popular Banco de Dados -->
-          <div class="admin-stat-card max-w-lg">
-            <h3 class="text-xl font-bold mb-4">Configuração Inicial</h3>
-            <p class="text-gray-600 mb-4">Se o banco de dados estiver vazio, clique abaixo para adicionar os cursos e instrutores iniciais.</p>
-            <button id="btn-seed-database" class="btn btn-accent">
-              <i class="fas fa-database mr-2"></i>Popular Banco de Dados
-            </button>
-          </div>
-        </div>
-      </main>
+  <div id="course-detail-view" class="hidden">
+    <p class="text-center p-20">A carregar detalhes do curso...</p>
+  </div>
+  
+  <div id="admin-panel-view" class="hidden">
+    <div id="admin-panel">
+    <nav id="admin-nav" class="flex flex-col flex-shrink-0 p-6">
+    <div class="flex items-center gap-3 mb-10 px-4">
+    <img src="https://i.postimg.cc/hvvWCwnk/Prancheta-1-1.png" alt="Logo LIDS" class="h-10 w-auto" />
+    <span class="font-bold text-lg text-white">Admin</span>
     </div>
-  </div> <!-- Fim da #admin-view -->
+    <a href="#dashboard" class="admin-nav-link active" data-target="admin-dashboard">
+    <i class="fa-solid fa-chart-line"></i> Dashboard
+    </a>
+    <a href="#cursos" class="admin-nav-link" data-target="admin-cursos">
+    <i class="fa-solid fa-graduation-cap"></i> Cursos
+    </a>
+    <a href="#matriculas" class="admin-nav-link" data-target="admin-matriculas">
+    <i class="fa-solid fa-users"></i> Matrículas
+    </a>
+    <a href="#instrutores" class="admin-nav-link" data-target="admin-instrutores">
+    <i class="fa-solid fa-chalkboard-user"></i> Instrutores
+    </a>
+    <a href="#certificados" class="admin-nav-link" data-target="admin-certificados">
+    <i class="fa-solid fa-certificate"></i> Certificados
+    </a>
+    <a href="#config" class="admin-nav-link" data-target="admin-config">
+    <i class="fa-solid fa-gear"></i> Configurações
+    </a>
+    <div class="mt-auto">
+    <a href="#" id="admin-logout-nav" class="admin-nav-link !border-transparent hover:!bg-red-900/50 hover:!text-red-300">
+    <i class="fa-solid fa-right-from-bracket"></i> Sair
+    </a>
+    <p id="admin-user-email" class="text-xs text-center text-slate-500 mt-4 break-all"></p>
+    </div>
+    </nav>
+    
+    <main id="admin-content" class="p-10 overflow-y-auto">
+    
+    <section id="admin-dashboard" class="admin-section">
+    <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="card-3d !p-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase">Total Matrículas</h3>
+    <p id="stats-total-enrollments" class="text-3xl font-bold text-blue-600">0</p>
+    </div>
+    <div class="card-3d !p-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase">Total Check-ins</h3>
+    <p id="stats-total-checkins" class="text-3xl font-bold text-teal-600">0</p>
+    </div>
+    <div class="card-3d !p-6">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase">Certificados Emitidos</h3>
+    <p id="stats-total-certs" class="text-3xl font-bold text-purple-600">0</p>
+    </div>
+    </div>
+    <div class="card-3d !p-6">
+    <h3 class="text-lg font-bold mb-4">Matrículas ao Longo do Tempo</h3>
+    <canvas id="enrollmentsChart" height="100"></canvas>
+    </div>
+    </section>
+    
+    <section id="admin-cursos" class="admin-section hidden">
+    <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Gestão de Cursos</h1>
+    <button id="admin-add-course-btn" class="btn-primary"><i class="fas fa-plus mr-2"></i>Adicionar Novo Curso</button>
+    </div>
+    <div class="overflow-x-auto">
+    <table class="admin-table">
+    <thead>
+    <tr>
+    <th>Título</th>
+    <th>Status</th>
+    <th>Instrutores</th>
+    <th>Data</th>
+    <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="admin-courses-table-body">
+    </tbody>
+    </table>
+    </div>
+    </section>
+    
+    <section id="admin-matriculas" class="admin-section hidden">
+    <h1 class="text-3xl font-bold mb-8">Gestão de Matrículas</h1>
+    <div class="overflow-x-auto">
+    <table class="admin-table">
+    <thead>
+    <tr>
+    <th>Protocolo</th>
+    <th>Aluno</th>
+    <th>E-mail</th>
+    <th>Curso</th>
+    <th>Data</th>
+    <th>Setor</th>
+    <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="admin-enrollments-table-body">
+    </tbody>
+    </table>
+    </div>
+    </section>
+    
+    <section id="admin-instrutores" class="admin-section hidden">
+    <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Gestão de Instrutores</h1>
+    <button id="admin-add-instructor-btn" class="btn-primary"><i class="fas fa-plus mr-2"></i>Adicionar Instrutor</button>
+    </div>
+    <div class="overflow-x-auto">
+    <table class="admin-table">
+    <thead>
+    <tr>
+    <th>Foto</th>
+    <th>Nome</th>
+    <th>Título</th>
+    <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="admin-instructors-table-body">
+    </tbody>
+    </table>
+    </div>
+    </section>
+    
+    <section id="admin-certificados" class="admin-section hidden">
+    <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">Gestão de Certificados</h1>
+    <button id="admin-add-certificate-btn" class="btn-primary"><i class="fas fa-plus mr-2"></i>Emitir Novo Certificado</button>
+    </div>
+    <div class="overflow-x-auto">
+    <table class="admin-table">
+    <thead>
+    <tr>
+    <th>ID Certificado</th>
+    <th>Aluno</th>
+    <th>E-mail</th>
+    <th>Curso</th>
+    <th>Data Emissão</th>
+    <th>Status</th>
+    <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="admin-certificates-table-body">
+    </tbody>
+    </table>
+    </div>
+    </section>
 
+    <section id="admin-config" class="admin-section hidden">
+    <h1 class="text-3xl font-bold mb-8">Configurações</h1>
+    <div class="card-3d !p-6 max-w-2xl">
+    <h3 class="text-lg font-bold mb-4">Senhas de Check-in</h3>
+    <p class="text-sm text-gray-500 mb-6">Defina aqui as senhas que os instrutores irão fornecer aos alunos para o check-in.</p>
+    <div id="checkin-passwords-form" class="space-y-4">
+    <p class="text-sm text-gray-400">A carregar senhas dos cursos...</p>
+    </div>
+    <button id="save-checkin-passwords-btn" class="btn-primary mt-6"><i class="fas fa-save mr-2"></i>Salvar Senhas</button>
+    </div>
 
-  <!-- === MODAIS === -->
+    <div class="card-3d !p-6 max-w-2xl mt-8">
+    <h3 class="text-lg font-bold mb-4">Popular Banco de Dados</h3>
+    <p class="text-sm text-gray-500 mb-6">Se o seu banco de dados estiver vazio, clique aqui para adicionar os dados iniciais dos cursos (Fotografia, IA) e dos instrutores. <strong class="text-red-600">Atenção:</strong> Isso pode sobrescrever dados existentes se os IDs forem iguais.</p>
+    <button id="populate-db-btn" class="btn-primary"><i class="fas fa-database mr-2"></i>Popular Dados Iniciais</button>
+    </div>
+    </section>
 
-  <!-- Modal Login Admin -->
-  <div id="modalLogin" class="modal-backdrop flex items-center justify-center px-4">
-    <div class="modal-card p-8">
+    </main>
+    </div>
+  </div>
+
+  <!-- Modal Login -->
+  <div id="modalLogin" class="modal-backdrop">
+    <div class="modal-card modal-card-sm p-8">
     <div class="flex items-start justify-between mb-6">
     <div>
     <h3 class="text-2xl font-bold" style="color: var(--text);">Acesso Administrativo</h3>
     <p class="text-sm" style="color: var(--text-muted);">Área restrita para gestores</p>
     </div>
-    <button id="closeLogin" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    <button id="closeLogin" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <form id="login-form" class="space-y-4">
+    <form id="loginForm" class="space-y-4">
     <div>
-    <label class="input-label" for="login-email">E-mail</label>
-    <input id="login-email" type="email" class="input-field" placeholder="admin@evereste.org" required />
+    <label class="admin-label">E-mail</label>
+    <input id="loginEmail" type="email" class="admin-input" placeholder="admin@evereste.org" required />
     </div>
     <div>
-    <label class="input-label" for="login-password">Senha</label>
-    <input id="login-password" type="password" class="input-field" placeholder="••••••••" required />
+    <label class="admin-label">Senha</label>
+    <input id="loginPassword" type="password" class="admin-input" placeholder="••••" required />
     </div>
-    <p id="login-error" class="text-sm text-red-600 hidden">Mensagem de erro aqui.</p>
-    <button type="submit" id="login-submit-btn" class="btn btn-primary w-full">
-      <span id="login-submit-text"><i class="fa-solid fa-right-to-bracket mr-2"></i>Entrar</span>
-      <span id="login-submit-spinner" class="hidden"><i class="fas fa-spinner animate-spin"></i></span>
+    <p id="loginError" class="text-red-600 text-sm hidden">Erro ao fazer login.</p>
+    <button type="submit" class="btn-primary w-full !py-3 !text-base"><i class="fa-solid fa-right-to-bracket mr-2"></i>Entrar</button>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal Inscrição -->
+  <div id="modalEnroll" class="modal-backdrop">
+    <div class="modal-card modal-card-md p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Formulário de Inscrição</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Inscreva-se no curso: <strong id="enrollCourseName" class="text-blue-600"></strong></p>
+    </div>
+    <button id="closeEnroll" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="enrollForm" class="space-y-4">
+    <div>
+    <label class="admin-label">Nome Completo</label>
+    <input id="enrollName" type="text" class="admin-input" placeholder="O seu nome" required />
+    </div>
+    <div>
+    <label class="admin-label">E-mail</label>
+    <input id="enrollEmail" type="email" class="admin-input" placeholder="voce@email.com" required />
+    </div>
+    <div>
+    <label class="admin-label">Telefone</label>
+    <input id="enrollPhone" type="tel" class="admin-input" placeholder="(00) 0000-0000" required />
+    </div>
+    <div>
+    <label class="admin-label">Setor</label>
+    <input id="enrollSector" type="text" class="admin-input" placeholder="Ex: Comunicação, Pedagógico..." required />
+    </div>
+
+    <div class="space-y-3 pt-2">
+    <label class="consent-label">
+    <input type="checkbox" id="enrollConsentImage" name="consentImage" required>
+    <span>Autorizo o uso da minha imagem em materiais de divulgação relacionados a esta capacitação, conforme <a href="#" id="enrollImageUseLink">Termo de Uso de Imagem</a>.</span>
+    </label>
+    <label class="consent-label">
+    <input type="checkbox" id="enrollConsentLGPD" name="consentLGPD" required>
+    <span>Li e concordo com a <a href="#" id="enrollPrivacyLink">Política de Privacidade</a> e autorizo o tratamento dos meus dados para fins desta inscrição, conforme a LGPD.</span>
+    </label>
+    </div>
+
+    <p id="enrollError" class="text-red-600 text-sm hidden">Erro ao processar inscrição. Tente novamente.</p>
+    <button type="submit" class="btn-primary w-full !py-3 !text-base">
+    <span id="enrollSubmitBtnText"><i class="fa-solid fa-paper-plane mr-2"></i>Confirmar Inscrição</span>
+    <span id="enrollSpinner" class="hidden"><i class="fas fa-spinner animate-spin mr-2"></i>A processar...</span>
     </button>
     </form>
     </div>
   </div>
 
-  <!-- Modal Inscrição (Matrícula) -->
-  <div id="modalEnroll" class="modal-backdrop flex items-center justify-center px-4">
-    <div class="modal-card p-8">
-    <div class="flex items-start justify-between mb-6">
-    <div>
-    <h3 class="text-2xl font-bold" style="color: var(--text);">Confirmar Inscrição</h3>
-    <p class="text-sm" style="color: var(--text-muted);">Você está prestes a inscrever-se no curso:</p>
-    <h4 id="enroll-course-name" class="text-lg font-semibold mt-1" style="color: var(--primary);"></h4>
+  <!-- Modal Sucesso Inscrição -->
+  <div id="modalEnrollSuccess" class="modal-backdrop">
+    <div class="modal-card modal-card-sm p-8 text-center">
+    <div class="text-center">
+    <i class="fas fa-check-circle text-6xl text-green-500 mb-6"></i>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Inscrição Confirmada!</h3>
+    <p class="text-base mt-2" style="color: var(--text-muted);">Guarde o seu número de protocolo:</p>
+    <p id="enrollProtocol" class="text-3xl font-bold text-blue-600 bg-blue-50 border-2 border-blue-200 rounded-lg py-4 my-4"></p>
+    <p class="text-sm" style="color: var(--text-muted);">Você receberá os detalhes da inscrição no seu e-mail.</p>
     </div>
-    <button id="closeEnroll" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <form id="enroll-form">
-      <p class="text-gray-600 mb-4">Seu ID de aluno é: <strong id="enroll-user-id" class="select-all">...</strong></p>
-      <p class="text-gray-600 mb-6">Clique em confirmar para concluir sua matrícula. Você será identificado anonimamente.</p>
-      <p id="enroll-error" class="text-sm text-red-600 hidden mb-4">Mensagem de erro aqui.</p>
-      <div class="flex gap-4">
-        <button type="button" id="enroll-cancel" class="btn btn-ghost w-full">Cancelar</button>
-        <button type="submit" id="enroll-submit-btn" class="btn btn-primary w-full">Confirmar Matrícula</button>
-      </div>
-    </form>
+    <button id="closeEnrollSuccess" class="btn-primary w-full mt-6">Fechar</button>
     </div>
   </div>
 
   <!-- Modal Check-in -->
-  <div id="modalCheckin" class="modal-backdrop flex items-center justify-center px-4">
-    <div class="modal-card p-8">
+  <div id="modalCheckin" class="modal-backdrop">
+    <div class="modal-card modal-card-sm p-8">
     <div class="flex items-start justify-between mb-6">
     <div>
     <h3 class="text-2xl font-bold" style="color: var(--text);">Check-in do Curso</h3>
     <p class="text-sm" style="color: var(--text-muted);">Insira a senha fornecida pelo instrutor.</p>
     </div>
-    <button id="closeCheckin" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    <button id="closeCheckin" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <form id="checkin-form" class="space-y-4">
+    <form id="checkinForm" class="space-y-4">
     <div>
-    <label class="input-label" for="checkin-password">Senha de Acesso</label>
-    <input id="checkin-password" type="password" class="input-field" placeholder="••••••••" required />
+    <label class="admin-label">Senha de Acesso</label>
+    <input id="checkinPassword" type="password" class="admin-input" placeholder="••••" required />
     </div>
-    <p id="checkin-error" class="text-sm text-red-600 hidden">Senha incorreta. Tente novamente.</p>
-    <button type="submit" id="checkin-submit-btn" class="btn btn-primary w-full">
-      Validar Check-in
+    <p id="checkinError" class="text-red-600 text-sm hidden">Senha incorreta. Tente novamente.</p>
+    <button type="submit" class="btn-primary w-full !py-3 !text-base">
+    <span id="checkinSubmitBtnText">Validar Check-in</span>
+    <span id="checkinSpinner" class="hidden"><i class="fas fa-spinner animate-spin mr-2"></i>A validar...</span>
     </button>
     </form>
     </div>
   </div>
 
   <!-- Modal Avaliar Instrutor -->
-  <div id="modalEvaluate" class="modal-backdrop flex items-center justify-center px-4">
-    <div class="modal-card p-8">
+  <div id="modalRating" class="modal-backdrop">
+    <div class="modal-card modal-card-sm p-8">
     <div class="flex items-start justify-between mb-6">
     <div>
     <h3 class="text-2xl font-bold" style="color: var(--text);">Avaliar Instrutor</h3>
-    <p class="text-sm" style="color: var(--text-muted);">Deixe seu feedback sobre <strong id="evaluate-instructor-name"></strong></p>
+    <p class="text-sm" style="color: var(--text-muted);">O seu feedback é importante para nós.</p>
     </div>
-    <button id="closeEvaluate" class="btn btn-ghost px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
+    <button id="closeRating" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <form id="evaluate-form" class="space-y-4">
-      <div>
-        <label class="input-label">Nota</label>
-        <div class="star-rating mt-1">
-          <input type="radio" id="5-stars" name="rating" value="5" required /><label for="5-stars" class="fas fa-star"></label>
-          <input type="radio" id="4-stars" name="rating" value="4" /><label for="4-stars" class="fas fa-star"></label>
-          <input type="radio" id="3-stars" name="rating" value="3" /><label for="3-stars" class="fas fa-star"></label>
-          <input type="radio" id="2-stars" name="rating" value="2" /><label for="2-stars" class="fas fa-star"></label>
-          <input type="radio" id="1-star" name="rating" value="1" /><label for="1-star" class="fas fa-star"></label>
-        </div>
-      </div>
-      <div>
-        <label class="input-label" for="evaluate-comment">Comentário (Opcional)</label>
-        <textarea id="evaluate-comment" class="input-field" rows="3" placeholder="O que você achou da didática?"></textarea>
-      </div>
-      <p id="evaluate-error" class="text-sm text-red-600 hidden">Ocorreu um erro. Tente novamente.</p>
-      <button type="submit" id="evaluate-submit-btn" class="btn btn-primary w-full">
-        Enviar Avaliação
-      </button>
+    <form id="ratingForm" class="space-y-4">
+    <div>
+    <label class="admin-label">Selecione o Instrutor</label>
+    <select id="ratingInstructorSelect" class="admin-select" required>
+    </select>
+    </div>
+    <div>
+    <label class="admin-label">A sua avaliação (1 a 5 estrelas)</label>
+    <div id="ratingStars" class="flex text-3xl text-gray-300 cursor-pointer">
+    <i class="fa-solid fa-star" data-value="1"></i>
+    <i class="fa-solid fa-star" data-value="2"></i>
+    <i class="fa-solid fa-star" data-value="3"></i>
+    <i class="fa-solid fa-star" data-value="4"></i>
+    <i class="fa-solid fa-star" data-value="5"></i>
+    </div>
+    <input type="hidden" id="ratingValue" value="0" required>
+    </div>
+    <div>
+    <label class="admin-label">Comentário (Opcional)</label>
+    <textarea id="ratingComment" class="admin-textarea" rows="3" placeholder="O que achou da didática?"></textarea>
+    </div>
+    <p id="ratingError" class="text-red-600 text-sm hidden">Erro ao enviar. Tente novamente.</p>
+    <button type="submit" class="btn-primary w-full !py-3 !text-base">
+    <span id="ratingSubmitBtnText">Enviar Avaliação</span>
+    <span id="ratingSpinner" class="hidden"><i class="fas fa-spinner animate-spin mr-2"></i>A enviar...</span>
+    </button>
     </form>
     </div>
   </div>
 
-  <!-- Scripts (Firebase e Lógica da Aplicação) -->
-  <script type="module">
-    // Importações do Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      signOut, 
-      onAuthStateChanged, 
-      signInAnonymously,
-      signInWithCustomToken,
-      setPersistence,
-      browserLocalPersistence
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { 
-      getFirestore, 
-      collection, 
-      getDocs, 
-      doc, 
-      getDoc, 
-      setDoc, 
-      addDoc, 
-      query, 
-      where,
-      onSnapshot,
-      Timestamp
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { 
-      getStorage, 
-      ref, 
-      getDownloadURL 
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+  <!-- Modal Verificação de Certificado -->
+  <div id="modalCertificateCheck" class="modal-backdrop">
+    <div class="modal-card modal-card-sm p-8">
+    <div class="flex items-start justify-between mb-6">
+    <div>
+    <h3 class="text-2xl font-bold" style="color: var(--text);">Verificar Certificado</h3>
+    <p class="text-sm" style="color: var(--text-muted);">Insira o e-mail que usou na inscrição.</p>
+    </div>
+    <button id="closeCertificateCheck" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="certificateCheckForm" class="space-y-4">
+    <div>
+    <label class="admin-label">E-mail de Inscrição</label>
+    <input id="certificateCheckEmail" type="email" class="admin-input" placeholder="voce@email.com" required />
+    </div>
+    <div id="certificateCheckResult" class="oculto"></div>
+    <p id="certificateCheckError" class="text-red-600 text-sm hidden"></p>
+    <button type="submit" class="btn-primary w-full !py-3 !text-base">
+    <span id="certificateCheckSubmitBtnText">Verificar Disponibilidade</span>
+    <span id="certificateCheckSpinner" class="hidden"><i class="fas fa-spinner animate-spin mr-2"></i>A verificar...</span>
+    </button>
+    </form>
+    </div>
+  </div>
 
-    // --- Configuração do Firebase ---
-    // A configuração real será injetada pelo ambiente
-    const firebaseConfig = typeof __firebase_config !== 'undefined' 
-      ? JSON.parse(__firebase_config)
-      : {
-          apiKey: "AIzaSyB0xvVzytOx4dumokND-dr926krSO4-CqU",
-          authDomain: "academylids.firebaseapp.com",
-          projectId: "academylids",
-          storageBucket: "academylids.firebasestorage.app",
-          messagingSenderId: "826478835273",
-          appId: "1:826478835273:web:0995d64419276b932cb198",
-          measurementId: "G-T2TN7FL590"
-        };
+  <!-- Modal Política de Privacidade -->
+  <div id="modalPrivacy" class="modal-backdrop">
+    <div class="modal-card modal-card-lg p-8">
+    <div class="flex items-start justify-between mb-6">
+    <h3 class="text-2xl font-bold">Política de Privacidade</h3>
+    <button class="btn-ghost !p-2 !text-lg" data-close-modal="modalPrivacy"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="space-y-4 text-gray-600">
+    <p><strong>Última atualização:</strong> Janeiro de 2025</p>
+    <p>O Instituto Evereste, através da Evereste Academy, está comprometido com a proteção da sua privacidade e dos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).</p>
     
-    // ID da Aplicação (injetado pelo ambiente)
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-    const analytics = getAnalytics(app);
-
-    // Variáveis Globais de Estado
-    let currentUserId = null;
-    let isAdmin = false;
-    let localCourses = []; // Cache local dos cursos
-    let localInstructors = []; // Cache local dos instrutores
-    let courseCheckinPasswords = {}; // Cache local das senhas de check-in
-    let currentUserCheckins = {}; // Cache local dos check-ins do usuário
-    let authReady = false; // Flag para controlar se a autenticação inicial já ocorreu
-
-    // --- Elementos DOM ---
-    const mainView = document.getElementById('main-view');
-    const courseDetailView = document.getElementById('course-detail-view');
-    const adminView = document.getElementById('admin-view');
+    <h4 class="font-bold text-lg text-gray-800 mt-6">1. Dados Coletados</h4>
+    <p>Ao inscrever-se nos nossos cursos, coletamos as seguintes informações:</p>
+    <ul class="list-disc list-inside ml-4">
+    <li>Nome completo</li>
+    <li>Endereço de e-mail</li>
+    <li>Número de telefone</li>
+    <li>Setor de atuação</li>
+    <li>Imagens capturadas durante as atividades (mediante consentimento)</li>
+    </ul>
     
-    const coursesListContainer = document.getElementById('courses-list');
-    const coursesLoading = document.getElementById('courses-loading');
-    const instructorsListContainer = document.getElementById('instructors-list');
-    const instructorsLoading = document.getElementById('instructors-loading');
+    <h4 class="font-bold text-lg text-gray-800 mt-6">2. Finalidade do Tratamento</h4>
+    <p>Os seus dados pessoais são utilizados para:</p>
+    <ul class="list-disc list-inside ml-4">
+    <li>Processar e gerir a sua inscrição nos cursos</li>
+    <li>Comunicar informações relevantes sobre as capacitações</li>
+    <li>Emitir certificados de participação</li>
+    <li>Realizar check-in nas atividades</li>
+    <li>Melhorar a qualidade dos nossos serviços educacionais</li>
+    <li>Divulgar as atividades da Evereste Academy (apenas com consentimento expresso para uso de imagem)</li>
+    </ul>
     
-    const modalLogin = document.getElementById('modalLogin');
-    const modalEnroll = document.getElementById('modalEnroll');
-    const modalCheckin = document.getElementById('modalCheckin');
-    const modalEvaluate = document.getElementById('modalEvaluate');
+    <h4 class="font-bold text-lg text-gray-800 mt-6">3. Base Legal</h4>
+    <p>O tratamento dos seus dados pessoais é realizado com base no seu consentimento expresso e na execução de contrato educacional.</p>
     
-    const loginForm = document.getElementById('login-form');
-    const loginEmail = document.getElementById('login-email');
-    const loginPassword = document.getElementById('login-password');
-    const loginError = document.getElementById('login-error');
-    const loginSubmitBtn = document.getElementById('login-submit-btn');
-    const loginSubmitText = document.getElementById('login-submit-text');
-    const loginSubmitSpinner = document.getElementById('login-submit-spinner');
+    <h4 class="font-bold text-lg text-gray-800 mt-6">4. Compartilhamento de Dados</h4>
+    <p>Os seus dados não serão compartilhados com terceiros, exceto quando necessário para a prestação dos serviços educacionais ou por obrigação legal.</p>
     
-    const adminBtnHeader = document.getElementById('adminBtnHeader');
-    const adminBtnFooter = document.getElementById('adminBtnFooter');
-    const userInfo = document.getElementById('user-info');
-    const userEmail = document.getElementById('user-email');
-
-    // --- Funções Utilitárias ---
-
-    // Mostrar Notificação (Toast)
-    const showNotification = (title, message, type = 'success') => {
-      const toast = document.getElementById('notification-toast');
-      const icon = document.getElementById('notification-icon');
-      
-      document.getElementById('notification-title').innerText = title;
-      document.getElementById('notification-message').innerText = message;
-      
-      toast.className = ''; // Limpa classes
-      toast.classList.add('show', type);
-      
-      if (type === 'success') {
-        icon.className = 'icon fas fa-check-circle';
-      } else if (type === 'error') {
-        icon.className = 'icon fas fa-times-circle';
-      }
-
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    };
-
-    // Verificar se o usuário é Admin
-    const checkAdminStatus = async (uid) => {
-      if (!uid) return false;
-      try {
-        const adminDocRef = doc(db, 'admins', uid);
-        const adminDocSnap = await getDoc(adminDocRef);
-        return adminDocSnap.exists();
-      } catch (error) {
-        console.error("Erro ao verificar status de admin:", error);
-        return false;
-      }
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">5. Segurança</h4>
+    <p>Implementamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais contra acesso não autorizado, perda, destruição ou alteração.</p>
     
-    // Mudar a visibilidade das views
-    const showView = (viewToShow) => {
-      mainView.classList.add('hidden');
-      courseDetailView.classList.add('hidden');
-      adminView.classList.add('hidden');
-      document.getElementById('header').classList.remove('hidden');
-
-      if (viewToShow === 'main') {
-        mainView.classList.remove('hidden');
-      } else if (viewToShow === 'course') {
-        courseDetailView.classList.remove('hidden');
-      } else if (viewToShow === 'admin') {
-        adminView.classList.remove('hidden');
-        document.getElementById('header').classList.add('hidden'); // Oculta header principal no admin
-      }
-      window.scrollTo(0, 0);
-    };
-
-    // --- Lógica de Autenticação ---
-
-    // Monitorar estado da autenticação (LÓGICA CORRIGIDA)
-    onAuthStateChanged(auth, async (user) => {
-      authReady = true; // Marca que a verificação inicial terminou
-      if (user) {
-        // Usuário está logado
-        currentUserId = user.uid;
-        
-        // Carrega dados específicos do usuário (check-ins)
-        loadUserCheckins();
-        
-        if (user.isAnonymous) {
-          // Usuário anônimo
-          console.log("Usuário anônimo logado:", user.uid);
-          isAdmin = false;
-          adminBtnHeader.classList.remove('hidden');
-          adminBtnFooter.classList.remove('hidden');
-          
-        } else {
-          // Usuário NÃO-anônimo (pode ser admin ou comum)
-          isAdmin = await checkAdminStatus(user.uid);
-          
-          if (isAdmin) {
-            // É Admin
-            console.log("Admin logado:", user.email);
-            userInfo.classList.remove('hidden');
-            userEmail.innerText = user.email;
-            adminBtnHeader.classList.add('hidden');
-            adminBtnFooter.classList.add('hidden');
-            
-            if (modalLogin.classList.contains('show')) {
-              modalLogin.classList.remove('show');
-            }
-            if (!adminView.classList.contains('hidden')) {
-               // Se já estiver no admin, apenas recarrega os dados
-               loadAdminPanel();
-            } else {
-               // Se estava fora, redireciona para o admin
-               showView('admin');
-               loadAdminPanel();
-            }
-
-          } else {
-            // É um usuário comum (não-admin, não-anônimo)
-            console.log("Usuário logado:", user.email);
-            isAdmin = false;
-            // (lógica futura para usuário comum)
-          }
-        }
-        
-        // DADOS PÚBLICOS: Carrega DEPOIS de saber quem é o usuário
-        if (localCourses.length === 0) loadCourses();
-        if (localInstructors.length === 0) loadInstructors();
-
-      } else {
-        // Usuário deslogado
-        console.log("Nenhum usuário logado. A tentar login anônimo...");
-        currentUserId = null;
-        isAdmin = false;
-        
-        // UI para deslogado
-        userInfo.classList.add('hidden');
-        userEmail.innerText = '';
-        adminBtnHeader.classList.remove('hidden');
-        adminBtnFooter.classList.remove('hidden');
-
-        // Se estiver no admin, volta para home
-        if (adminView.classList.contains('hidden') === false) {
-          showView('main');
-        }
-
-        // Tenta logar anonimamente
-        try {
-          // Tenta usar o token injetado se disponível
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            console.log("A tentar login com Custom Token...");
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            console.log("A tentar login anônimo...");
-            await signInAnonymously(auth);
-          }
-        } catch (error) {
-          console.error("Erro no login anônimo ou custom token:", error);
-          // Este erro (auth/operation-not-allowed) acontece se o login anônimo
-          // não estiver ativado no Console do Firebase.
-          loginError.innerText = "Erro de conexão. Não foi possível autenticar.";
-        }
-      }
-    });
-
-    // Login Admin (Formulário)
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = loginEmail.value;
-      const password = loginPassword.value;
-
-      loginError.classList.add('hidden');
-      loginSubmitBtn.disabled = true;
-      loginSubmitText.classList.add('hidden');
-      loginSubmitSpinner.classList.remove('hidden');
-
-      try {
-        // Define a persistência da sessão
-        await setPersistence(auth, browserLocalPersistence);
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        
-        // A verificação de admin e redirecionamento são feitos pelo onAuthStateChanged
-        showNotification('Sucesso', `Bem-vindo, ${userCredential.user.email}!`, 'success');
-
-      } catch (error) {
-        console.error("Erro de login:", error.code, error.message);
-        let friendlyMessage = "Email ou senha inválidos.";
-        if (error.code === 'auth/wrong-password') {
-          friendlyMessage = "Senha incorreta.";
-        } else if (error.code === 'auth/user-not-found') {
-          friendlyMessage = "Usuário não encontrado.";
-        } else if (error.code === 'auth/invalid-credential') {
-            friendlyMessage = "Email ou senha inválidos.";
-        } else if (error.code === 'auth/operation-not-allowed') {
-            friendlyMessage = "Login por email e senha não está ativado no Firebase.";
-        }
-        loginError.innerText = friendlyMessage;
-        loginError.classList.remove('hidden');
-      } finally {
-        loginSubmitBtn.disabled = false;
-        loginSubmitText.classList.remove('hidden');
-        loginSubmitSpinner.classList.add('hidden');
-      }
-    });
+    <h4 class="font-bold text-lg text-gray-800 mt-6">6. Seus Direitos</h4>
+    <p>Você tem o direito de:</p>
+    <ul class="list-disc list-inside ml-4">
+    <li>Confirmar a existência de tratamento dos seus dados</li>
+    <li>Acessar os seus dados pessoais</li>
+    <li>Corrigir dados incompletos, inexatos ou desatualizados</li>
+    <li>Solicitar a anonimização, bloqueio ou eliminação de dados desnecessários</li>
+    <li>Revogar o consentimento a qualquer momento</li>
+    </ul>
     
-    // Logout (Botão no Header e no Admin)
-    const handleLogout = async () => {
-      try {
-        await signOut(auth);
-        isAdmin = false;
-        currentUserId = null;
-        localCourses = []; // Limpa cache
-        localInstructors = []; // Limpa cache
-        showView('main');
-        showNotification('Até logo!', 'Você saiu da sua conta.', 'success');
-        // O onAuthStateChanged vai tratar de logar anonimamente
-      } catch (error) {
-        console.error("Erro ao sair:", error);
-      }
-    };
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('admin-logout').addEventListener('click', handleLogout);
-
-    // --- Lógica de Carregamento de Dados (Público) ---
+    <h4 class="font-bold text-lg text-gray-800 mt-6">7. Retenção de Dados</h4>
+    <p>Os seus dados serão mantidos pelo período necessário para cumprir as finalidades descritas nesta política ou conforme exigido por lei.</p>
     
-    // Função para esperar a autenticação estar pronta
-    const waitForAuth = () => {
-      return new Promise((resolve, reject) => {
-        if (authReady) {
-          resolve();
-        } else {
-          // Se o onAuthStateChanged ainda não rodou, espera um pouco
-          // Isso é um fallback, o ideal é que o authReady já seja true
-          const unsubscribe = onAuthStateChanged(auth, (user) => {
-            authReady = true;
-            unsubscribe(); // Para de ouvir
-            resolve();
-          });
-        }
-      });
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">8. Contato</h4>
+    <p>Para exercer os seus direitos ou esclarecer dúvidas sobre esta política, entre em contato através do e-mail: <a href="mailto:privacidade@evereste.org" class="text-blue-600 underline">privacidade@evereste.org</a></p>
+    </div>
+    </div>
+  </div>
 
-    // Carregar Cursos do Firestore
-    const loadCourses = async () => {
-      await waitForAuth(); // Espera o auth estar pronto (anônimo ou não)
-      
-      try {
-        const coursesRef = collection(db, 'artifacts', appId, 'public/data/courses');
-        const querySnap = await getDocs(coursesRef);
-        
-        localCourses = []; // Limpa cache
-        coursesListContainer.innerHTML = ''; // Limpa container
-
-        if (querySnap.empty) {
-          coursesLoading.innerText = "Nenhum curso disponível no momento.";
-          return;
-        }
-        
-        // Aplicando regra 60/30/10
-        const colors = ['60', '30', '10'];
-        let colorIndex = 0;
-
-        querySnap.forEach((docSnap) => {
-          const course = { id: docSnap.id, ...docSnap.data() };
-          localCourses.push(course); // Adiciona ao cache
-
-          // Só exibe cursos com status 'aberto'
-          if (course.status !== 'aberto') {
-            return;
-          }
-
-          const colorRule = colors[colorIndex % colors.length];
-          colorIndex++;
-
-          const cardHTML = `
-            <article class="card-3d p-8 reveal course-card-solid cursor-pointer" 
-                     data-course-id="${course.id}" 
-                     data-color-rule="${colorRule}"
-                     style="background-color: ${course.themeColor || 'var(--brand-blue)'};">
-              <div class="flex items-center gap-3 mb-4">
-                <i class="fa-solid ${course.icon || 'fa-graduation-cap'} text-3xl"></i>
-                <div>
-                  <h3 class="text-2xl font-bold">${course.title}</h3>
-                  <p class="text-sm opacity-90">${course.subtitle}</p>
-                </div>
-              </div>
-              <div class="overflow-hidden rounded-lg mb-4">
-                <img src="${course.headerOverlayImage}" alt="${course.title}" class="w-full h-48 object-cover opacity-80" 
-                     onerror="this.src='https://placehold.co/600x400/333/fff?text=ImagemIndisponível'" />
-              </div>
-              <p class="mb-6 opacity-90">${course.summary}</p>
-              <button class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-bold py-3 px-4 rounded-lg transition-all">
-                <i class="fa-solid fa-arrow-right mr-2"></i>Ver Detalhes
-              </button>
-            </article>
-          `;
-          coursesListContainer.innerHTML += cardHTML;
-        });
-
-        coursesLoading.classList.add('hidden');
-        // Re-ativa animações de reveal
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('#courses-list .reveal').forEach(el => io.observe(el));
-
-      } catch (error) {
-        console.error("Erro ao carregar cursos:", error);
-        coursesLoading.innerText = "Não foi possível carregar os cursos. (Permissões?)";
-        coursesLoading.style.color = "red";
-      }
-    };
+  <!-- Modal Termo de Uso de Imagem -->
+  <div id="modalImageUse" class="modal-backdrop">
+    <div class="modal-card modal-card-lg p-8">
+    <div class="flex items-start justify-between mb-6">
+    <h3 class="text-2xl font-bold">Termo de Uso de Imagem</h3>
+    <button class="btn-ghost !p-2 !text-lg" data-close-modal="modalImageUse"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="space-y-4 text-gray-600">
+    <p><strong>Última atualização:</strong> Janeiro de 2025</p>
+    <p>Ao aceitar este termo, você autoriza o Instituto Evereste a utilizar a sua imagem, voz e nome em materiais de divulgação relacionados às atividades da Evereste Academy.</p>
     
-    // Carregar Instrutores do Firestore
-    const loadInstructors = async () => {
-      await waitForAuth(); // Espera o auth estar pronto (anônimo ou não)
-      
-      try {
-        const instructorsRef = collection(db, 'artifacts', appId, 'public/data/instructors');
-        const querySnap = await getDocs(instructorsRef);
-        
-        localInstructors = []; // Limpa cache
-        instructorsListContainer.innerHTML = ''; // Limpa container
-
-        if (querySnap.empty) {
-          instructorsLoading.innerText = "Nenhum instrutor encontrado.";
-          return;
-        }
-
-        querySnap.forEach((docSnap) => {
-          const instructor = { id: docSnap.id, ...docSnap.data() };
-          localInstructors.push(instructor); // Adiciona ao cache
-
-          const cardHTML = `
-            <div class="card-3d p-6 reveal">
-              <img src="${instructor.image}" 
-                   alt="${instructor.name}" 
-                   class="instructor-avatar mx-auto mb-4" 
-                   style="border-color: var(--brand-blue);"
-                   onerror="this.src='https://placehold.co/80x80/0066cc/fff?text=${instructor.name[0]}'" />
-              <h4 class="font-bold text-lg text-center" style="color: var(--text);">${instructor.name}</h4>
-              <p class="text-sm mt-2 text-center" style="color: var(--text-muted);">${instructor.title}</p>
-              <p class="text-xs mt-3 text-center" style="color: var(--text-muted);">${instructor.bio || ''}</p>
-            </div>
-          `;
-          instructorsListContainer.innerHTML += cardHTML;
-        });
-        
-        instructorsLoading.classList.add('hidden');
-        // Re-ativa animações de reveal
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('#instructors-list .reveal').forEach(el => io.observe(el));
-
-      } catch (error) {
-        console.error("Erro ao carregar instrutores:", error);
-        instructorsLoading.innerText = "Não foi possível carregar os instrutores. (Permissões?)";
-        instructorsLoading.style.color = "red";
-      }
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">1. Objeto da Autorização</h4>
+    <p>Este termo autoriza o uso de:</p>
+    <ul class="list-disc list-inside ml-4">
+    <li>Fotografias</li>
+    <li>Vídeos</li>
+    <li>Gravações de áudio</li>
+    <li>Depoimentos</li>
+    <li>Nome e identificação profissional</li>
+    </ul>
     
-    // Carregar Check-ins do Usuário (Privado)
-    const loadUserCheckins = async () => {
-      if (!currentUserId) return;
-      
-      try {
-        // Caminho privado do usuário
-        const checkinsRef = collection(db, 'artifacts', appId, 'users', currentUserId, 'checkins');
-        const querySnap = await getDocs(checkinsRef);
-        
-        currentUserCheckins = {}; // Limpa cache
-        querySnap.forEach((docSnap) => {
-          // docSnap.id é o courseId (ex: 'fotografia')
-          // docSnap.data() deve ser { checkedInAt: Timestamp }
-          currentUserCheckins[docSnap.id] = docSnap.data();
-        });
-        console.log("Check-ins do usuário carregados:", currentUserCheckins);
-      } catch (error) {
-        console.error("Erro ao carregar check-ins do usuário:", error);
-      }
-    };
-
-    // --- Lógica da Página de Detalhes do Curso ---
-
-    // Renderizar Detalhes do Curso
-    const renderCourseDetail = (course) => {
-      const detailsHTML = Object.entries(course.details || {}).map(([key, value]) => `
-      <div class="flex items-start">
-      <i class="fas fa-check mt-1 mr-3" style="color: ${course.themeColor};"></i>
-      <span><strong>${key}:</strong> ${value}</span>
-      </div>
-      `).join('');
-
-      const instructorsHTML = (course.instructors || []).map(instructor => `
-      <div class="flex items-center space-x-4">
-      <img class="h-16 w-16 rounded-full object-cover" 
-           src="${instructor.image}" alt="${instructor.name}"
-           onerror="this.src='https://placehold.co/64x64/0066cc/fff?text=${instructor.name[0]}'" />
-      <div>
-      <p class="font-bold text-gray-800">${instructor.name}</p>
-      <p class="text-sm text-gray-500">${instructor.title}</p>
-      </div>
-      </div>
-      `).join('');
-
-      const modulesHTML = (course.modules || []).map(module => `
-      <div class="bg-gray-50 p-5 rounded-lg border-l-4" style="border-color: ${course.themeColor};">
-      <h4 class="font-bold text-lg" style="color: var(--primary);">${module.title}</h4>
-      <ul class="mt-3 space-y-2 list-disc list-inside text-gray-600">
-      ${(module.topics || []).map(topic => `<li>${topic}</li>`).join('')}
-      </ul>
-      </div>
-      `).join('');
-
-      const practicalActivitiesHTML = (course.practicalActivities || []).map(activity => `
-      <div class="bg-white p-5 rounded-lg border border-gray-200">
-      <h4 class="font-bold flex items-center text-lg" style="color: ${course.themeColor};"><i class="fas fa-flask mr-3"></i>${activity.title}</h4>
-      <p class="text-gray-600 mt-2 pl-8">${activity.description}</p>
-      </div>
-      `).join('');
-      
-      // Botões de Ação - Lógica de Estado
-      const hasCheckedIn = !!currentUserCheckins[course.id];
-      const isEnrolled = true; // Simulado - idealmente viria do Firestore
-      const isCompleted = false; // Simulado - idealmente viria do Firestore
-
-      const checkinBtnDisabled = !isEnrolled || hasCheckedIn;
-      const materialsBtnDisabled = !isEnrolled || !hasCheckedIn;
-      const evaluateBtnDisabled = !isEnrolled || !hasCheckedIn;
-      const certificateBtnDisabled = !isEnrolled || !isCompleted;
-      
-      const checkinBtnText = hasCheckedIn ? 'Check-in Realizado' : 'Fazer Check-in';
-
-      const courseHTML = `
-      <section class="relative text-white py-20 md:py-32 overflow-hidden course-detail-hero" style="background: linear-gradient(-45deg, ${course.themeColor}, ${course.themeColorDark || course.themeColor});">
-      <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('${course.headerOverlayImage}');"></div>
-      <div class="container mx-auto px-6 relative">
-      <p class="text-lg font-semibold mb-2"><i class="fas ${course.icon} mr-2"></i>Capacitação Evereste Academy</p>
-      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">${course.title}</h1>
-      <p class="mt-2 text-xl md:text-2xl opacity-90">${course.subtitle}</p>
-      </div>
-      </section>
-      
-      <div class="container mx-auto px-6 py-16 course-detail-content">
-      <button id="back-to-courses-btn" class="mb-12 font-semibold hover:underline" style="color: ${course.themeColor};">
-      <i class="fas fa-arrow-left mr-2"></i>Voltar para todos os cursos
-      </button>
-      
-      <div class="grid lg:grid-cols-3 gap-12">
-      <!-- Coluna Principal (Conteúdo) -->
-      <div class="lg:col-span-2">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Sobre a atividade</h2>
-      <p class="text-gray-600 leading-relaxed mb-8">${course.fullDescription}</p>
-      
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">O que irá aprender</h2>
-      <ul class="space-y-3 mb-8">${(course.learningObjectives || []).map(obj => `<li class="flex items-start"><i class="fas fa-check-circle mt-1 mr-3" style="color: ${course.themeColor};"></i><span>${obj}</span></li>`).join('')}</ul>
-      
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 mt-12">Conteúdo Programático</h2>
-      <div class="space-y-6 mb-12">${modulesHTML}</div>
-      
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">Atividades Práticas</h2>
-      <div class="space-y-4 mb-12">${practicalActivitiesHTML}</div>
-
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Requisitos</h2>
-      <ul class="space-y-3">${(course.requirements || []).map(req => `<li class="flex items-start"><i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i><span>${req}</span></li>`).join('')}</ul>
-      </div>
-      
-      <!-- Coluna Lateral (Ações) -->
-      <div class="lg:col-span-1">
-      <div class="bg-white p-6 rounded-lg shadow-xl sticky top-24">
-      <span class="inline-block text-sm font-semibold mb-4 px-3 py-1 rounded-full" style="background-color: ${course.themeColor}20; color: ${course.themeColor};">Inscrições abertas</span>
-      <h3 class="text-xl font-bold mb-4" style="color: var(--primary);">${course.title}</h3>
-      <div class="space-y-3 mb-6 text-gray-700">${detailsHTML}</div>
-      
-      <!-- Botões de Ação do Curso -->
-      <div class="space-y-3">
-        <button id="enroll-btn-detail" class="btn btn-primary w-full" style="background-color: ${course.themeColor};" data-course-id="${course.id}" data-course-name="${course.title}">
-          <i class="fas fa-check-circle mr-2"></i>Inscreva-se
-        </button>
-        
-        <button id="btn-checkin" class="btn btn-secondary w-full" ${checkinBtnDisabled ? 'disabled' : ''}>
-          <i class="fas ${hasCheckedIn ? 'fa-user-check' : 'fa-map-marker-alt'} mr-2"></i>${checkinBtnText}
-        </button>
-        
-        <button id="btn-materials" class="btn btn-ghost w-full" ${materialsBtnDisabled ? 'disabled' : ''}>
-          <i class="fas fa-download mr-2"></i>Materiais
-        </button>
-        
-        <button id="btn-evaluate" class="btn btn-ghost w-full" ${evaluateBtnDisabled ? 'disabled' : ''}>
-          <i class="fas fa-star mr-2"></i>Avaliar Instrutor
-        </button>
-        
-        <button id="btn-certificate" class="btn btn-ghost w-full" ${certificateBtnDisabled ? 'disabled' : ''}>
-          <i class="fas fa-certificate mr-2"></i>Certificado
-        </button>
-      </div>
-      
-      </div>
-      </div>
-      </div>
-      
-      <div class="mt-16 pt-8 border-t">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">Instrutores</h2>
-      <div class="flex flex-col md:flex-row gap-8">${instructorsHTML}</div>
-      </div>
-      <div class="mt-16 pt-8 border-t">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">Público-alvo</h2>
-      <p class="text-gray-600">${course.targetAudience}</p>
-      </div>
-      </div>
-      `;
-      
-      courseDetailView.innerHTML = courseHTML;
-      showView('course');
-      
-      // Adiciona listeners aos novos botões
-      addCourseDetailListeners(course);
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">2. Finalidade</h4>
+    <p>As imagens e materiais poderão ser utilizados para:</p>
+    <ul class="list-disc list-inside ml-4">
+    <li>Divulgação das atividades da Evereste Academy em redes sociais</li>
+    <li>Materiais promocionais e institucionais</li>
+    <li>Relatórios de atividades</li>
+    <li>Website e plataformas digitais do Instituto Evereste</li>
+    <li>Apresentações e eventos institucionais</li>
+    </ul>
     
-    // Adicionar Listeners aos Botões de Detalhe do Curso
-    const addCourseDetailListeners = (course) => {
-      // Voltar
-      document.getElementById('back-to-courses-btn').addEventListener('click', () => {
-        showView('main');
-      });
-      
-      // Inscrever-se
-      document.getElementById('enroll-btn-detail').addEventListener('click', (e) => {
-        if (!currentUserId) {
-          showNotification('Erro', 'Você precisa estar logado (mesmo anonimamente) para se inscrever.', 'error');
-          return;
-        }
-        document.getElementById('enroll-course-name').innerText = e.target.dataset.courseName;
-        document.getElementById('enroll-user-id').innerText = currentUserId;
-        modalEnroll.dataset.courseId = e.target.dataset.courseId; // Armazena o ID do curso no modal
-        modalEnroll.classList.add('show');
-      });
-      
-      // Check-in
-      document.getElementById('btn-checkin').addEventListener('click', () => {
-        modalCheckin.dataset.courseId = course.id; // Armazena o ID do curso no modal
-        document.getElementById('checkin-error').classList.add('hidden');
-        document.getElementById('checkin-password').value = '';
-        modalCheckin.classList.add('show');
-      });
-      
-      // Materiais
-      document.getElementById('btn-materials').addEventListener('click', () => {
-        // Lógica para baixar materiais
-        showNotification('Info', 'Funcionalidade de download de materiais em implementação.', 'success');
-        // Exemplo: window.open(course.materialsUrl, '_blank');
-      });
-      
-      // Avaliar
-      document.getElementById('btn-evaluate').addEventListener('click', () => {
-        const instructorName = course.instructors[0]?.name || 'o instrutor';
-        document.getElementById('evaluate-instructor-name').innerText = instructorName;
-        modalEvaluate.dataset.courseId = course.id;
-        modalEvaluate.dataset.instructorId = course.instructors[0]?.id || 'unknown'; // Assumindo que instrutor tem ID
-        modalEvaluate.classList.add('show');
-      });
-      
-      // Certificado
-      document.getElementById('btn-certificate').addEventListener('click', () => {
-        // Lógica para baixar certificado
-        showNotification('Info', 'Funcionalidade de download de certificado em implementação.', 'success');
-        // Exemplo: window.open(course.certificateUrl, '_blank');
-      });
-    };
-
-    // --- Lógica dos Modais de Ação ---
-
-    // Modal de Inscrição (Formulário)
-    document.getElementById('enroll-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const courseId = modalEnroll.dataset.courseId;
-      if (!currentUserId || !courseId) {
-        showNotification('Erro', 'ID do usuário ou do curso não encontrado.', 'error');
-        return;
-      }
-      
-      const enrollSubmitBtn = document.getElementById('enroll-submit-btn');
-      enrollSubmitBtn.disabled = true;
-      enrollSubmitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i>A processar...';
-
-      try {
-        // Cria um ID de documento único para a matrícula
-        const enrollmentRef = doc(collection(db, 'artifacts', appId, 'public/data/enrollments'));
-        
-        await setDoc(enrollmentRef, {
-          userId: currentUserId,
-          courseId: courseId,
-          enrolledAt: Timestamp.now(),
-          status: 'inscrito'
-        });
-        
-        showNotification('Sucesso!', 'Inscrição realizada com sucesso.', 'success');
-        modalEnroll.classList.remove('show');
-        // Atualizar UI (ex: desabilitar botão de inscrição)
-        // Por simplicidade, vamos apenas recarregar os dados do usuário
-        
-      } catch (error) {
-        console.error("Erro ao inscrever:", error);
-        document.getElementById('enroll-error').innerText = "Erro ao processar inscrição. Tente novamente.";
-        document.getElementById('enroll-error').classList.remove('hidden');
-      } finally {
-        enrollSubmitBtn.disabled = false;
-        enrollSubmitBtn.innerHTML = 'Confirmar Matrícula';
-      }
-    });
-    document.getElementById('enroll-cancel').addEventListener('click', () => modalEnroll.classList.remove('show'));
-
-    // Modal de Check-in (Formulário)
-    document.getElementById('checkin-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const courseId = modalCheckin.dataset.courseId;
-      const inputPassword = document.getElementById('checkin-password').value;
-      const errorEl = document.getElementById('checkin-error');
-      
-      if (!currentUserId || !courseId) {
-        showNotification('Erro', 'ID do usuário ou do curso não encontrado.', 'error');
-        return;
-      }
-
-      try {
-        // 1. Buscar a senha correta no Firestore
-        // Admin pode ler, mas usuário comum não. App precisa de admin logado para buscar? Não.
-        // A senha deve ser buscada por um usuário admin, ou por uma cloud function.
-        // Vamos assumir que a senha é buscada por um admin logado, ou que as regras permitem
-        // a leitura da senha por usuários inscritos.
-        
-        // **CORREÇÃO DE LÓGICA DE PERMISSÃO**
-        // O usuário comum não pode ler /checkinPasswords/.
-        // A solução mais simples é o admin carregar isso no cache (courseCheckinPasswords)
-        // quando ele loga. Mas o usuário anônimo não terá acesso.
-        
-        // **Solução Temporária (Insegura):** O admin define, mas o cache local é usado.
-        // **Solução Correta (Complexa):** Usar uma Cloud Function para validar a senha.
-        
-        // **Vamos usar a solução insegura por enquanto, assumindo que as regras serão ajustadas**
-        // **ou que o admin já carregou as senhas.**
-        
-        // Tenta buscar do cache primeiro
-        let correctPassword = courseCheckinPasswords[courseId];
-        
-        if (!correctPassword) {
-          // Se admin, tenta buscar do DB (fallback)
-          if (isAdmin) {
-            const passwordDocRef = doc(db, 'artifacts', appId, 'public/data/checkinPasswords', courseId);
-            const docSnap = await getDoc(passwordDocRef);
-            if (docSnap.exists() && docSnap.data().password) {
-              correctPassword = docSnap.data().password;
-              courseCheckinPasswords[courseId] = correctPassword; // Salva no cache
-            }
-          } else {
-            // Se não é admin e não está no cache, não há como validar
-            // O admin PRECISA logar-se pelo menos uma vez para carregar as senhas na tab de config.
-            console.warn("Usuário não-admin tentou check-in sem cache de senhas. O admin precisa carregar as senhas.");
-          }
-        }
-        
-        // 2. Comparar a senha
-        if (correctPassword && inputPassword === correctPassword) {
-          // Senha correta!
-          // 3. Registrar o check-in no documento *privado* do usuário
-          const checkinRef = doc(db, 'artifacts', appId, 'users', currentUserId, 'checkins', courseId);
-          await setDoc(checkinRef, {
-            checkedInAt: Timestamp.now()
-          });
-          
-          // 4. Atualizar cache local e UI
-          currentUserCheckins[courseId] = { checkedInAt: Timestamp.now() };
-          showNotification('Sucesso!', 'Check-in realizado!', 'success');
-          modalCheckin.classList.remove('show');
-          
-          // Atualiza botões na página de detalhes
-          const btnCheckin = document.getElementById('btn-checkin');
-          const btnMaterials = document.getElementById('btn-materials');
-          const btnEvaluate = document.getElementById('btn-evaluate');
-          
-          if (btnCheckin) {
-            btnCheckin.disabled = true;
-            btnCheckin.innerHTML = '<i class="fas fa-user-check mr-2"></i>Check-in Realizado';
-          }
-          if (btnMaterials) btnMaterials.disabled = false;
-          if (btnEvaluate) btnEvaluate.disabled = false;
-          
-        } else {
-          // Senha incorreta
-          errorEl.innerText = "Senha incorreta. Tente novamente.";
-          errorEl.classList.remove('hidden');
-        }
-        
-      } catch (error) {
-        console.error("Erro ao fazer check-in:", error);
-        errorEl.innerText = "Erro ao validar a senha. (O admin já definiu uma?)";
-        errorEl.classList.remove('hidden');
-      }
-    });
-    document.getElementById('closeCheckin').addEventListener('click', () => modalCheckin.classList.remove('show'));
+    <h4 class="font-bold text-lg text-gray-800 mt-6">3. Prazo</h4>
+    <p>A autorização é concedida por prazo indeterminado, podendo ser revogada a qualquer momento mediante solicitação por escrito ao Instituto Evereste.</p>
     
-    // Modal de Avaliação (Formulário)
-    document.getElementById('evaluate-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const courseId = modalEvaluate.dataset.courseId;
-      const instructorId = modalEvaluate.dataset.instructorId;
-      const rating = document.querySelector('input[name="rating"]:checked');
-      const comment = document.getElementById('evaluate-comment').value;
-
-      if (!rating) {
-        showNotification('Erro', 'Por favor, selecione uma nota (de 1 a 5 estrelas).', 'error');
-        return;
-      }
-
-      if (!currentUserId || !courseId || !instructorId) {
-        showNotification('Erro', 'Informações em falta (usuário, curso ou instrutor).', 'error');
-        return;
-      }
-
-      try {
-        const evaluationRef = doc(collection(db, 'artifacts', appId, 'public/data/evaluations'));
-        await setDoc(evaluationRef, {
-          userId: currentUserId,
-          courseId: courseId,
-          instructorId: instructorId,
-          rating: parseInt(rating.value, 10),
-          comment: comment,
-          createdAt: Timestamp.now()
-        });
-        
-        showNotification('Obrigado!', 'Sua avaliação foi enviada com sucesso.', 'success');
-        modalEvaluate.classList.remove('show');
-        // Limpa o formulário
-        document.getElementById('evaluate-form').reset();
-        document.querySelectorAll('.star-rating input').forEach(r => r.checked = false);
-        
-      } catch (error) {
-        console.error("Erro ao enviar avaliação:", error);
-        document.getElementById('evaluate-error').classList.remove('hidden');
-      }
-    });
-    document.getElementById('closeEvaluate').addEventListener('click', () => modalEvaluate.classList.remove('show'));
-
-    // --- Lógica do Painel de Admin ---
-
-    // Navegação por Tabs do Admin
-    document.querySelector('.admin-sidebar nav').addEventListener('click', (e) => {
-      const link = e.target.closest('.admin-nav-link');
-      if (link && isAdmin) { // Garante que só admin pode navegar
-        e.preventDefault();
-        const tabId = link.dataset.tab;
-        
-        // Remove 'active' de todos os links
-        document.querySelectorAll('.admin-sidebar .admin-nav-link').forEach(l => l.classList.remove('active'));
-        // Adiciona 'active' ao link clicado
-        link.classList.add('active');
-        
-        // Esconde todas as tabs
-        document.querySelectorAll('.admin-tab-content').forEach(tab => tab.classList.add('hidden'));
-        // Mostra a tab correspondente
-        document.getElementById(tabId).classList.remove('hidden');
-        
-        // Carrega dados da tab específica
-        if (tabId === 'admin-tab-courses') loadAdminCourses();
-        if (tabId === 'admin-tab-enrollments') loadAdminEnrollments();
-        if (tabId === 'admin-tab-instructors') loadAdminInstructors();
-        if (tabId === 'admin-tab-certificates') loadAdminCertificates();
-        if (tabId === 'admin-tab-settings') loadAdminCoursePasswords();
-      }
-    });
-
-    // Carrega dados para o Painel de Admin (chamado no login admin)
-    const loadAdminPanel = () => {
-      if (!isAdmin) return; // Segurança extra
-      loadAdminDashboardData();
-      // Outros dados são carregados ao clicar na tab
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">4. Gratuidade</h4>
+    <p>A presente autorização é concedida a título gratuito, não gerando qualquer ônus ou obrigação de pagamento ao autorizante.</p>
     
-    // Carrega senhas dos cursos (para o form de config)
-    const loadAdminCoursePasswords = async () => {
-      if (!isAdmin) return;
-      
-      const container = document.getElementById('admin-passwords-inputs');
-      container.innerHTML = ''; // Limpa
-      
-      try {
-        // Usa o cache local de cursos
-        if (localCourses.length === 0) {
-          await loadCourses(); // Garante que os cursos estão carregados
-        }
-
-        // Carrega senhas existentes
-        const passwordsRef = collection(db, 'artifacts', appId, 'public/data/checkinPasswords');
-        const querySnap = await getDocs(passwordsRef);
-        
-        courseCheckinPasswords = {}; // Limpa o cache
-        querySnap.forEach((docSnap) => {
-          if (docSnap.data().password) {
-            courseCheckinPasswords[docSnap.id] = docSnap.data().password;
-          }
-        });
-
-        // Cria os inputs
-        localCourses.forEach(course => {
-          const currentPassword = courseCheckinPasswords[course.id] || '';
-          const inputGroup = `
-            <div>
-              <label class="input-label" for="pass-${course.id}">${course.title}</label>
-              <input id="pass-${course.id}" type="text" class="input-field" 
-                     data-course-id="${course.id}" 
-                     value="${currentPassword}"
-                     placeholder="Senha para ${course.title}">
-            </div>
-          `;
-          container.innerHTML += inputGroup;
-        });
-        
-      } catch (error) {
-        console.error("Erro ao carregar senhas:", error);
-        container.innerHTML = '<p class="text-red-600">Erro ao carregar dados.</p>';
-      }
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">5. Direitos de Personalidade</h4>
+    <p>O Instituto Evereste compromete-se a utilizar as imagens de forma respeitosa e adequada, preservando a dignidade e os direitos de personalidade do autorizante.</p>
     
-    // Salva senhas dos cursos
-    document.getElementById('admin-form-passwords').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!isAdmin) return;
-      
-      const inputs = document.querySelectorAll('#admin-form-passwords input[data-course-id]');
-      const promises = [];
-      const newPasswordsCache = {};
-
-      inputs.forEach(input => {
-        const courseId = input.dataset.courseId;
-        const newPassword = input.value;
-        
-        // Salva em documentos individuais, conforme firestore.rules
-        const passwordDocRef = doc(db, 'artifacts', appId, 'public/data/checkinPasswords', courseId);
-        
-        promises.push(setDoc(passwordDocRef, { password: newPassword }));
-        newPasswordsCache[courseId] = newPassword;
-      });
-
-      try {
-        await Promise.all(promises); // Salva todas as senhas
-        courseCheckinPasswords = newPasswordsCache; // Atualiza o cache local
-        showNotification('Sucesso', 'Senhas de check-in atualizadas.', 'success');
-      } catch (error) {
-        console.error("Erro ao salvar senhas:", error);
-        showNotification('Erro', 'Não foi possível salvar as senhas.', 'error');
-      }
-    });
-
-    // --- NOVO: Lógica para Popular o Banco (Seed) ---
-    document.getElementById('btn-seed-database').addEventListener('click', async () => {
-      if (!isAdmin) return;
-      
-      if (!confirm('Tem certeza que deseja adicionar os dados iniciais? Isso pode sobrescrever cursos e instrutores existentes com o mesmo ID.')) {
-        return;
-      }
-      
-      console.log('Iniciando o seeding do banco de dados...');
-      
-      // Dados dos Cursos (baseado no lidssistema.txt)
-      const coursesToSeed = [
-        {
-          id: "fotografia",
-          themeColor: "#FFC107",
-          themeColorDark: "#E6A700",
-          headerOverlayImage: "https://i.postimg.cc/3rLTy2xn/medium-shot-people-with-camera.jpg",
-          icon: "fa-camera-retro",
-          title: "Workshop de Fotografia",
-          subtitle: "O Olhar que Conecta Histórias",
-          summary: "Aprenda a capturar a essência dos nossos projetos com sensibilidade e técnica.",
-          fullDescription: "No Instituto Evereste, cada imagem conta uma parte da nossa história. Este workshop é um convite para desenvolver a sua percepção e criatividade...",
-          learningObjectives: [
-            "Introduzir conceitos básicos de fotografia (composição, iluminação).",
-            "Desenvolver habilidades práticas em fotografia com câmaras e celulares.",
-            "Capacitar para o registo de eventos e projetos com qualidade profissional.",
-          ],
-          modules: [
-            { title: "Módulo 1: Fundamentos e Equipamento", topics: ["Introdução à história e ao impacto da fotografia.", "Dominando o corpo da câmera.", "Entendendo ISO, lentes e o uso do flash."] },
-            { title: "Módulo 2: Composição e Iluminação", topics: ["A arte do enquadramento.", "Trabalhando com a luz.", "Princípios de composição de imagens."] },
-            { title: "Módulo 3: Edição e Pós-Produção", topics: ["Introdução à edição no Lightroom.", "Análise do histograma e correção de cores.", "Exercícios práticos."] }
-          ],
-          requirements: ["Não são necessários pré-requisitos.", "Incentivamos a trazer o seu próprio smartphone ou câmara."],
-          targetAudience: "O Curso de Fotografia é voltado para pessoas que desejam explorar o poder da imagem como forma de expressão...",
-          instructors: [
-            { name: "Bruno Diogo", title: "Supervisor de Marketing e Mídias Visuais", image: "https://i.postimg.cc/yNhgmLJK/IMG-7311.avif" },
-            { name: "Vinícius Sena", title: "Fotógrafo Documental/Eventos", image: "https://i.postimg.cc/bw7kHG3D/vinicius.jpg" }
-          ],
-          details: { "Data": "28 de Outubro de 2025", "Horário": "08:30h - 12:15h", "Carga": "4 horas", "Certificado": "Sim", "Modalidade": "Presencial e Online" },
-          practicalActivities: [
-            { title: "Exercício de Teste: Contando uma História", description: "Em duplas, os participantes tiram 3 fotos um do outro." },
-            { title: "Exercício de Conhecimento: Dominando a Luz", description: "Os participantes tiram 3-5 fotos com diferentes tipos de iluminação." }
-          ],
-          status: "aberto"
-        },
-        {
-          id: "ia",
-          themeColor: "#4CAF50",
-          themeColorDark: "#388E3C",
-          headerOverlayImage: "https://i.postimg.cc/bv25v2BZ/relat-rio-1.png",
-          icon: "fa-brain",
-          title: "IA Aplicada à Análise de Dados",
-          subtitle: "Do Relatório ao Insight",
-          summary: "Transforme relatórios e dados brutos em dashboards web interativos e de alto impacto.",
-          fullDescription: "Num mundo movido por dados, a capacidade de extrair insights rápidos é um superpoder...",
-          learningObjectives: [
-            "Formular prompts eficazes no Gemini para gerar códigos de dashboards.",
-            "Publicar um dashboard interativo na web utilizando o GitHub Pages.",
-            "Estruturar uma apresentação de resultados de alto impacto.",
-          ],
-          modules: [
-            { title: "Módulo 1: Fundamentos e Geração de Código", topics: ["Os 3 pilares do Método Evereste Ágil.", "Introdução às ferramentas de IA.", "Oficina Prática: Construindo o prompt perfeito."] },
-            { title: "Módulo 2: Publicação e Interatividade", topics: ["Desmistificando o GitHub Pages.", "Oficina Prática: Publicando o seu primeiro dashboard.", "Análise e refinamento."] },
-            { title: "Módulo 3: Apresentação Estratégica", topics: ["Técnicas para apresentar resultados.", "Simulação de apresentação para a diretoria.", "Transformando a cultura de apresentação de resultados."] }
-          ],
-          requirements: ["É indispensável ter um notebook.", "Conta Google (Gemini) e conta no GitHub."],
-          targetAudience: "Para todos os colaboradores, entusiastas de tecnologia e qualquer pessoa curiosa sobre o poder da IA.",
-          instructors: [
-            { name: "Marllon Costa", title: "Técnico em Tecnologia da Informação | Inovação e IA", image: "https://i.postimg.cc/sxm4TVvF/IMG-9781.jpg" }
-          ],
-          details: { "Data": "06 de Novembro de 2025", "Carga": "4 horas", "Certificado": "Sim", "Modalidade": "Presencial ou Online" },
-          practicalActivities: [
-            { title: "Oficina Prática 1: O Prompt Perfeito", description: "Construir um prompt detalhado no Gemini para solicitar um dashboard." },
-            { title: "Oficina Prática 2: O Seu Primeiro Dashboard no Ar", description: "Publicar o seu dashboard online via GitHub." }
-          ],
-          status: "aberto"
-        }
-      ];
-      
-      // Dados dos Instrutores
-      const instructorsToSeed = [
-        { id: "marllon", name: "Marllon Costa", title: "Técnico em Tecnologia da Informação | Designer | Marketing | Inovação e IA", image: "https://i.postimg.cc/sxm4TVvF/IMG-9781.jpg", bio: "Designer gráfico, graduando em marketing e autodidata em Inovação e IA..." },
-        { id: "vinicius", name: "Vinícius Sena", title: "Fotógrafo Documental/Eventos | Animação", image: "https://i.postimg.cc/bw7kHG3D/vinicius.jpg", bio: "Formado em Animação, estudante e entusiasta de fotografia desde 2019..." },
-        { id: "bruno", name: "Bruno Diogo", title: "Supervisor de Marketing e Mídias Visuais | Designer Gráfico", image: "https://i.postimg.cc/yNhgmLJK/IMG-7311.avif", bio: "Designer Gráfico e Digital | UX & UI | 📸 Fotografia" },
-        { id: "keven", name: "Keven Menezes", title: "Analista de TI | Designer Gráfico | Motion Design", image: "https://i.postimg.cc/fTgkcmpP/Whats-App-Image-2025-10-27-at-12-11-25.jpg", bio: "Formado em Design Gráfico e possui mais de 5 anos de experiência..." },
-        { id: "deyse", name: "Deyse Pereira", title: "Estrategista em Comunicação, Design e Gestão de Projetos", image: "https://i.postimg.cc/T1sL3bXz/IMG-7381-jpg.png", bio: "Mestre em Design de Artefatos Digitais, pós-graduanda em Gestão de Projetos..." }
-      ];
-
-      try {
-        const coursePromises = coursesToSeed.map(course => {
-          const courseRef = doc(db, 'artifacts', appId, 'public/data/courses', course.id);
-          return setDoc(courseRef, course);
-        });
-        
-        const instructorPromises = instructorsToSeed.map(instructor => {
-          const instructorRef = doc(db, 'artifacts', appId, 'public/data/instructors', instructor.id);
-          return setDoc(instructorRef, instructor);
-        });
-        
-        await Promise.all([...coursePromises, ...instructorPromises]);
-        
-        showNotification('Sucesso!', 'Banco de dados populado com cursos e instrutores iniciais.', 'success');
-        console.log('Seeding concluído com sucesso.');
-        
-        // Recarrega os dados na UI
-        loadCourses();
-        loadInstructors();
-        
-      } catch (error) {
-        console.error('Erro ao popular o banco de dados:', error);
-        showNotification('Erro de Seeding', 'Não foi possível popular o banco de dados. Verifique o console e suas regras do Firestore.', 'error');
-      }
-    });
-
-
-    // Carrega dados do Dashboard
-    const loadAdminDashboardData = async () => {
-      if (!isAdmin) return;
-      try {
-        const enrollmentsSnap = await getDocs(collection(db, 'artifacts', appId, 'public/data/enrollments'));
-        const certificatesSnap = await getDocs(collection(db, 'artifacts', appId, 'public/data/certificates'));
-        
-        // Contar check-ins é mais complexo pois estão em subcoleções de usuários
-        // Vamos simplificar por enquanto ou fazer uma query mais complexa (requer regras)
-        
-        document.getElementById('stat-enrollments').innerText = enrollmentsSnap.size;
-        document.getElementById('stat-certificates').innerText = certificatesSnap.size;
-        document.getElementById('stat-checkins').innerText = '...'; // Placeholder
-
-      } catch(error) {
-        console.error("Erro ao carregar stats do dashboard:", error);
-      }
-    };
+    <h4 class="font-bold text-lg text-gray-800 mt-6">6. Revogação</h4>
+    <p>Você pode revogar esta autorização a qualquer momento, solicitando a remoção das suas imagens dos materiais futuros. Materiais já publicados poderão permanecer em circulação conforme as limitações técnicas de cada plataforma.</p>
     
-    // Carrega Cursos na Tabela Admin
-    const loadAdminCourses = () => {
-      if (!isAdmin) return;
-      const tbody = document.getElementById('admin-courses-table-body');
-      tbody.innerHTML = '';
-      if (localCourses.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4">Nenhum curso encontrado. Tente popular o banco de dados.</td></tr>';
-        return;
-      }
-      localCourses.forEach(course => {
-        const row = `
-          <tr>
-            <td>${course.title}</td>
-            <td><span class="badge ${course.status === 'aberto' ? 'badge-success' : 'badge-soon'}">${course.status}</span></td>
-            <td>...</td>
-            <td>
-              <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        `;
-        tbody.innerHTML += row;
-      });
-    };
-    
-    // Carrega Instrutores na Tabela Admin
-    const loadAdminInstructors = () => {
-      if (!isAdmin) return;
-      const tbody = document.getElementById('admin-instructors-table-body');
-      tbody.innerHTML = '';
-      if (localInstructors.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4">Nenhum instrutor encontrado. Tente popular o banco de dados.</td></tr>';
-        return;
-      }
-      localInstructors.forEach(instructor => {
-        const row = `
-          <tr>
-            <td><img src="${instructor.image}" class="h-10 w-10 rounded-full object-cover" onerror="this.src='https://placehold.co/40x40/ccc/fff?text=${instructor.name[0]}'"></td>
-            <td>${instructor.name}</td>
-            <td>${instructor.title}</td>
-            <td>
-              <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        `;
-        tbody.innerHTML += row;
-      });
-    };
-    
-    // Carrega Matrículas na Tabela Admin (com onSnapshot para tempo real)
-    const loadAdminEnrollments = () => {
-      if (!isAdmin) return;
-      const tbody = document.getElementById('admin-enrollments-table-body');
-      const enrollmentsRef = collection(db, 'artifacts', appId, 'public/data/enrollments');
-      
-      onSnapshot(enrollmentsRef, (querySnap) => {
-        tbody.innerHTML = '';
-        if (querySnap.empty) {
-          tbody.innerHTML = '<tr><td colspan="4">Nenhuma matrícula encontrada.</td></tr>';
-          return;
-        }
-        querySnap.forEach(docSnap => {
-          const data = docSnap.data();
-          const courseName = localCourses.find(c => c.id === data.courseId)?.title || data.courseId;
-          const row = `
-            <tr>
-              <td class="text-xs font-mono">${data.userId}</td>
-              <td>${courseName}</td>
-              <td>${data.enrolledAt.toDate().toLocaleDateString('pt-PT')}</td>
-              <td><span class="badge badge-success">${data.status}</span></td>
-            </tr>
-          `;
-          tbody.innerHTML += row;
-        });
-      }, (error) => {
-        console.error("Erro ao ouvir matrículas:", error);
-        tbody.innerHTML = '<tr><td colspan="4" class="text-red-600">Erro ao carregar matrículas.</td></tr>';
-      });
-    };
-    
-    // Carrega Certificados na Tabela Admin (com onSnapshot)
-    const loadAdminCertificates = () => {
-      if (!isAdmin) return;
-      const tbody = document.getElementById('admin-certificates-table-body');
-      const certificatesRef = collection(db, 'artifacts', appId, 'public/data/certificates');
+    <h4 class="font-bold text-lg text-gray-800 mt-6">7. Contato</h4>
+    <p>Para revogar esta autorização ou esclarecer dúvidas, entre em contato através do e-mail: <a href="mailto:comunicacao@evereste.org" class="text-blue-600 underline">comunicacao@evereste.org</a></p>
+    </div>
+    </div>
+  </div>
 
-      onSnapshot(certificatesRef, (querySnap) => {
-        tbody.innerHTML = '';
-        if (querySnap.empty) {
-          tbody.innerHTML = '<tr><td colspan="4">Nenhum certificado emitido.</td></tr>';
-          return;
-        }
-        querySnap.forEach(docSnap => {
-          const data = docSnap.data();
-          const courseName = localCourses.find(c => c.id === data.courseId)?.title || data.courseId;
-          const row = `
-            <tr>
-              <td class="text-xs font-mono">${data.userId}</td>
-              <td>${courseName}</td>
-              <td>${data.issuedAt.toDate().toLocaleDateString('pt-PT')}</td>
-              <td>
-                <button class="btn btn-ghost text-sm px-2 py-1"><i class="fas fa-download"></i></button>
-                <button class="btn btn-ghost text-sm px-2 py-1 text-red-500"><i class="fas fa-trash"></i></button>
-              </td>
-            </tr>
-          `;
-          tbody.innerHTML += row;
-        });
-      }, (error) => {
-        console.error("Erro ao ouvir certificados:", error);
-        tbody.innerHTML = '<tr><td colspan="4" class="text-red-600">Erro ao carregar certificados.</td></tr>';
-      });
-    };
-    
-    // --- Lógica de Inicialização ---
-    
-    // Event Listeners Globais
-    document.addEventListener('DOMContentLoaded', () => {
-      // Carrega dados públicos assim que a página abre
-      // *** REMOVIDO DAQUI - Movido para onAuthStateChanged ***
-      
-      // Reveal on Scroll (para elementos estáticos)
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-      
-      // Modais
-      [adminBtnHeader, adminBtnFooter].forEach(btn => btn.addEventListener('click', () => modalLogin.classList.add('show')));
-      document.getElementById('closeLogin').addEventListener('click', () => modalLogin.classList.remove('show'));
-      modalLogin.addEventListener('click', (e) => { if (e.target === modalLogin) modalLogin.classList.remove('show'); });
-      
-      document.getElementById('closeEnroll').addEventListener('click', () => modalEnroll.classList.remove('show'));
-      modalEnroll.addEventListener('click', (e) => { if (e.target === modalEnroll) modalEnroll.classList.remove('show'); });
-      
-      document.getElementById('closeCheckin').addEventListener('click', () => modalCheckin.classList.remove('show'));
-      modalCheckin.addEventListener('click', (e) => { if (e.target === modalCheckin) modalCheckin.classList.remove('show'); });
-      
-      document.getElementById('closeEvaluate').addEventListener('click', () => modalEvaluate.classList.remove('show'));
-      modalEvaluate.addEventListener('click', (e) => { if (e.target === modalEvaluate) modalEvaluate.classList.remove('show'); });
-    });
-
-    // Logo click
-    document.getElementById('logo-link').addEventListener('click', (e) => {
-      e.preventDefault();
-      showView('main');
-    });
-
-    // Course card click (na lista principal)
-    coursesListContainer.addEventListener('click', (e) => {
-      const card = e.target.closest('[data-course-id]');
-      if (card) {
-        const courseId = card.dataset.courseId;
-        const course = localCourses.find(c => c.id === courseId);
-        if (course) {
-          renderCourseDetail(course);
-        } else {
-          console.error("Curso não encontrado no cache local.");
-        }
-      }
-    });
-
-    // Scroll Progress
-    const scrollProgress = document.getElementById('scroll-progress');
-    window.addEventListener('scroll', () => {
-      const h = document.documentElement;
-      const st = h.scrollTop || document.body.scrollTop;
-      const sh = h.scrollHeight || document.body.scrollHeight;
-      // Previne divisão por zero se o conteúdo for menor que a viewport
-      const percent = (sh - h.clientHeight) > 0 ? (st / (sh - h.clientHeight)) * 100 : 0;
-      scrollProgress.style.width = percent + '%';
-    });
-
-    // Header Scroll Effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 10) header.classList.add('header-scrolled');
-      else header.classList.remove('header-scrolled');
-    });
-
-    // Animação de Partículas (Hero)
-    const particles = document.getElementById('particles');
-    const createParticle = () => {
-      const s = document.createElement('span');
-      s.style.left = Math.random() * 100 + 'vw';
-      s.style.bottom = '-10px';
-      s.style.width = (Math.random() * 2 + 1) + 'px';
-      s.style.height = (Math.random() * 2 + 1) + 'px';
-      s.style.animationDelay = Math.random() * 8 + 's';
-      particles.appendChild(s);
-      setTimeout(() => s.remove(), 14000);
-    };
-    // Gera partículas iniciais e depois em intervalos
-    if (particles) {
-      for (let i = 0; i < 60; i++) createParticle();
-      setInterval(createParticle, 600);
-    }
-    
-  </script>
-</body>
-</html>
-
+  <!-- Modal Admin: Editar Curso -->
+  <div id="modalEditCourse" class="modal-backdrop">
+    <div class="modal-card modal-card-xl p-8">
+    <div class="flex items-start justify-between mb-6">
+    <h3 id="modalCourseTitle" class="text-2xl font-bold" style="color: var(--text);"></h3>
+    <button id="closeEditCourse" class="btn-ghost !p-2 !text-lg"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="courseForm" class="space-y-6">
+    <input type="hidden" id="courseId">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+    <label class="admin-label" for="courseTitle">Título</label>
+    <input class="admin-input" type="text" id="courseTitle" required>
+    </div>
+    <div>
+    <label class="admin-label" for="courseSubtitle">Subtítulo</label>
+    <input class="admin-input" type="text" id="courseSubtitle" required>
+    </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div>
+    <label class="admin-label" for="courseThemeColor">Cor (Hex)</label>
+    <input class="admin-input" type="text" id="courseThemeColor" placeholder="#FFC107" required>
+    </div>
+    <div>
+    <label class="admin-label" for="courseIcon">Ícone (FontAwesome)</label>
+    <input class="admin-input" type="text" id="courseIcon" placeholder="fa-camera-retro" required>
+    </div>
+    <div>
+    <labe
